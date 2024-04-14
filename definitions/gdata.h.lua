@@ -1,0 +1,111 @@
+---@class gData
+---@field GetCurrentCall fun(): CallType
+---@field GetAlliance fun(): Alliance
+---@field GetAction fun(): Action
+---@field GetActionTarget fun(): Entity
+---@field GetBuffCount fun(matchBuff: string|number): integer
+---@field GetEntity fun(index:number): Entity
+---@field GetEnvironment fun(): Environment
+---@field GetEquipment fun(): Equipment
+---@field GetEquipScreen fun(): EquipScreenData
+---@field GetPet fun(): Pet
+---@field GetPetAction fun(): PetAction
+---@field GetPlayer fun(): Player
+---@field GetParty fun(): Party
+---@field GetTarget fun(): Entity
+
+---@class Alliance
+---@field ActionTarget boolean
+---@field Count number
+---@field InAlly boolean
+---@field Target boolean
+
+---@class Action
+---@field ActionType 'Spell' | 'Weaponskill' | 'Ability' | 'Ranged' | 'Item'
+---@field CastTime number?
+---@field Element (Element | 'Non-Elemental' | 'Unknown')?
+---@field Id number
+---@field MpCost number?
+---@field MpAftercast number?
+---@field MppAftercast number?
+---@field Name string
+---@field Recast number?
+---@field Resource IAbility | IItem | ISpell | nil
+---@field Skill Skill
+---@field Type SpellType | AbilityType
+
+---@class Entity
+---@field Distance string
+---@field HPP number
+---@field Id number
+---@field Index number
+---@field Name string
+---@field Status EntityStatus
+---@field Type EntityType
+
+---@class Environment
+---@field Area string
+---@field Day Day
+---@field DayElement Element | 'Unknown'
+---@field MoonPhase MoonPhase
+---@field MoonPercent number
+---@field RawWeather WeatherType
+---@field RawWeatherElement WeatherElement
+---@field Time number
+---@field Timestamp Time
+---@field Weather WeatherType
+---@field WeatherElement WeatherElement
+
+---@class Equipment
+---@field Main FFIEquipment
+---@field Sub FFIEquipment
+---@field Range FFIEquipment
+---@field Ammo FFIEquipment
+---@field Head FFIEquipment
+---@field Body FFIEquipment
+---@field Hands FFIEquipment
+---@field Legs FFIEquipment
+---@field Feet FFIEquipment
+---@field Neck FFIEquipment
+---@field Waist FFIEquipment
+---@field Ear1 FFIEquipment
+---@field Ear2 FFIEquipment
+---@field Ring1 FFIEquipment
+---@field Ring2 FFIEquipment
+---@field Back FFIEquipment
+
+---@class EquipScreenData
+---@field Attack number
+---@field DarkResistance number
+---@field Defense number
+---@field EarthResistance number
+---@field FireResistance number
+---@field IceResistance number
+---@field LightningResistance number
+---@field LightResistance number
+---@field WaterResistance number
+---@field WindResistance number
+
+---@class Pet: Entity
+---@field TP number
+---@field EntityType nil
+
+---@class PetAction: Action
+---@field ActionType 'Spell' | 'Ability' | 'MobSkill'
+---@field Resource ISpell | IAbility | nil
+
+---@class Player: Entity
+---@field IsMoving boolean
+---@field MainJob string
+---@field MainJobLevel number
+---@field MainJobSync number
+---@field SubJob string
+---@field SubJobLevel number
+---@field SubJobSync number
+---@field TP number
+
+---@class Party
+---@field ActionTarget boolean
+---@field Count number
+---@field InParty boolean
+---@field Target boolean

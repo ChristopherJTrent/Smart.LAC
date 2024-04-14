@@ -1,0 +1,9 @@
+---@class accessories
+---Equips an appropriate elemental belt from the list of belts you own
+---@field DoBelt fun(ability: skillchainData, data: playerData): void
+---Equips an appropriate elemental gorget from the list of gorgets you own
+---@field DoGorget fun(ability: skillchainData, data:playerData): void
+---Convenience function that runs both doBelt and doGorget
+---@see doBelt
+---@see doGorget
+---@field DoBeltAndGorget fun(ability: skillchainData, data: playerData): void

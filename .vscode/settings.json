@@ -1,0 +1,8 @@
+{
+	"explorer.fileNesting.enabled": true,
+	"explorer.fileNesting.expand": false,
+	"explorer.fileNesting.patterns": {
+		"*.lua": "${capture}.h.lua",
+	},
+	"Lua.completion.autoRequire": false
+}

@@ -1,0 +1,66 @@
+---@meta
+
+---@class IMonAbility
+---@field AbilityId number
+---@field Level number
+---@field Unknown0000 number
+
+---@class IItem
+---@field Id number         // The items id.
+---@field Flags number      // The items flags.
+---@field StackSize number  // The items stack size.
+---@field Type number       // The items type.
+---@field ResourceId number // The items resource id. (Mainly used for AH sorting.)
+---@field Targets number    // The items valid targets for use.
+--- Armor & Weapon Items
+---@field Level number               // The items level requirement to use.
+---@field Slots number[]             // The items equipment slots where the item can be equipped to.
+---@field Races number[]             // The items races that can use the item.
+---@field Jobs number[]              // The items jobs that can use the item.
+---@field SuperiorLevel number       // The items superior level.
+---@field ShieldSize number          // The items shield size.
+---@field MaxCharges number          // The items max charges.
+---@field CastTime number            // The items cast time.
+---@field CastDelay number           // The items cast delay.
+---@field RecastDelay number         // The items recast delay.
+---@field BaseItemId number          // The items base item id used for upgrades.
+---@field ItemLevel number           // The items item level.
+---@field Damage number              // The items damage.
+---@field Delay number               // The items delay.
+---@field DPS number                 // The items damae per second.
+---@field Skill number               // The items skill type.
+---@field JugSize number             // The items jug size.
+---@field WeaponUnknown0000 number   // Unknown (Some sort of flag for item types. 0-5 and 255 are valid values.)
+---@field Range number                // The items range.           (Range is based on a lookup table.)
+---@field AreaRange number            // The items AoE range.       (Range is based on a lookup table.)
+---@field AreaShapeType number        // The items AoE shape.       (0 = None, 1 = Circle on self/target, 2 = Cone AoE, 3 = Circle on self while targeting enemy.)
+---@field AreaCursorTargetType number // The items AoE target type. (0x00 to 0x0F flag determining the valid targeting type of the spell.)
+--- Common Items
+---@field Element number         // The items elemental aura type.
+---@field Storage number         // The items storage amount.
+---@field AttachmentFlags number // The items puppet attachment flags.
+--- Instinct Items
+---@field InstinctCost number // The items instinct cost.
+--- Monstrosity Items
+---@field MonstrosityId number                 // The items monstrosity id.
+---@field MonstrosityName string             // The items monstrosity name.
+---@field MonstrosityData number          // The items monstrosity data. (Unknown block of data currently.)
+---@field MonstrosityAbilities IMonAbility // The items monstrosity abilities.
+--- Puppet Items
+---@field PuppetSlotId number   // The items puppet slot id.
+---@field PuppetElements number // The items puppet elements.
+--- Slip & Voucher Items
+---@field SlipData number // The items slip data.
+--- Usable Items
+---@field UsableData0000 number // The items usable data. (0) - (Used as animation lookup types. Learnable Scrolls: 0x01000. Learnable Rolls: 0x02000)
+---@field UsableData0001 number // The items usable data. (1) - (Used as animation ids for learnable items. Used as AoE range information for usable items.)
+---@field UsableData0002 number // The items usable data. (2) - (Used as a flag to tell what UsableData0001 is. 0x00: Unused. 0x01: Animation Id. 0x02: AoE range information.)
+---@field Article number // The items article type.
+---@field Name string[] const            // The items name. (0 = Default, 1 = Japanese, 2 = English)
+---@field Description string[] const     // The items description. (0 = Default, 1 = Japanese, 2 = English)
+---@field LogNameSingular string[] const // The items log name (singular). (0 = Default, 1 = Japanese, 2 = English)
+---@field LogNamePlural string[] const   // The items log name (plural). (0 = Default, 1 = Japanese, 2 = English)
+---@field ImageSize number      // The items image size.
+---@field ImageType number       // The items image type.
+---@field ImageName number // The items image name.
+---@field Bitmap number   // The items bitmap data.

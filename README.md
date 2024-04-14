@@ -13,3 +13,6 @@ Steps:
 2. Run `git clone https://gitlab.com/ChristopherJTrent/smart.lac.git`  
 3. You're done.
 
+
+## Setup
+Take a look at the [Repo Wiki](https://gitlab.com/ChristopherJTrent/smart.lac/-/wikis/Getting-Started) for more information.

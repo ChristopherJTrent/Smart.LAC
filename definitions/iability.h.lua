@@ -1,0 +1,30 @@
+---@meta
+
+---@class IAbility
+---@field Id number // The abilities id.
+---@field Type number // The abilities type.
+---@field Element number // The abilities element.
+---@field ListIconId number // The abilities list icon id.
+---@field ManaCost number // The abilities mana cost.
+---@field RecastTimerId number // The abilities recast timer id.
+---@field Targets number // The abilities valid targets.
+---@field TPCost number // The abilities TP cost.
+---@field MenuCategoryId number // The abilities sub-category menu id.
+---@field MonsterLevel number // The abilities monster level.
+---@field Range number // The abilities range. (Range is based on a lookup table.)
+---@field AreaRange number // The abilities AoE range. (Range is based on a lookup table.)
+---@field AreaShapeType number // The abilities AoE shape. (0 = None, 1 = Circle on self/target, 2 = Cone AoE, 3 = Circle on self while targeting enemy.)
+---@field CursorTargetType number // The abilities cursor target type. (0x00 to 0x0F flag determining the valid targeting type of the ability.)
+---@field Unknown0000 number // Unknown
+---@field Unknown0001 number // Unknown (Type confirmed.)
+---@field Unknown0002 number // Unknown (Type confirmed.)
+---@field Unknown0003 number // Unknown (Type confirmed.) (TP related.)
+---@field Unknown0004 number // Unknown (Type confirmed.) (TP related.)
+---@field Unknown0005 number // Unknown (Type confirmed.)
+---@field Unknown0006 number // Unknown (Type confirmed.)
+---@field Unknown0007 number // Unknown
+---@field Unknown0008 number // Unknown (Type confirmed.)
+---@field Unknown0009 number // Unknown
+---@field EOE number // 0xFF - End of Entry
+---@field Name string[] // The abilities name. (0 = Default, 1 = Japanese, 2 = English)
+---@field Description string[] // The abilities description. (0 = Default, 1 = Japanese, 2 = English)

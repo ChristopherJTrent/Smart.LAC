@@ -1,0 +1,2 @@
+---@class handler
+---@field handle fun():boolean

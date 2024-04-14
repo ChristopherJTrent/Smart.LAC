@@ -1,0 +1,4 @@
+---@class playerData
+---@field public ownedBelts table<string, boolean>
+---@field public ownedGorgets table<string, boolean>
+---@field public DisableWeaponWarning boolean

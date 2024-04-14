@@ -1,0 +1,14 @@
+---@meta
+---@alias abilityHandler fun(sets: sets):boolean
+---@class helpers
+---if the argument isn't an Ashita meta-table, make it one.
+---@field EnsureSugaredTable fun(t: table): table
+---@field ContainsAllKeys fun(t: table, other: table): boolean
+---@field ValidatePlayerData fun(t: playerData): boolean
+---@field ValidateSets fun(sets: sets): boolean
+---@field AddModHeader fun(string: string): string
+---@field SucceedOrWarn fun(success: boolean, good: string, bad: string): string
+---@field SucceedOrError fun(success: boolean, good: string, bad: string): string
+---@field GetWeaponskillProperty fun(ability: Action): skillchainData
+---@field GenericAbilityHandler fun(sets: sets, key:string):boolean
+---@field CleanupSets fun(sets: sets):sets

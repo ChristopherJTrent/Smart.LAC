@@ -1,0 +1,30 @@
+---@meta
+---@class ISpell
+---@field Index number // The spells index.
+---@field Type number // The spells type.
+---@field Element number // The spells element.
+---@field Targets number // The spells valid targets.
+---@field Skill number // The spells magic skill type.
+---@field ManaCost number // The spells mana cost.
+---@field CastTime number // The spells cast time.         (CastTime / 4.0) (Cast Bar: CastTime * 20)
+---@field RecastDelay number // The spells recast delay.      (RecastDely / 4.0) (Cast Bar: RecastDelay * 15)
+---@field LevelRequired number // The spells level requirements.(-1 = Unlearnable, > 99 = Unlocked with job points. See: JobPointMask for validation.)
+---@field Id number // The spells id.                (Old recast id; unused now except for auto-sorting.)
+---@field ListIconNQ number // The spells icon id.           (Low quality menu icon, client config set to icon set 1.)
+---@field ListIconHQ number // The spells icon id.           (High quality menu icon, client config set to icon set 2.)
+---@field Requirements number // The spells requirements.
+---@field Range number // The spells casting range.     (Range is based on a lookup table.)
+---@field AreaRange number // The spells AoE range.         (Range is based on a lookup table.)
+---@field AreaShapeType number // The spells AoE shape.         (0 = None, 1 = Circle on self/target, 2 = Cone AoE, 3 = Circle on self while targeting enemy.)
+---@field CursorTargetType number // The spells AoE target type.   (0x00 to 0x0F flag determining the valid targeting type of the spell.)
+---@field Unknown0000 number // Unknown                       (Always 00 for all spells.)
+---@field AreaFlags number // The spells AoE flags.         (Flag to determine various things. Example: Divine Veil valid spell: ((val & 0x7FFF80) == 512)))
+---@field Unknown0001 number // Unknown
+---@field Unknown0002 number // Unknown
+---@field Unknown0003 number // Unknown                       (Type confirmed.) (Used with GEO spells, looks to be a range of some sort.)
+---@field Unknown0004 number // Unknown
+---@field JobPointMask number // The spells job point mask.    (JobPointMask & (1 << ((PlayerJobU32 & 0xFF) & 0x1F))) (If true, LevelRequired turns into required job points to unlock the spell.)
+---@field Unknown0005 number // Unknown
+---@field EOE number // 0xFF - End of Entry
+---@field Name string // The spells name. (0 = Default, 1 = Japanese, 2 = English)
+---@field Description string // The spells description. (0 = Default, 1 = Japanese, 2 = English)
