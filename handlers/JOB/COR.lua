@@ -1,9 +1,10 @@
 return {
 	ability = function(action, sets)
-		if (string.match(action.Name, 'Roll')) then
+		print('ability handler called')
+		if (action.Type == 'Corsair Roll' or action.Name == 'Double-Up') then
 			if(sets['ability'].phantomRoll) then
-				gFunc.EquipSet(sets.ability.phantomRoll)
-				return false
+				print('returning PR set')
+				return sets.ability.phantomRoll
 			end
 		end
 		return false

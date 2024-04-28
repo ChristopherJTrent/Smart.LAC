@@ -3,18 +3,19 @@ return {
 		if not sets.midcast then return false end
 		---@type Action
 		local ability = gFunc.GetAction()
+		if ability.Type == 'Geomancy' then
+			if sets.midcast.Geomancy then
+				return sets.midcast.Geomancy
+			end
+		end
 		if string.match(ability.Name, 'Geo-') then
-			print ("geocolure")
 			if sets.midcast.geocolure then
-				gFunc.EquipSet(sets.midcast.geocolure)
-				return true
+				return sets.midcast.geocolure
 			end
 		end
 		if string.match(ability.Name, 'Indi-') then
-			print('indicolure')
 			if sets.midcast.indicolure then
-				gFunc.EquipSet(sets.midcast.indicolure)
-				return true
+				return sets.midcast.indicolure
 			end
 		end
 		return false
