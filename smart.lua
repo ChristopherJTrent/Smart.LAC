@@ -33,7 +33,6 @@ if(skills==nil or data==nil or validData==nil or globals == nil or helpers == ni
 end
 
 local load = function(sets)
-	helpers.CheckForDefaults(sets)
 	local sub = gData.GetPlayer().SubJob
 	gSettings.AllowAddSet = true
 	print(chat.colors.SpringGreen..'Welcome to Smart.LAC!'..chat.colors.Reset)
@@ -48,6 +47,8 @@ local load = function(sets)
 	print(helpers.AddModHeader(helpers.SucceedOrError(helpers.ValidatePlayerData(data),
 														"Validated index.lua",
 														"Failed to validate index.lua")))
+	local validator = gFunc.LoadFile('smart.lac/handlers/validations.lua')
+	validator(sets)
 	print(helpers.AddModHeader(helpers.SucceedOrWarn(helpers.ValidateSets(sets),
 													"Validated sets in "
 														..gData.GetPlayer().MainJob
@@ -77,13 +78,13 @@ local load = function(sets)
 		gProfile.Sets = helpers.CleanupSets(sets)
 	end
 	gProfile['SubjobOnLoad'] = sub
-	print(gProfile['SubjobOnLoad'])
 	gProfile.Sets = sets
 end
 
 local unload = function() end
 -- This is the only callback that natively accepts an argument
 local command = function(args)
+	print("equip"..args[0])
 	local switch = {
 		equip = function(args)
 			local switch = {
@@ -103,7 +104,7 @@ end
 
 local default = function(sets)
 	local player = gData.GetPlayer()
-	if player.SubJob ~= "NON" and player.SubJob ~= gProfile.SubjobOnLoad then
+	if player.SubJob ~= "NON" and gProfile.SubjobOnLoad ~= "NON" and player.SubJob ~= gProfile.SubjobOnLoad then
 		print(helpers.AddModHeader("Subjob doesn't match what it was when your profile was loaded. Rerunning subjob checks. "
 									.. 'Was: '
 									..gProfile.SubjobOnLoad
