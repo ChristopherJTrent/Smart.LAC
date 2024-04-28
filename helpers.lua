@@ -52,17 +52,6 @@ local function AddModHeader(string)
 	return chat.colors.LawnGreen..'[Smart.LAC] '..chat.colors.Reset..string
 end
 
-local function CheckForDefaults(sets)
-	for k, v in pairs(sets) do
-		if k ~= "general" and v.default == nil then
-			if v.Default ~= nil then
-				print(chat.warning(AddModHeader('Found key "Default" in table '..k..', did you mean "default"?')))
-			else
-				print(chat.warning(AddModHeader('Table '..k..' is missing a "default" set. All defined set tables should have a default.')))
-			end
-		end
-	end
-end
 
 
 local function SucceedOrWarn(success, good, bad)
@@ -82,38 +71,33 @@ end
 ---@param key string
 ---@return boolean success?
 local function GenericAbilityHandler(sets, key)
+	if not sets[key] then return false end
+
 	local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
 	local action = gData.GetAction()
+
 	if sets[key] and sets[key]['customHandler'] ~= nil and type(sets[key]['customHandler']) == "function" then
 		if sets[key]['customHandler'](sets) then return true end
 	end
 
+	local finalSet = sets[key].default ~= nil and sets[key].default or {}
+
 	local mainJob = gData.GetPlayer().MainJob
 	if jobHandlers[mainJob] and jobHandlers[mainJob][key] then
-		if jobHandlers[mainJob][key](action, sets) then return true end
+		local result = jobHandlers[mainJob][key](action, sets)
+		finalSet = result and gFunc.Combine(finalSet, result) or finalSet
 	end
 	local subJob = gData.GetPlayer().SubJob
 	if jobHandlers[subJob] and jobHandlers[subJob][key] then
-		if jobHandlers[subJob][key](action, sets) then return true end
+		local result = jobHandlers[subJob][key](action, sets)
+		finalSet = result and gFunc.Combine(finalSet, result) or finalSet
 	end
-	-- Failure Case
-	if not sets[key] then return false end
 
-	if sets[key][action.Name] ~= nil then
-		if sets[key].default ~= nil then
-			EquipWithDefault(sets, key, sets[key][action.Name])
-		else
-			chat.warning(AddModHeader('default (base) set for key "'..key..'" was not found. Consider adding one.'))
-			gFunc.EquipSet(sets[key][action.Name])
-		end
-		return true
-	end
-	if sets[key].default ~= nil then
-		gFunc.EquipSet(sets[key].default)
-		return true
-	end
-	-- Fail if all options failed.
-	return false
+	finalSet = sets[key][action.Name] and gFunc.Combine(finalSet, sets[key][action.Name]) or finalSet
+	finalSet = sets[key][action.Type] and gFunc.Combine(finalSet, sets[key][action.Type]) or finalSet
+	finalSet = sets[key][action.Skill] and gFunc.Combine(finalSet, sets[key][action.Skill]) or finalSet
+
+	gFunc.EquipSet(finalSet)
 end
 
 local function CleanupSets(sets)
@@ -150,5 +134,4 @@ return {
 	GetWeaponskillProperty = GetWeaponskillProperties,
 	GenericAbilityHandler = GenericAbilityHandler,
 	CleanupSets = CleanupSets,
-	CheckForDefaults = CheckForDefaults
 }
