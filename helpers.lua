@@ -96,6 +96,14 @@ local function GenericAbilityHandler(sets, key)
 	finalSet = sets[key][action.Name] and gFunc.Combine(finalSet, sets[key][action.Name]) or finalSet
 	finalSet = sets[key][action.Type] and gFunc.Combine(finalSet, sets[key][action.Type]) or finalSet
 	finalSet = sets[key][action.Skill] and gFunc.Combine(finalSet, sets[key][action.Skill]) or finalSet
+	
+	if sets[key].buffs ~= nil then
+		for k, v in pairs(sets[key].buffs) do
+			if gData.GetBuffCount(k) > 0 then
+				finalSet = gFunc.Combine(finalSet, v)
+			end
+		end
+	end
 
 	gFunc.EquipSet(finalSet)
 end
