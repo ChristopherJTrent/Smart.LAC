@@ -33,10 +33,11 @@ if(skills==nil or data==nil or validData==nil or globals == nil or helpers == ni
 end
 
 local load = function(sets)
+	local success = true
 	local sub = gData.GetPlayer().SubJob
 	gSettings.AllowAddSet = true
 	print(chat.colors.SpringGreen..'Welcome to Smart.LAC!'..chat.colors.Reset)
-	print(helpers.AddModHeader('Validating data...'))
+	--print(helpers.AddModHeader('Validating data...'))
 	data.ownedBelts = helpers.EnsureSugaredTable(data.ownedBelts)
 	data.ownedGorgets = helpers.EnsureSugaredTable(data.ownedGorgets)
 	if globals and globals.debug  then
@@ -44,21 +45,22 @@ local load = function(sets)
 				and chat.success("    Tables have been sugared")
 				or chat.error("    Table sugaring failed."))
 	end
-	print(helpers.AddModHeader(helpers.SucceedOrError(helpers.ValidatePlayerData(data),
-														"Validated index.lua",
-														"Failed to validate index.lua")))
+	if not helpers.ValidatePlayerData(data) then
+		print(helpers.AddModHeader(chat.warning('Failed to validate index.lua')))
+		success = false
+	end
 	local validator = gFunc.LoadFile('smart.lac/handlers/validations.lua')
 	validator(sets)
-	print(helpers.AddModHeader(helpers.SucceedOrWarn(helpers.ValidateSets(sets),
-													"Validated sets in "
-														..gData.GetPlayer().MainJob
-														..".lua",
-													"Failed to validate sets.")))
+	if not helpers.ValidateSets(sets) then
+		print(helpers.AddModHeader(chat.warning('Failed to validate sets')))
+		success = false
+	end
 	if sets.general and sets.general.Idle  then
 		gFunc.EquipSet(sets.general.Idle)
 	else
 		print(helpers.AddModHeader(helpers.SucceedOrWarn(false, "",
 														"Failed to equip default idle set, please check your gear.")))
+		success = false
 	end
 	if sets.Weapons and sets.Weapons[sub] then
 		print(helpers.AddModHeader("Equipping weapons for subjob."))
@@ -79,6 +81,7 @@ local load = function(sets)
 	end
 	gProfile['SubjobOnLoad'] = sub
 	gProfile.Sets = sets
+	print(helpers.AddModHeader(helpers.SucceedOrWarn(success, 'All validations passed', 'Some validations failed, check chat output for info.')))
 end
 
 local unload = function() end
