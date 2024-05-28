@@ -26,6 +26,13 @@ local function ContainsAllKeys(t, other)
 	return true
 end
 
+local function getSpellBaseName(spell)
+	local start, _ = string.find(spell, ' ')
+	if start == nil then return spell end
+	local name = string.sub(spell, 1, start-1)
+	return name
+end
+
 local function ValidatePlayerData(t)
 	---@type playerData
 	local validData = gFunc.LoadFile('smart.lac/data/index.lua')
@@ -72,7 +79,7 @@ end
 ---@return boolean success?
 local function GenericAbilityHandler(sets, key)
 	if not sets[key] then return false end
-
+	
 	local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
 	local action = gData.GetAction()
 
@@ -94,9 +101,10 @@ local function GenericAbilityHandler(sets, key)
 	end
 
 	finalSet = sets[key][action.Name] and gFunc.Combine(finalSet, sets[key][action.Name]) or finalSet
+	local base = getSpellBaseName(action.Name)
+	finalSet = sets[key][base] and gFunc.Combine(finalSet, sets[key][base]) or finalSet
 	finalSet = sets[key][action.Type] and gFunc.Combine(finalSet, sets[key][action.Type]) or finalSet
 	finalSet = sets[key][action.Skill] and gFunc.Combine(finalSet, sets[key][action.Skill]) or finalSet
-	
 	if sets[key].buffs ~= nil then
 		for k, v in pairs(sets[key].buffs) do
 			if gData.GetBuffCount(k) > 0 then

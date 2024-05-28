@@ -72,12 +72,15 @@ local load = function(sets)
 		print(helpers.AddModHeader("settings table not found."))
 		if not data.DisableWeaponWarning then
 			print(helpers.AddModHeader("Note: Mainhand and Offhand weapon slots are disabled by default when using Smart.LAC. \n"
-			.."Set sets.settings.overrideWeapons=true in your sets table to override this behavior. \n"
+			.."Set sets.settings.enableWeapons=true in your sets table to override this behavior. \n"
 			.."Set DisableWeaponWarning = true in your profile's index.lua to disable this warning."))
 		end
 	end
-	if sets.settings == nil or sets.settings.overrideWeapons ~= true then
+	if sets.settings == nil or sets.settings.enableWeapons ~= true then
+		print(helpers.AddModHeader('cleaned up sets'))
 		gProfile.Sets = helpers.CleanupSets(sets)
+		gFunc.Disable("Main")
+		gFunc.Disable("Sub")
 	end
 	gProfile['SubjobOnLoad'] = sub
 	gProfile.Sets = sets
@@ -122,9 +125,17 @@ local default = function(sets)
 	if(sets['general']) then
 		local status = player.Status
 		if(not status) then return end
+    local set = {}
 		if(sets.general[status] ~= nil) then
-			gFunc.EquipSet(sets.general[status])
+			set = gFunc.Combine(set, sets.general[status])
 		end
+    if (sets.general[status].buffs) then
+      for k, v in pairs(sets.general[status].buffs) do
+        if gData.GetBuffCount(k) > 0 then
+          set = gFunc.Combine(set, v)
+        end
+      end
+    end
 	end
 end
 local ability = function(sets)
@@ -153,7 +164,7 @@ end
 ---@param sets sets
 local weaponskill = function(sets)
 	helpers.GenericAbilityHandler(sets, 'weaponskill')
-	if(sets.settings ~= nil and sets.settings.allowElementalAccessories ~= false) then
+	if(sets.settings ~= nil and sets.settings.allowElementalAccessories == true) then
 		accessories.DoBeltAndGorget(helpers.GetWeaponskillProperty(gData.GetAction()), data)
 	end
 end
