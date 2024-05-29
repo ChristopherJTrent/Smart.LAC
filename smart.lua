@@ -90,21 +90,19 @@ end
 local unload = function() end
 -- This is the only callback that natively accepts an argument
 local command = function(args)
-	print("equip"..args[0])
 	local switch = {
 		equip = function(args)
 			local switch = {
 				function(_) print("equip requires at least 2 arguments") end,
 				function(_) print("equip requires at least 2 arguments") end,
-				function(a) gFunc.LockSet(gProfile.Sets[a[1]][a[2]], 15) end,
-				function(a) gFunc.LockSet(gProfile.Sets[a[1]][a[2]][a[3]], 15) end,
-				function(a) gFunc.LockSet(gProfile.Sets[a[1]][a[2]][a[3]][a[4]], 15) end,
-				function(a) gFunc.LockSet(gProfile.Sets[a[1]][a[2]][a[3]][a[4]][a[5]], 15) end
+				function(a) gFunc.LockSet(gProfile.Sets[a[2]][a[3]], 15) end,
+				function(a) gFunc.LockSet(gProfile.Sets[a[2]][a[3]][a[4]], 15) end,
+				function(a) gFunc.LockSet(gProfile.Sets[a[2]][a[3]][a[4]][a[5]], 15) end,
+				function(a) gFunc.LockSet(gProfile.Sets[a[2]][a[3]][a[4]][a[5]][a[6]], 15) end
 			}
 			switch[#args](args)
 		end
 	}
-	if true then return nil end
 	switch[args[1]](args)
 end
 
@@ -122,6 +120,7 @@ local default = function(sets)
 		end
 		gProfile.SubjobOnLoad = player.SubJob
 	end
+  
 	if(sets['general']) then
 		local status = player.Status
 		if(not status) then return end
@@ -129,13 +128,14 @@ local default = function(sets)
 		if(sets.general[status] ~= nil) then
 			set = gFunc.Combine(set, sets.general[status])
 		end
-    if (sets.general[status].buffs) then
-      for k, v in pairs(sets.general[status].buffs) do
+    if (sets.general.buffs) then
+      for k, v in pairs(sets.general.buffs) do
         if gData.GetBuffCount(k) > 0 then
           set = gFunc.Combine(set, v)
         end
       end
     end
+    gFunc.EquipSet(set)
 	end
 end
 local ability = function(sets)

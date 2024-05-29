@@ -27,6 +27,8 @@ Index = {
 	},
 	---@type boolean
 	DisableWeaponWarning = false,
+  ---@type boolean
+  EnableModeWindow = false,
 }
 
 function Index:new(o)
