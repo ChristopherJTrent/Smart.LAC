@@ -13,6 +13,8 @@ local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
 local accessories = gFunc.LoadFile('smart.lac/accessories.lua')
 ---@type jobHandlers
 local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
+local modes = gFunc.LoadFile('smart.lac/modes.lua')
+if not modes then return nil end
 if(skills==nil or data==nil or validData==nil or globals == nil or helpers == nil or jobHandlers == nil) then
 	print ("Failed to load a file.")
 	print("--------------------\nGlobals")
@@ -32,7 +34,7 @@ if(skills==nil or data==nil or validData==nil or globals == nil or helpers == ni
 	return nil
 end
 
-local load = function(sets)
+local load = function()
 	local success = true
 	local sub = gData.GetPlayer().SubJob
 	gSettings.AllowAddSet = true
@@ -49,6 +51,9 @@ local load = function(sets)
 		print(helpers.AddModHeader(chat.warning('Failed to validate index.lua')))
 		success = false
 	end
+
+	local sets = modes.getSets()
+
 	local validator = gFunc.LoadFile('smart.lac/handlers/validations.lua')
 	validator(sets)
 	if not helpers.ValidateSets(sets) then
@@ -84,10 +89,17 @@ local load = function(sets)
 	end
 	gProfile['SubjobOnLoad'] = sub
 	gProfile.Sets = sets
+
+	modes.initializeWindow()
+
+	AshitaCore:GetChatManager():QueueCommand(-1, '/bind F12 /lac fwd nextMode')
+
 	print(helpers.AddModHeader(helpers.SucceedOrWarn(success, 'All validations passed', 'Some validations failed, check chat output for info.')))
 end
 
-local unload = function() end
+local unload = function()
+  modes.setWindowVisibility(false)
+end
 -- This is the only callback that natively accepts an argument
 local command = function(args)
 	local switch = {
@@ -95,19 +107,42 @@ local command = function(args)
 			local switch = {
 				function(_) print("equip requires at least 2 arguments") end,
 				function(_) print("equip requires at least 2 arguments") end,
-				function(a) gFunc.LockSet(gProfile.Sets[a[2]][a[3]], 15) end,
-				function(a) gFunc.LockSet(gProfile.Sets[a[2]][a[3]][a[4]], 15) end,
-				function(a) gFunc.LockSet(gProfile.Sets[a[2]][a[3]][a[4]][a[5]], 15) end,
-				function(a) gFunc.LockSet(gProfile.Sets[a[2]][a[3]][a[4]][a[5]][a[6]], 15) end
+				function(a)
+					local sets = modes.getSets()
+					gFunc.LockSet(sets[a[2]][a[3]], 15)
+				end,
+				function(a)
+					local sets = modes.getSets()
+					gFunc.LockSet(sets[a[2]][a[3]][a[4]], 15)
+				end,
+				function(a)
+					local sets = modes.getSets()
+					gFunc.LockSet(sets[a[2]][a[3]][a[4]][a[5]], 15)
+				end,
+				function(a)
+					local sets = modes.getSets()
+					gFunc.LockSet(sets[a[2]][a[3]][a[4]][a[5]][a[6]], 15)
+				end
 			}
 			switch[#args](args)
-		end
+		end,
+		setMode = function(args)
+			if #args ~= 2 then
+				print(helpers.AddModHeader("setMode requires exactly 1 argument."))
+			else
+				modes.setActiveMode(args[2])
+			end
+		end,
+    nextMode = function()
+      modes.nextMode()
+    end
 	}
 	switch[args[1]](args)
 end
 
-local default = function(sets)
+local default = function()
 	local player = gData.GetPlayer()
+	local sets = modes.getSets()
 	if player.SubJob ~= "NON" and gProfile.SubjobOnLoad ~= "NON" and player.SubJob ~= gProfile.SubjobOnLoad then
 		print(helpers.AddModHeader("Subjob doesn't match what it was when your profile was loaded. Rerunning subjob checks. "
 									.. 'Was: '
@@ -120,7 +155,7 @@ local default = function(sets)
 		end
 		gProfile.SubjobOnLoad = player.SubJob
 	end
-  
+
 	if(sets['general']) then
 		local status = player.Status
 		if(not status) then return end
@@ -138,31 +173,38 @@ local default = function(sets)
     gFunc.EquipSet(set)
 	end
 end
-local ability = function(sets)
+local ability = function()
+	local sets = modes.getSets()
 	return helpers.GenericAbilityHandler(sets, "ability")
 end
-local item = function(sets)
+local item = function()
+	local sets = modes.getSets()
 	return helpers.GenericAbilityHandler(sets, "item")
 end
 
-local precast = function(sets)
+local precast = function()
+	local sets = modes.getSets()
 	return helpers.GenericAbilityHandler(sets, "precast")
 end
 
-local midcast = function(sets)
+local midcast = function()
+	local sets = modes.getSets()
 	return helpers.GenericAbilityHandler(sets, "midcast")
 end
 
-local preshot = function(sets)
+local preshot = function()
+	local sets = modes.getSets()
 	return helpers.GenericAbilityHandler(sets, "preshot")
 end
 
-local midshot = function(sets)
+local midshot = function()
+	local sets = modes.getSets()
 	return helpers.GenericAbilityHandler(sets, 'midshot')
 end
 
 ---@param sets sets
-local weaponskill = function(sets)
+local weaponskill = function()
+	local sets = modes.getSets()
 	helpers.GenericAbilityHandler(sets, 'weaponskill')
 	if(sets.settings ~= nil and sets.settings.allowElementalAccessories == true) then
 		accessories.DoBeltAndGorget(helpers.GetWeaponskillProperty(gData.GetAction()), data)
@@ -174,34 +216,32 @@ end
 ---@param sets sets
 ---@return smartProfile
 return function(sets)
-		---@nodiscard
-		---@param f fun(sets:sets)
-		local function curryWithSets(f)
-			return function()
-				f(sets)
-			end
-		end
-		---@type smartProfile
-		local returnTable = T{
-			Sets = sets,
-			Packer = sets,
-			OnLoad    = curryWithSets(load),
-			OnUnload  = unload,
-			HandleCommand = command,
-			HandleDefault = curryWithSets(default),
-			HandleAbility = curryWithSets(ability),
-			HandleItem    = curryWithSets(item),
-			HandlePrecast = curryWithSets(precast),
-			HandleMidcast = curryWithSets(midcast),
-			HandlePreshot = curryWithSets(preshot),
-			HandleMidshot = curryWithSets(midshot),
-			HandleWeaponskill = curryWithSets(weaponskill)
-		}
+	if sets ~= nil then
+		modes.registerSets('default', sets)
+		modes.setActiveMode('default')
+		modes.setWindowVisibility(false)
+	end
 
-		function returnTable:withPacker(packerData)
-			self.Packer = packerData
-			return self
-		end
+	---@type smartProfile
+	local returnTable = T{
+		Packer = modes.getSets(),
+		OnLoad    = load,
+		OnUnload  = unload,
+		HandleCommand = command,
+		HandleDefault = default,
+		HandleAbility = ability,
+		HandleItem    = item,
+		HandlePrecast = precast,
+		HandleMidcast = midcast,
+		HandlePreshot = preshot,
+		HandleMidshot = midshot,
+		HandleWeaponskill = weaponskill
+	}
 
-		return returnTable
+	function returnTable:withPacker(packerData)
+		self.Packer = packerData
+		return self
+	end
+
+	return returnTable
 end
