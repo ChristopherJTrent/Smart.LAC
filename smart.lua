@@ -136,15 +136,17 @@ local command = function(args)
 		setWindowLocation = function(args) 
 			if #args ~= 3 then
 				print(helpers.AddModHeader("setWindowLocation requires exactly 3 arguments"))
-			else if string.lower(args[2]) == 'x' then
+			elseif string.lower(args[2]) == 'x' then
 				modes.setWindowPosX(tonumber(args[3]))
-			else if string.lower(args[2]) == 'y' then
+			elseif string.lower(args[2]) == 'y' then
 				modes.setWindowPosY(tonumber(args[3]))
+			else 
+				print(helpers.AddModHeader("second argument must be either x or y"))
 			end
+		end,
+		nextMode = function()
+			modes.nextMode()
 		end
-    nextMode = function()
-      modes.nextMode()
-    end
 	}
 	switch[args[1]](args)
 end
