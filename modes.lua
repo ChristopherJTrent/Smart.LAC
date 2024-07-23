@@ -6,6 +6,9 @@ local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
 
 modeTable = {}
 modeTable.enableWindow = true
+modeTable.imgui = {}
+modeTable.imgui.windowPosX = 1300
+modeTable.imgui.windowPosY = 400
 
 modeTable.modeList = {}
 modeTable.currentMode = 1
@@ -45,6 +48,12 @@ return {
       modeTable.currentMode = modeTable.currentMode + 1
     end
   end,
+  setWindowPosX = function(x)
+    modeTable.imgui.windowPosX = x
+  end,
+  setWindowPosY = function(y)
+    modeTable.imgui.windowPosY = y
+  end,
   initializeWindow = function()
     ashita.events.register('d3d_present', 'present_cb', function()
       if modeTable and modeTable.enableWindow then
@@ -58,7 +67,7 @@ return {
         imgui.SetNextWindowBgAlpha(0.8)
         imgui.SetNextWindowSize({300, -1}, ImGuiCond_Always)
         imgui.SetNextWindowSizeConstraints({-1, -1}, {FLT_MAX, FLT_MAX})
-        imgui.SetNextWindowPos({1300, 400}, ImGuiCond_Always, {0, 0})
+        imgui.SetNextWindowPos({modeTable.imgui.windowPosX, modeTable.imgui.windowPosY}, ImGuiCond_Always, {0, 0})
         if (imgui.Begin('smart.lac', true, flags)) then
           imgui.SetWindowFontScale(1)
           imgui.Text("Smart.LAC")
