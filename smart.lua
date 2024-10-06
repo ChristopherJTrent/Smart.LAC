@@ -87,13 +87,17 @@ local load = function()
 	-- 	gFunc.Disable("Main")
 	-- 	gFunc.Disable("Sub")
 	-- end
-	gProfile['SubjobOnLoad'] = sub
+	-- gProfile['SubjobOnLoad'] = sub
 	gProfile.Sets = sets
 
 	modes.initializeWindow()
 
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind F12 /lac fwd nextMode')
-
+	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent F12 /lac fwd nextMode')
+	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent F11 /lac fwd nextWeaponGroup')
+	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent +F12 /lac fwd setMode '..modeTable.modeList[1])
+	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent +F11 /lac fwd setWeaponGroup '..modeTable.weaponGroupList[1])
+	
+	
 	print(helpers.AddModHeader(helpers.SucceedOrWarn(success, 'All validations passed', 'Some validations failed, check chat output for info.')))
 end
 
@@ -133,6 +137,13 @@ local command = function(args)
 				modes.setActiveMode(args[2])
 			end
 		end,
+		setWeaponGroup = function(args)
+			if #args ~= 2 then
+				print(helpers.AddModHeader(chat.error('setWeaponGroup requires exactly 1 argument')))
+			else
+				modes.setActiveMode(args[2])
+			end
+		end,
 		setWindowLocation = function(args) 
 			if #args ~= 3 then
 				print(helpers.AddModHeader("setWindowLocation requires exactly 3 arguments"))
@@ -146,6 +157,9 @@ local command = function(args)
 		end,
 		nextMode = function()
 			modes.nextMode()
+		end,
+		nextWeaponGroup = function()
+			modes.nextWeaponGroup()
 		end
 	}
 	switch[args[1]](args)
@@ -154,19 +168,22 @@ end
 local default = function()
 	local player = gData.GetPlayer()
 	local sets = modes.getSets()
-	if player.SubJob ~= "NON" and gProfile.SubjobOnLoad ~= "NON" and player.SubJob ~= gProfile.SubjobOnLoad then
-		print(helpers.AddModHeader("Subjob doesn't match what it was when your profile was loaded. Rerunning subjob checks. "
-									.. 'Was: '
-									..gProfile.SubjobOnLoad
-									.." Now: "
-									..player.SubJob))
-		if sets.Weapons and sets.Weapons[player.SubJob] then
-			print(helpers.AddModHeader("Subjob Weapon definitions found for new subjob, equipping..."))
-			gFunc.EquipSet(sets.Weapons[player.SubJob])
-		end
-		gProfile.SubjobOnLoad = player.SubJob
-	end
+	-- if player.SubJob ~= "NON" and gProfile.SubjobOnLoad ~= "NON" and player.SubJob ~= gProfile.SubjobOnLoad then
+	-- 	print(helpers.AddModHeader("Subjob doesn't match what it was when your profile was loaded. Rerunning subjob checks. "
+	-- 								.. 'Was: '
+	-- 								..gProfile.SubjobOnLoad
+	-- 								.." Now: "
+	-- 								..player.SubJob))
+	-- 	if sets.Weapons and sets.Weapons[player.SubJob] then
+	-- 		print(helpers.AddModHeader("Subjob Weapon definitions found for new subjob, equipping..."))
+	-- 		gFunc.EquipSet(sets.Weapons[player.SubJob])
+	-- 	end
+	-- 	gProfile.SubjobOnLoad = player.SubJob
+	-- end
 
+	if modeTable.weaponsEnabled then
+		gFunc.EquipSet(modes.getWeaponGroup())
+	end
 	if(sets['general']) then
 		local status = player.Status
 		if(not status) then return end
