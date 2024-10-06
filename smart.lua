@@ -67,26 +67,26 @@ local load = function()
 														"Failed to equip default idle set, please check your gear.")))
 		success = false
 	end
-	if sets.Weapons and sets.Weapons[sub] then
-		print(helpers.AddModHeader("Equipping weapons for subjob."))
-		print(sets.Weapons[sub].Main)
-		print(sets.Weapons[sub].Sub)
-		gFunc.ForceEquipSet(sets.Weapons[sub])
-	end
+	-- if sets.Weapons and sets.Weapons[sub] then
+	-- 	print(helpers.AddModHeader("Equipping weapons for subjob "..sub))
+	-- 	print(sets.Weapons[sub].Main)
+	-- 	print(sets.Weapons[sub].Sub)
+	-- 	gFunc.ForceEquipSet(sets.Weapons[sub])
+	-- end
 	if sets.settings == nil then
-		print(helpers.AddModHeader("settings table not found."))
-		if not data.DisableWeaponWarning then
-			print(helpers.AddModHeader("Note: Mainhand and Offhand weapon slots are disabled by default when using Smart.LAC. \n"
-			.."Set sets.settings.enableWeapons=true in your sets table to override this behavior. \n"
-			.."Set DisableWeaponWarning = true in your profile's index.lua to disable this warning."))
-		end
+		-- print(helpers.AddModHeader("settings table not found."))
+		-- if not data.DisableWeaponWarning then
+		-- 	print(helpers.AddModHeader("Note: Mainhand and Offhand weapon slots are disabled by default when using Smart.LAC. \n"
+		-- 	.."Set sets.settings.enableWeapons=true in your sets table to override this behavior. \n"
+		-- 	.."Set DisableWeaponWarning = true in your profile's index.lua to disable this warning."))
+		-- end
 	end
-	if sets.settings == nil or sets.settings.enableWeapons ~= true then
-		print(helpers.AddModHeader('cleaned up sets'))
-		gProfile.Sets = helpers.CleanupSets(sets)
-		gFunc.Disable("Main")
-		gFunc.Disable("Sub")
-	end
+	-- if sets.settings == nil or sets.settings.enableWeapons ~= true then
+	-- 	print(helpers.AddModHeader('cleaned up sets'))
+	-- 	gProfile.Sets = helpers.CleanupSets(sets)
+	-- 	gFunc.Disable("Main")
+	-- 	gFunc.Disable("Sub")
+	-- end
 	gProfile['SubjobOnLoad'] = sub
 	gProfile.Sets = sets
 
