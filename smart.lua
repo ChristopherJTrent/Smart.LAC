@@ -36,16 +36,22 @@ end
 
 local load = function()
 	local success = true
+
 	local sub = gData.GetPlayer().SubJob
+
 	gSettings.AllowAddSet = true
+
 	print(chat.colors.SpringGreen..'Welcome to Smart.LAC!'..chat.colors.Reset)
+
 	data.ownedBelts = helpers.EnsureSugaredTable(data.ownedBelts)
 	data.ownedGorgets = helpers.EnsureSugaredTable(data.ownedGorgets)
+
 	if globals and globals.debug  then
 		print(data.ownedBelts.contains ~= nil
 				and chat.success("    Tables have been sugared")
 				or chat.error("    Table sugaring failed."))
 	end
+
 	if not helpers.ValidatePlayerData(data) then
 		print(helpers.AddModHeader(chat.warning('Failed to validate index.lua')))
 		success = false
@@ -55,10 +61,12 @@ local load = function()
 
 	local validator = gFunc.LoadFile('smart.lac/handlers/validations.lua')
 	validator(sets)
+
 	if not helpers.ValidateSets(sets) then
 		print(helpers.AddModHeader(chat.warning('Failed to validate sets')))
 		success = false
 	end
+
 	if sets.general and sets.general.Idle  then
 		gFunc.EquipSet(sets.general.Idle)
 	else
@@ -75,7 +83,6 @@ local load = function()
 	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent F11 /lac fwd nextWeaponGroup')
 	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent +F12 /lac fwd setMode '..modeTable.modeList[1])
 	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent +F11 /lac fwd setWeaponGroup '..modeTable.weaponGroupList[1])
-	
 	
 	print(helpers.AddModHeader(helpers.SucceedOrWarn(success, 'All validations passed', 'Some validations failed, check chat output for info.')))
 end
@@ -109,6 +116,7 @@ local command = function(args)
 			}
 			switch[#args](args)
 		end,
+
 		setMode = function(args)
 			if #args ~= 2 then
 				print(helpers.AddModHeader("setMode requires exactly 1 argument."))
@@ -116,6 +124,7 @@ local command = function(args)
 				modes.setActiveMode(args[2])
 			end
 		end,
+
 		setWeaponGroup = function(args)
 			if #args ~= 2 then
 				print(helpers.AddModHeader(chat.error('setWeaponGroup requires exactly 1 argument')))
@@ -123,6 +132,7 @@ local command = function(args)
 				modes.setActiveMode(args[2])
 			end
 		end,
+
 		setWindowLocation = function(args) 
 			if #args ~= 3 then
 				print(helpers.AddModHeader("setWindowLocation requires exactly 3 arguments"))
@@ -134,9 +144,11 @@ local command = function(args)
 				print(helpers.AddModHeader("second argument must be either x or y"))
 			end
 		end,
+
 		nextMode = function()
 			modes.nextMode()
 		end,
+
 		nextWeaponGroup = function()
 			modes.nextWeaponGroup()
 		end
@@ -151,27 +163,33 @@ local default = function()
 	if modeTable.weaponsEnabled then
 		gFunc.EquipSet(modes.getWeaponGroup())
 	end
+
 	if(sets['general']) then
 		local status = player.Status
 		if(not status) then return end
-    local set = {}
+
+    	local set = {}
+
 		if(sets.general[status] ~= nil) then
 			set = gFunc.Combine(set, sets.general[status])
 		end
-    if (sets.general.buffs) then
-      for k, v in pairs(sets.general.buffs) do
-        if gData.GetBuffCount(k) > 0 then
-          set = gFunc.Combine(set, v)
-        end
-      end
-    end
-    gFunc.EquipSet(set)
+
+		if (sets.general.buffs) then
+			for k, v in pairs(sets.general.buffs) do
+				if gData.GetBuffCount(k) > 0 then
+					set = gFunc.Combine(set, v)
+				end
+			end
+		end
+		gFunc.EquipSet(set)
 	end
 end
+
 local ability = function()
 	local sets = modes.getSets()
 	return helpers.GenericAbilityHandler(sets, "ability")
 end
+
 local item = function()
 	local sets = modes.getSets()
 	return helpers.GenericAbilityHandler(sets, "item")
