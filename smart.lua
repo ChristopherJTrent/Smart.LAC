@@ -39,7 +39,6 @@ local load = function()
 	local sub = gData.GetPlayer().SubJob
 	gSettings.AllowAddSet = true
 	print(chat.colors.SpringGreen..'Welcome to Smart.LAC!'..chat.colors.Reset)
-	--print(helpers.AddModHeader('Validating data...'))
 	data.ownedBelts = helpers.EnsureSugaredTable(data.ownedBelts)
 	data.ownedGorgets = helpers.EnsureSugaredTable(data.ownedGorgets)
 	if globals and globals.debug  then
@@ -67,27 +66,7 @@ local load = function()
 														"Failed to equip default idle set, please check your gear.")))
 		success = false
 	end
-	-- if sets.Weapons and sets.Weapons[sub] then
-	-- 	print(helpers.AddModHeader("Equipping weapons for subjob "..sub))
-	-- 	print(sets.Weapons[sub].Main)
-	-- 	print(sets.Weapons[sub].Sub)
-	-- 	gFunc.ForceEquipSet(sets.Weapons[sub])
-	-- end
-	if sets.settings == nil then
-		-- print(helpers.AddModHeader("settings table not found."))
-		-- if not data.DisableWeaponWarning then
-		-- 	print(helpers.AddModHeader("Note: Mainhand and Offhand weapon slots are disabled by default when using Smart.LAC. \n"
-		-- 	.."Set sets.settings.enableWeapons=true in your sets table to override this behavior. \n"
-		-- 	.."Set DisableWeaponWarning = true in your profile's index.lua to disable this warning."))
-		-- end
-	end
-	-- if sets.settings == nil or sets.settings.enableWeapons ~= true then
-	-- 	print(helpers.AddModHeader('cleaned up sets'))
-	-- 	gProfile.Sets = helpers.CleanupSets(sets)
-	-- 	gFunc.Disable("Main")
-	-- 	gFunc.Disable("Sub")
-	-- end
-	-- gProfile['SubjobOnLoad'] = sub
+
 	gProfile.Sets = sets
 
 	modes.initializeWindow()
@@ -168,18 +147,6 @@ end
 local default = function()
 	local player = gData.GetPlayer()
 	local sets = modes.getSets()
-	-- if player.SubJob ~= "NON" and gProfile.SubjobOnLoad ~= "NON" and player.SubJob ~= gProfile.SubjobOnLoad then
-	-- 	print(helpers.AddModHeader("Subjob doesn't match what it was when your profile was loaded. Rerunning subjob checks. "
-	-- 								.. 'Was: '
-	-- 								..gProfile.SubjobOnLoad
-	-- 								.." Now: "
-	-- 								..player.SubJob))
-	-- 	if sets.Weapons and sets.Weapons[player.SubJob] then
-	-- 		print(helpers.AddModHeader("Subjob Weapon definitions found for new subjob, equipping..."))
-	-- 		gFunc.EquipSet(sets.Weapons[player.SubJob])
-	-- 	end
-	-- 	gProfile.SubjobOnLoad = player.SubJob
-	-- end
 
 	if modeTable.weaponsEnabled then
 		gFunc.EquipSet(modes.getWeaponGroup())
