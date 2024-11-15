@@ -2,7 +2,7 @@ local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
 
 local function CheckForDefaults(sets)
 	for k, v in pairs(sets) do
-		if v.default == nil and (k ~= 'general' and k ~= 'settings') then
+		if v.default == nil and (k ~= 'general' and k ~= 'settings' and k ~= 'lockstyle') and not k:find("^_") then
 			if v.Default ~= nil then
 				print(chat.warning(helpers.AddModHeader('Found key "Default" in table '..k..', did you mean "default"?')))
 			else

@@ -47,6 +47,20 @@ local function ValidatePlayerData(t)
 	return belts and gorgets
 end
 
+local function customFlattenTable(table) 
+	local ignore = T{"Augment", "AugPath", "AugRank", "AugTrial", "Quantity", "Bag"}
+	local ret = {}
+	for k, v in pairs(table) do
+		if (type(v) == type({}) and not ignore:contains(k)) then
+			 local flat = customFlattenTable(v)
+			 T(flat):each(function(vv) ret[#ret+1] = vv; end)
+		elseif (not ignore:contains(k)) then
+			ret[#ret + 1] = v
+		end
+	end
+	return T(ret)
+end
+
 local function ValidateSets(sets)
 	local validSets = gFunc.LoadFile('smart.lac/data/JOB.lua')
 	if(validSets ~= nil) then
@@ -79,7 +93,6 @@ end
 ---@return boolean success?
 local function GenericAbilityHandler(sets, key)
 	if not sets[key] then return false end
-	
 	local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
 	local action = gData.GetAction()
 
@@ -100,15 +113,20 @@ local function GenericAbilityHandler(sets, key)
 		finalSet = result and gFunc.Combine(finalSet, result) or finalSet
 	end
 
-	finalSet = sets[key][action.Name] and gFunc.Combine(finalSet, sets[key][action.Name]) or finalSet
 	local base = getSpellBaseName(action.Name)
-	finalSet = sets[key][base] and gFunc.Combine(finalSet, sets[key][base]) or finalSet
 	finalSet = sets[key][action.Type] and gFunc.Combine(finalSet, sets[key][action.Type]) or finalSet
 	finalSet = sets[key][action.Skill] and gFunc.Combine(finalSet, sets[key][action.Skill]) or finalSet
+	finalSet = sets[key][base] and gFunc.Combine(finalSet, sets[key][base]) or finalSet
+	finalSet = sets[key][action.Name] and gFunc.Combine(finalSet, sets[key][action.Name]) or finalSet
+	finalSet = modes.applyOverrides(finalSet, key, action.Type)
+	finalSet = modes.applyOverrides(finalSet, key, action.Skill)
+	finalSet = modes.applyOverrides(finalSet, key, base)
+	finalSet = modes.applyOverrides(finalSet, key, action.Name)
 	if sets[key].buffs ~= nil then
 		for k, v in pairs(sets[key].buffs) do
 			if gData.GetBuffCount(k) > 0 then
 				finalSet = gFunc.Combine(finalSet, v)
+				finalSet = modes.applyOverrides(finalSet, key, 'buffs', k)
 			end
 		end
 	end
@@ -140,6 +158,24 @@ end
 
 ---@type helpers
 return {
+	slotNames = T{
+		"Main",
+		"Sub",
+		"Range",
+		"Ammo",
+		"Head",
+		"Neck",
+		"Ear1",
+		"Ear2",
+		"Body",
+		"Hands",
+		"Ring1",
+		"Ring2",
+		"Back",
+		"Waist",
+		"Legs",
+		"Feet"
+	},
 	EnsureSugaredTable = EnsureSugaredTable,
 	ContainsAllKeys = ContainsAllKeys,
 	ValidatePlayerData = ValidatePlayerData,
@@ -150,4 +186,5 @@ return {
 	GetWeaponskillProperty = GetWeaponskillProperties,
 	GenericAbilityHandler = GenericAbilityHandler,
 	CleanupSets = CleanupSets,
+	customFlattenTable = customFlattenTable,
 }

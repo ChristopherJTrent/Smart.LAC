@@ -3,12 +3,93 @@
 require('common')
 local imgui = require('imgui')
 local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
+local index = gFunc.LoadFile('index.lua')
+
+local defaultBindings = {
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "0",
+  "+1",
+  "+2",
+  "+3",
+  "+4",
+  "+5",
+  "+6",
+  "+7",
+  "+8",
+  "+9",
+  "+0",
+}
+local defaultWeaponBindings = T{
+  "^1",
+  "^2",
+  "^3",
+  "^4",
+  "^5",
+  "^6",
+  "^7",
+  "^8",
+  "^9",
+  "^0",
+  "^+1",
+  "^+2",
+  "^+3",
+  "^+4",
+  "^+5",
+  "^+6",
+  "^+7",
+  "^+8",
+  "^+9",
+  "^+0",
+}
+local defaultSecondaryBindings = T{
+  "!1",
+  "!2",
+  "!3",
+  "!4",
+  "!5",
+  "!6",
+  "!7",
+  "!8",
+  "!9",
+  "!0",
+  "!+1",
+  "!+2",
+  "!+3",
+  "!+4",
+  "!+5",
+  "!+6",
+  "!+7",
+  "!+8",
+  "!+9",
+  "!+0",
+}
 
 modeTable = {}
 modeTable.enableWindow = true
 modeTable.imgui = {}
-modeTable.imgui.windowPosX = 1300
-modeTable.imgui.windowPosY = 400
+if index.imgui then
+  if index.imgui.posX then
+    modeTable.imgui.windowPosX = index.imgui.posX
+  else 
+    modeTable.imgui.windowPosX = 3200
+  end
+  if index.imgui.posY then
+    modeTable.imgui.windowPosY = index.imgui.posY
+  else 
+    modeTable.imgui.windowPosY = 750
+  end
+else 
+  modeTable.imgui.windowPosX = 3200
+  modeTable.imgui.windowPosY = 750
+end
 
 modeTable.modeList = {}
 modeTable.currentMode = 1
@@ -19,6 +100,18 @@ modeTable.weaponGroups = {}
 modeTable.weaponGroupList = {}
 modeTable.currentWeaponGroup = 1
 
+modeTable.secondaryEnabled = false
+modeTable.secondaryGroups = {}
+modeTable.secondaryGroupList = {}
+modeTable.currentSecondaryGroup = 1
+
+modeTable.overrideLayersEnabled = false
+modeTable.overrideLayers = T{}
+modeTable.overrideLayerStates = T{}
+modeTable.overrideLayerNames = T{}
+modeTable.overrideStateNames = T{}
+modeTable.keybinds = T{}
+
 local getCurrentMode = function()
   return modeTable.modeList[modeTable.currentMode]
 end
@@ -27,10 +120,50 @@ local getCurrentWeaponGroup = function()
   return modeTable.weaponGroupList[modeTable.currentWeaponGroup]
 end
 
+local getCurrentSecondaryGroup = function()
+  return modeTable.secondaryGroupList[modeTable.currentSecondaryGroup]
+end
+
 return {
+  generatePackerConfig = function()
+    local builder = gFunc.LoadFile('smart.lac/packerBuilder.lua')
+    if not builder then 
+      print(helpers.AddModHeader(chat.error("Failed to load builder lib")))
+      return 
+    end
+    builder:process(modeTable.modes)
+    builder:process(modeTable.weaponGroups)
+    builder:process(modeTable.secondaryGroups)
+    builder:process(modeTable.overrideLayers)
+    return builder:get()
+  end,
+  registerKeybinds = function()
+    local chatManager = AshitaCore:GetChatManager()
+    chatManager:QueueCommand(-1, "/unbind all")
+    chatManager:QueueCommand(-1, "/bind F12 /lac fwd nextMode")
+    chatManager:QueueCommand(-1, "/bind F11 /lac fwd nextWeaponGroup")
+    chatManager:QueueCommand(-1, "/bind F10 /lac fwd nextSecondaryGroup")
+    for i, v in ipairs(modeTable.keybinds) do
+      chatManager:QueueCommand(-1, "/bind "..v.." /lac fwd nextOverride "..i)
+    end
+    for i, _ in ipairs(modeTable.weaponGroups) do
+      chatManager:QueueCommand(-1, "/bind "..defaultWeaponBindings[i].." /lac fwd setActiveWeaponGroup "..i)
+    end
+    for i, _ in ipairs(modeTable.secondaryGroups) do
+      chatManager:QueueCommand(-1, "/bind "..defaultSecondaryBindings[i].." /lac fwd setActiveSecondaryGroup "..i)
+    end
+  end,
   enableWeaponGroups = function()
     print(helpers.AddModHeader(chat.success('Enabled weapon groups')))
     modeTable.weaponsEnabled = true
+  end,
+  enableSecondaryGroups = function()
+    print(helpers.AddModHeader(chat.success('Enabled secondary weapon groups')))
+    modeTable.secondaryEnabled = true
+  end,
+  enableOverrideLayers = function()
+    print(helpers.AddModHeader(chat.success('Enabled override layers')))
+    modeTable.overrideLayersEnabled = true
   end,
   registerSets = function (mode, sets)
     if modeTable.modes[mode] == nil then
@@ -44,14 +177,76 @@ return {
       modeTable.weaponGroupList[#modeTable.weaponGroupList + 1] = group
     end
   end,
+  registerSecondaryGroup = function(group, set)
+    if modeTable.secondaryGroups[group] == nil then
+      modeTable.secondaryGroups[group] = set
+      modeTable.secondaryGroupList[#modeTable.secondaryGroupList + 1] = group
+    end
+  end,
+  registerOverride = function(layerName, sets, stateName, keybind)
+    local foundIndex = modeTable.overrideLayerNames:find(layerName)
+    if foundIndex then
+      if not stateName then
+        print(helpers.AddModHeader(chat.error('Cannot add additional states to an existing override layer without supplying a state name.')))
+        return
+      end
+      local layerSize = #modeTable.overrideLayers[foundIndex]
+      modeTable.overrideLayers[foundIndex][layerSize + 1] = sets
+      modeTable.overrideStateNames[foundIndex][#modeTable.overrideStateNames[foundIndex] + 1] = stateName
+    else
+      local nextIdx = #modeTable.overrideLayerNames + 1
+      modeTable.overrideLayers[nextIdx] = {{}, sets}
+      modeTable.overrideLayerNames[nextIdx] = layerName
+      modeTable.overrideStateNames[nextIdx] = T{"OFF"}
+      modeTable.overrideLayerStates[nextIdx] = 1
+      if stateName then
+        modeTable.overrideStateNames[nextIdx][2] = stateName
+      else
+        modeTable.overrideStateNames[nextIdx][2] = "ON"
+      end
+      if keybind then
+        modeTable.keybinds[nextIdx] = keybind
+      else
+        modeTable.keybinds[nextIdx] = defaultBindings[nextIdx]
+      end
+    end
+  end,
+  applyOverrides = function(baseSet, outerKey, innerKey, secondaryInnerKey)
+    if not modeTable.overrideLayersEnabled then return baseSet end
+    local outputSet = baseSet
+    for i, v in ipairs(modeTable.overrideLayers) do
+      local layerState = modeTable.overrideLayerStates[i]
+      if v[layerState][outerKey] ~= nil then
+        if innerKey ~= nil and v[layerState][outerKey][innerKey] ~= nil then
+          if secondaryInnerKey ~= nil and v[layerState][outerKey][innerKey][secondaryInnerKey] ~= nil then
+            -- will generally only be true if you're using the buff handler
+            outputSet = gFunc.Combine(outputSet, v[layerState][outerKey][innerKey][secondaryInnerKey])
+          else            
+            outputSet = gFunc.Combine(outputSet, v[layerState][outerKey][innerKey])
+          end
+        end
+      end
+    end
+    return outputSet
+  end,
   getSets = function()
     return modeTable.modes[getCurrentMode()]
   end,
   getWeaponGroup = function()
     return modeTable.weaponGroups[getCurrentWeaponGroup()]
   end,
+  getSecondaryGroup = function()
+    return modeTable.secondaryGroups[getCurrentSecondaryGroup()]
+  end,
   setActiveMode = function(key)
-    if modeTable.modes[key] ~= nil then
+    local index = tonumber(key)
+    if index ~= nil then
+      if index > #modeTable.modeList then
+        print(helpers.AddModHeader(chat.error('Mode index out of bounds.')))
+      else
+        modeTable.currentMode = index
+      end
+    elseif modeTable.modes[key] ~= nil then
       for i, v in pairs(modeTable.modeList) do
         if v == key then
           modeTable.currentMode = i
@@ -67,7 +262,10 @@ return {
       print(helpers.AddModHeader(chat.error('Weapon Groups are not enabled.')))
       return
     end
-    if modeTable.weaponGroups[key] ~= nil then
+    local index = tonumber(key)
+    if index ~= nil then
+      modeTable.currentWeaponGroup = index
+    elseif modeTable.weaponGroups[key] ~= nil then
       for i, v in pairs(modeTable.weaponGroupList) do
         if v == key then
           modeTable.currentWeaponGroup = i
@@ -76,6 +274,24 @@ return {
       end
     else
       print(helpers.AddModHeader("Could not set weapon group "..key.." because that group isn't registered."))
+    end
+  end,
+  setActiveSecondaryGroup = function(key)
+    if not modeTable.secondaryEnabled then
+      print(helpers.AddModHeader(chat.error('Secondary Weapon Groups are not enabled.')))
+      return
+    end    local index = tonumber(key)
+    if index ~= nil then
+      modeTable.currentSecondaryGroup = index
+    elseif modeTable.secondaryGroups[key] ~= nil then
+      for i, v in pairs(modeTable.secondaryGroupList) do
+        if v == key then
+          modeTable.currentSecondaryGroup = i
+          break
+        end
+      end
+    else
+      print(helpers.AddModHeader("Could not set secondary weapon group "..key.." because that group isn't registered."))
     end
   end,
   nextMode = function()
@@ -92,6 +308,24 @@ return {
       modeTable.currentWeaponGroup = modeTable.currentWeaponGroup + 1
     end
   end,
+  nextOverrideState = function(layer)
+    local l = tonumber(layer)
+    if l == nil then
+      l = modeTable.overrideStateNames:find(layer)
+    end
+    if #modeTable.overrideLayers[l] == modeTable.overrideLayerStates[l] then
+      modeTable.overrideLayerStates[l] = 1
+    else
+      modeTable.overrideLayerStates[l] = modeTable.overrideLayerStates[l] + 1
+    end
+  end,
+  nextSecondaryGroup = function()
+    if #modeTable.secondaryGroupList == modeTable.currentSecondaryGroup then
+      modeTable.currentSecondaryGroup = 1
+    else
+      modeTable.currentSecondaryGroup = modeTable.currentSecondaryGroup + 1
+    end
+  end,
   setWindowPosX = function(x)
     modeTable.imgui.windowPosX = x
   end,
@@ -99,30 +333,67 @@ return {
     modeTable.imgui.windowPosY = y
   end,
   initializeWindow = function()
+    local red = {0.91, 0.323, 0.091, 1}
+    local green = {0.091, 0.91, 0.105, 1}
+    local blue = {0.446, 0.516, 0.970, 1}
     ashita.events.register('d3d_present', 'present_cb', function()
       if modeTable and modeTable.enableWindow then
         local flags = bit.bor(
           ImGuiWindowFlags_NoDecoration,
           ImGuiWindowFlags_AlwaysAutoResize,
           ImGuiWindowFlags_NoSavedSettings,
-            ImGuiWindowFlags_NoFocusOnAppearing,
-            ImGuiWindowFlags_NoNav
+          ImGuiWindowFlags_NoFocusOnAppearing,
+          ImGuiWindowFlags_NoNav
         )
         imgui.SetNextWindowBgAlpha(0.8)
-        imgui.SetNextWindowSize({300, -1}, ImGuiCond_Always)
+        imgui.SetNextWindowSize({-1, -1}, ImGuiCond_Always)
         imgui.SetNextWindowSizeConstraints({-1, -1}, {FLT_MAX, FLT_MAX})
         imgui.SetNextWindowPos({modeTable.imgui.windowPosX, modeTable.imgui.windowPosY}, ImGuiCond_Always, {0, 0})
         if (imgui.Begin('smart.lac', true, flags)) then
+          local showSeparator = false
           imgui.SetWindowFontScale(1)
           imgui.Text("Smart.LAC")
           imgui.Separator()
-          imgui.Text('Current Mode: ')
-          imgui.SameLine()
-          imgui.Text(getCurrentMode() or 'None')
+          if modeTable.secondaryEnabled then 
+            showSeparator = true
+            imgui.TextColored(red, '(F10)')
+            imgui.SameLine()
+            imgui.Text('Secondary:')
+            imgui.SameLine()
+            imgui.Text(getCurrentSecondaryGroup() or 'None')
+          end
           if modeTable.weaponsEnabled then
-            imgui.Text('Current Weapon Set: ')
+            showSeparator = true
+            imgui.TextColored(red, '(F11)')
+            imgui.SameLine()
+            imgui.Text("Weapon Set:")
             imgui.SameLine()
             imgui.Text(getCurrentWeaponGroup() or 'None')
+          end
+          if #modeTable.modeList > 1 then
+            showSeparator = true
+            imgui.TextColored(red, '(F12)')
+            imgui.SameLine()
+            imgui.Text('Mode:')
+            imgui.SameLine()
+            imgui.Text(getCurrentMode() or 'None')  
+          end
+          if modeTable.overrideLayersEnabled then
+            if showSeparator then imgui.Separator() end
+            for i, v in ipairs(modeTable.overrideLayers) do
+              imgui.TextColored(red, "("..modeTable.keybinds[i]..")")
+              imgui.SameLine()
+              imgui.Text(modeTable.overrideLayerNames[i]..":")
+              imgui.SameLine()
+              local state = modeTable.overrideStateNames[i][modeTable.overrideLayerStates[i]]
+              if state == "OFF" then
+                imgui.TextColored(red, state)
+              elseif state == "ON" then
+                imgui.TextColored(green, state)
+              else
+                imgui.Text(state)
+              end
+            end
           end
           imgui.End()
         end
