@@ -13,7 +13,8 @@ local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
 local accessories = gFunc.LoadFile('smart.lac/accessories.lua')
 ---@type jobHandlers
 local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
-local modes = gFunc.LoadFile('smart.lac/modes.lua')
+modes = gFunc.LoadFile('smart.lac/modes.lua')
+
 if not modes then return nil end
 if(skills==nil or data==nil or validData==nil or globals == nil or helpers == nil or jobHandlers == nil) then
 	print ("Failed to load a file.")
@@ -35,6 +36,9 @@ if(skills==nil or data==nil or validData==nil or globals == nil or helpers == ni
 end
 
 local load = function()
+	AshitaCore:GetChatManager():QueueCommand(-1, "/unbind F12")
+	AshitaCore:GetChatManager():QueueCommand(-1, "/unbind F11")
+	AshitaCore:GetChatManager():QueueCommand(-1, "/unbind F10")
 	local success = true
 
 	local sub = gData.GetPlayer().SubJob
@@ -79,11 +83,8 @@ local load = function()
 
 	modes.initializeWindow()
 
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent F12 /lac fwd nextMode')
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent F11 /lac fwd nextWeaponGroup')
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent +F12 /lac fwd setMode '..modeTable.modeList[1])
-	AshitaCore:GetChatManager():QueueCommand(-1, '/bind silent +F11 /lac fwd setWeaponGroup '..modeTable.weaponGroupList[1])
-	
+	modes.registerKeybinds()
+
 	print(helpers.AddModHeader(helpers.SucceedOrWarn(success, 'All validations passed', 'Some validations failed, check chat output for info.')))
 end
 
@@ -151,18 +152,26 @@ local command = function(args)
 
 		nextWeaponGroup = function()
 			modes.nextWeaponGroup()
+		end,
+		nextSecondaryGroup = function()
+			modes.nextSecondaryGroup()
+		end,
+		nextOverride = function(args)
+			if #args ~= 2 then 
+				print(helpers.AddModHeader(chat.error('nextOverride requires a layer index')))
+			else
+				modes.nextOverrideState(args[2])
+			end
 		end
 	}
 	switch[args[1]](args)
 end
 
 local default = function()
+	-- return nil
 	local player = gData.GetPlayer()
 	local sets = modes.getSets()
 
-	if modeTable.weaponsEnabled then
-		gFunc.EquipSet(modes.getWeaponGroup())
-	end
 
 	if(sets['general']) then
 		local status = player.Status
@@ -170,14 +179,24 @@ local default = function()
 
     	local set = {}
 
+		if modeTable.weaponsEnabled then
+			set = gFunc.Combine(set, modes.getWeaponGroup())
+		end
+		if modeTable.secondaryEnabled then
+			set = gFunc.Combine(set, modes.getSecondaryGroup())
+		end
+
 		if(sets.general[status] ~= nil) then
 			set = gFunc.Combine(set, sets.general[status])
 		end
+
+		set = modes.applyOverrides(set, "general", status)
 
 		if (sets.general.buffs) then
 			for k, v in pairs(sets.general.buffs) do
 				if gData.GetBuffCount(k) > 0 then
 					set = gFunc.Combine(set, v)
+					set = modes.applyOverrides(set, 'general', 'buffs', k)
 				end
 			end
 		end
@@ -232,12 +251,12 @@ return function(sets)
 	if sets ~= nil then
 		modes.registerSets('default', sets)
 		modes.setActiveMode('default')
-		modes.setWindowVisibility(false)
+		--modes.setWindowVisibility(false)
 	end
 
 	---@type smartProfile
 	local returnTable = T{
-		Packer = modes.getSets(),
+		Packer = modes.generatePackerConfig(),
 		OnLoad    = load,
 		OnUnload  = unload,
 		HandleCommand = command,
@@ -253,6 +272,18 @@ return function(sets)
 
 	function returnTable:withPacker(packerData)
 		self.Packer = packerData
+		return self
+	end
+	
+	function returnTable:appendPacker(t)
+		self.Packer[#self.Packer] = t
+		return self
+	end
+
+	function returnTable:aAppendPacker(array)
+		for _, v in ipairs(array) do
+			self.Packer[#self.Packer + 1] = v
+		end
 		return self
 	end
 
