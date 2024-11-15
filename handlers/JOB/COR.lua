@@ -1,10 +1,12 @@
 return {
 	ability = function(action, sets)
-		print('ability handler called')
 		if (action.Type == 'Corsair Roll' or action.Name == 'Double-Up') then
 			if(sets['ability'].phantomRoll) then
-				print('returning PR set')
 				return sets.ability.phantomRoll
+			end
+		elseif (action.type == "Quick Draw") then
+			if (sets.ability.quickDraw) then
+				return sets.ability.quickDraw
 			end
 		end
 		return false
