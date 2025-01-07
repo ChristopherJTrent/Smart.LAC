@@ -162,6 +162,10 @@ local command = function(args)
 			else
 				modes.nextOverrideState(args[2])
 			end
+		end,
+		subjobPalette = function()
+			local subjob = gData.GetPlayer().SubJob
+			AshitaCore:GetChatManager():QueueCommand(-1, "/tc palette change \""..subjob.." JAs\"")
 		end
 	}
 	switch[args[1]](args)
