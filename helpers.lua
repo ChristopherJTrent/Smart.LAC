@@ -101,7 +101,9 @@ local function GenericAbilityHandler(sets, key)
 	end
 
 	local finalSet = sets[key].default ~= nil and sets[key].default or {}
-
+	finalSet = sets[key][action.Type] and gFunc.Combine(finalSet, sets[key][action.Type]) or finalSet
+	finalSet = sets[key][action.Skill] and gFunc.Combine(finalSet, sets[key][action.Skill]) or finalSet
+	
 	local mainJob = gData.GetPlayer().MainJob
 	if jobHandlers[mainJob] and jobHandlers[mainJob][key] then
 		local result = jobHandlers[mainJob][key](action, sets)
@@ -112,10 +114,8 @@ local function GenericAbilityHandler(sets, key)
 		local result = jobHandlers[subJob][key](action, sets)
 		finalSet = result and gFunc.Combine(finalSet, result) or finalSet
 	end
-
+	
 	local base = getSpellBaseName(action.Name)
-	finalSet = sets[key][action.Type] and gFunc.Combine(finalSet, sets[key][action.Type]) or finalSet
-	finalSet = sets[key][action.Skill] and gFunc.Combine(finalSet, sets[key][action.Skill]) or finalSet
 	finalSet = sets[key][base] and gFunc.Combine(finalSet, sets[key][base]) or finalSet
 	finalSet = sets[key][action.Name] and gFunc.Combine(finalSet, sets[key][action.Name]) or finalSet
 	finalSet = modes.applyOverrides(finalSet, key, action.Type)
