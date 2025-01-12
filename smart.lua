@@ -183,6 +183,9 @@ local default = function()
 
     	local set = {}
 
+		if(sets.general[status] ~= nil) then
+			set = gFunc.Combine(set, sets.general[status])
+		end
 		if modeTable.weaponsEnabled then
 			set = gFunc.Combine(set, modes.getWeaponGroup())
 		end
@@ -190,9 +193,6 @@ local default = function()
 			set = gFunc.Combine(set, modes.getSecondaryGroup())
 		end
 
-		if(sets.general[status] ~= nil) then
-			set = gFunc.Combine(set, sets.general[status])
-		end
 
 		set = modes.applyOverrides(set, "general", status)
 
