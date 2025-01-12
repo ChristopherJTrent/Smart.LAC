@@ -2,10 +2,12 @@ return {
     midcast = function(action, sets)
         if sets.midcast == nil then return false end
         if action.Skill == "Enfeebling Magic" then
-            if sets.midcast['Enfeebling Magic'] == nil or type(sets.midcast['Enfeebling Magic']) ~= type({}) then return false end
+            if sets.midcast['Enfeebling Magic'] == nil then return false end
+            local finalSet = sets.midcast['Enfeebling Magic'].default or {}
             local groups = T{
                 highSkill = T{"Distract III", "Frazzle III"},
                 lowSkill = T{"Poison", "Poison II"},
+                skill = T{"Distract III", "Frazzle III", "Poison", "Poison II"},
                 duration = T{"Inundation"},
                 mAccDuration = T{"Sleep", "Sleep II", "Bind", "Break", "Silence"},
                 mAccPotency = T{"Gravity", "Gravity II"},
@@ -16,20 +18,38 @@ return {
 
             for group, spells in ipairs(groups) do
                 if sets.midcast['Enfeebling Magic'][group] ~= nil and spells.include(action.Name) then
-                    return sets.midcast['Enfeebling Magic'][group];
+                    return gFunc.Combine(finalSet, sets.midcast['Enfeebling Magic'][group])
                 end
             end
-            return false
+            if sets.midcast['Enfeebling Magic'].default ~= nil then
+                return sets.midcast['Enfeebling Magic'].default 
+            else 
+                return false 
+            end
         elseif action.Skill == "Enhancing Magic" then
             local groups = T{
                 skill = T{"Aquaveil", "Stoneskin"},
                 duration = T{"Blink", "Haste", "Haste II", "Flurry", "Flurry II"} -- check for barspells
             }
-
+            
+            local finalSet = sets.midcast['Enhancing Magic'].default or {}
             for group, spells in ipairs(groups) do
                 if sets.midcast['Enhancing Magic'][group] ~= nil and spells.include(action.Name) then
-                    return sets.midcast['Enhancing Magic'][group]
+                    return gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'][group])
                 end
+            end
+            if string.find(action.Name, "bar") ~= nil then
+                return gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].duration)
+            end
+            if string.find(action.Name, "^En.*") ~= nil then
+                if sets.midcast.enspell then
+                    return gFunc.Combine(sets.midcast['Enhancing Magic'].default, sets.midcast.enspell)
+                end
+            end
+            if sets.midcast['Enhancing Magic'].default ~= nil then
+                return sets.midcast['Enhancing Magic'].default
+            else
+                return false
             end
         end
     end
