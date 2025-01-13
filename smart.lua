@@ -36,9 +36,6 @@ if(skills==nil or data==nil or validData==nil or globals == nil or helpers == ni
 end
 
 local load = function()
-	AshitaCore:GetChatManager():QueueCommand(-1, "/unbind F12")
-	AshitaCore:GetChatManager():QueueCommand(-1, "/unbind F11")
-	AshitaCore:GetChatManager():QueueCommand(-1, "/unbind F10")
 	local success = true
 
 	local sub = gData.GetPlayer().SubJob
