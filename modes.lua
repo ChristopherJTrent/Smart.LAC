@@ -99,11 +99,13 @@ modeTable.weaponsEnabled = false
 modeTable.weaponGroups = {}
 modeTable.weaponGroupList = {}
 modeTable.currentWeaponGroup = 1
+modeTable.weaponGroupTitle = "Weapon Set"
 
 modeTable.secondaryEnabled = false
 modeTable.secondaryGroups = {}
 modeTable.secondaryGroupList = {}
 modeTable.currentSecondaryGroup = 1
+modeTable.secondaryGroupTitle = "Secondary"
 
 modeTable.overrideLayersEnabled = false
 modeTable.overrideLayers = T{}
@@ -326,6 +328,12 @@ return {
       modeTable.currentSecondaryGroup = modeTable.currentSecondaryGroup + 1
     end
   end,
+  setWeaponGroupTitle = function(string)
+    modeTable.weaponGroupTitle = string
+  end,
+  setSecondaryGroupTitle = function(string)
+    modeTable.secondaryGroupTitle = string
+  end,
   setWindowPosX = function(x)
     modeTable.imgui.windowPosX = x
   end,
@@ -358,7 +366,7 @@ return {
             showSeparator = true
             imgui.TextColored(red, '(F10)')
             imgui.SameLine()
-            imgui.Text('Secondary:')
+            imgui.Text(modeTable.secondaryGroupTitle..':')
             imgui.SameLine()
             imgui.Text(getCurrentSecondaryGroup() or 'None')
           end
@@ -366,7 +374,7 @@ return {
             showSeparator = true
             imgui.TextColored(red, '(F11)')
             imgui.SameLine()
-            imgui.Text("Weapon Set:")
+            imgui.Text(modeTable.weaponGroupTitle..":")
             imgui.SameLine()
             imgui.Text(getCurrentWeaponGroup() or 'None')
           end
