@@ -1,8 +1,8 @@
 return {
-	midcast = function(sets)
+	midcast = function(action, sets)
 		if not sets.midcast then return false end
 		---@type Action
-		local ability = gFunc.GetAction()
+		local ability = action
 		if ability.Type == 'Geomancy' then
 			if sets.midcast.Geomancy then
 				return sets.midcast.Geomancy
