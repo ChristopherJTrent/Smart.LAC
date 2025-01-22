@@ -177,7 +177,7 @@ local default = function()
 	if(sets['general']) then
 		local status = player.Status
 		if(not status) then return end
-
+		
     	local set = {}
 
 		if(sets.general[status] ~= nil) then
@@ -189,7 +189,7 @@ local default = function()
 		if modeTable.secondaryEnabled then
 			set = gFunc.Combine(set, modes.getSecondaryGroup())
 		end
-
+				
 
 		set = modes.applyOverrides(set, "general", status)
 
@@ -245,48 +245,63 @@ local weaponskill = function()
 end
 
 
+return (function()
+	---@param sets sets
+	---@return smartProfile
+	local retFunc = function()
 
----@param sets sets
----@return smartProfile
-return function(sets)
-	if sets ~= nil then
-		modes.registerSets('default', sets)
-		modes.setActiveMode('default')
-		--modes.setWindowVisibility(false)
-	end
+		---@type smartProfile
+		local returnTable = T{
+			Packer = modes.generatePackerConfig(),
+			OnLoad    = load,
+			OnUnload  = unload,
+			HandleCommand = command,
+			HandleDefault = default,
+			HandleAbility = ability,
+			HandleItem    = item,
+			HandlePrecast = precast,
+			HandleMidcast = midcast,
+			HandlePreshot = preshot,
+			HandleMidshot = midshot,
+			HandleWeaponskill = weaponskill
+		}
 
-	---@type smartProfile
-	local returnTable = T{
-		Packer = modes.generatePackerConfig(),
-		OnLoad    = load,
-		OnUnload  = unload,
-		HandleCommand = command,
-		HandleDefault = default,
-		HandleAbility = ability,
-		HandleItem    = item,
-		HandlePrecast = precast,
-		HandleMidcast = midcast,
-		HandlePreshot = preshot,
-		HandleMidshot = midshot,
-		HandleWeaponskill = weaponskill
-	}
-
-	function returnTable:withPacker(packerData)
-		self.Packer = packerData
-		return self
-	end
-	
-	function returnTable:appendPacker(t)
-		self.Packer[#self.Packer] = t
-		return self
-	end
-
-	function returnTable:aAppendPacker(array)
-		for _, v in ipairs(array) do
-			self.Packer[#self.Packer + 1] = v
+		function returnTable:withPacker(packerData)
+			self.Packer = packerData
+			return self
 		end
-		return self
+		
+		function returnTable:appendPacker(t)
+			self.Packer[#self.Packer] = t
+			return self
+		end
+
+		function returnTable:aAppendPacker(array)
+			for _, v in ipairs(array) do
+				self.Packer[#self.Packer + 1] = v
+			end
+			return self
+		end
+
+		return returnTable
 	end
 
-	return returnTable
-end
+	local shared = gFunc.LoadFile('shared.lua')
+	if shared ~= nil then
+		if shared.overrides ~= nil then
+			modes.enableOverrideLayers()
+			for k, v in pairs(shared.overrides) do
+				modes.registerOverride(k, v)
+			end
+		end
+	end
+	return (function()
+		return function(sets)
+			if sets ~= nil then
+				modes.registerSets('default', (shared ~= nil and shared.defaults ~= nil) and sets:merge(shared.defaults) or sets)
+				modes.setActiveMode('default')
+			end
+			return retFunc
+		end
+	end)()
+end)()()
