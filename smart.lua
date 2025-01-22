@@ -262,7 +262,7 @@ return (function()
 	---@return smartProfile
 	local retFunc = function()
 
-		---@type smartProfile
+		---@class smartProfile
 		local returnTable = T{
 			Packer = modes.generatePackerConfig(),
 			OnLoad    = load,
@@ -313,7 +313,7 @@ return (function()
 				modes.registerSets('default', (shared ~= nil and shared.defaults ~= nil) and sets:merge(shared.defaults) or sets)
 				modes.setActiveMode('default')
 			end
-			return retFunc
+			return retFunc()
 		end
 	end)()
-end)()()
+end)()
