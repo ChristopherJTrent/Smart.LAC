@@ -18,4 +18,4 @@ Steps:
 
 
 ## Setup
-Take a look at the [Repo Wiki](https://gitlab.com/ChristopherJTrent/smart.lac/-/wikis/Getting-Started) for more information.
+Take a look at the [Repo Wiki](https://github.com/ChristopherJTrent/Smart.LAC/wiki) for more information.
