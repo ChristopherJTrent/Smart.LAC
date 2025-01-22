@@ -189,7 +189,19 @@ local default = function()
 		if modeTable.secondaryEnabled then
 			set = gFunc.Combine(set, modes.getSecondaryGroup())
 		end
-				
+		
+		if jobHandlers[player.MainJob] ~= nil and jobHandlers[player.MainJob].default ~= nil then
+			local mainJobOverride = jobHandlers[player.MainJob].default(sets, status)
+			if mainJobOverride then
+				set = gFunc.Combine(set, mainJobOverride)
+			end
+		end
+		if jobHandlers[player.SubJob] ~= nil and jobHandlers[player.SubJob].default ~= nil then
+			local subJobOverride = jobHandlers[player.SubJob].default(sets, status)
+			if subJobOverride then
+				set = gFunc.Combine(set, subJobOverride)
+			end
+		end
 
 		set = modes.applyOverrides(set, "general", status)
 
