@@ -2,7 +2,7 @@
 
 ---@alias void nil
 
----@alias smart fun(sets:sets):smartProfile
+---@alias smart fun(sets:sets|nil):smartProfile
 
 ---@class SpecializedHandlerContainer
 ---@field MainJobHandlers table<string, function> | nil
