@@ -132,6 +132,7 @@ local function GenericAbilityHandler(sets, key)
 	end
 
 	gFunc.EquipSet(finalSet)
+	return true
 end
 
 local function CleanupSets(sets)
