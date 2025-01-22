@@ -183,10 +183,10 @@ local default = function()
 		if(sets.general[status] ~= nil) then
 			set = gFunc.Combine(set, sets.general[status])
 		end
-		if modeTable.weaponsEnabled then
+		if ModeTable.weaponsEnabled then
 			set = gFunc.Combine(set, modes.getWeaponGroup())
 		end
-		if modeTable.secondaryEnabled then
+		if ModeTable.secondaryEnabled then
 			set = gFunc.Combine(set, modes.getSecondaryGroup())
 		end
 		

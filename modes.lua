@@ -72,56 +72,56 @@ local defaultSecondaryBindings = T{
   "!+0",
 }
 
-modeTable = {}
-modeTable.enableWindow = true
-modeTable.imgui = {}
+ModeTable = {}
+ModeTable.enableWindow = true
+ModeTable.imgui = {}
 if index.imgui then
   if index.imgui.posX then
-    modeTable.imgui.windowPosX = index.imgui.posX
+    ModeTable.imgui.windowPosX = index.imgui.posX
   else 
-    modeTable.imgui.windowPosX = 3200
+    ModeTable.imgui.windowPosX = 3200
   end
   if index.imgui.posY then
-    modeTable.imgui.windowPosY = index.imgui.posY
+    ModeTable.imgui.windowPosY = index.imgui.posY
   else 
-    modeTable.imgui.windowPosY = 750
+    ModeTable.imgui.windowPosY = 750
   end
 else 
-  modeTable.imgui.windowPosX = 3200
-  modeTable.imgui.windowPosY = 750
+  ModeTable.imgui.windowPosX = 3200
+  ModeTable.imgui.windowPosY = 750
 end
 
-modeTable.modeList = {}
-modeTable.currentMode = 1
-modeTable.modes = {}
+ModeTable.modeList = {}
+ModeTable.currentMode = 1
+ModeTable.modes = {}
 
-modeTable.weaponsEnabled = false
-modeTable.weaponGroups = {}
-modeTable.weaponGroupList = {}
-modeTable.currentWeaponGroup = 1
+ModeTable.weaponsEnabled = false
+ModeTable.weaponGroups = {}
+ModeTable.weaponGroupList = {}
+ModeTable.currentWeaponGroup = 1
 
-modeTable.secondaryEnabled = false
-modeTable.secondaryGroups = {}
-modeTable.secondaryGroupList = {}
-modeTable.currentSecondaryGroup = 1
+ModeTable.secondaryEnabled = false
+ModeTable.secondaryGroups = {}
+ModeTable.secondaryGroupList = {}
+ModeTable.currentSecondaryGroup = 1
 
-modeTable.overrideLayersEnabled = false
-modeTable.overrideLayers = T{}
-modeTable.overrideLayerStates = T{}
-modeTable.overrideLayerNames = T{}
-modeTable.overrideStateNames = T{}
-modeTable.keybinds = T{}
+ModeTable.overrideLayersEnabled = false
+ModeTable.overrideLayers = T{}
+ModeTable.overrideLayerStates = T{}
+ModeTable.overrideLayerNames = T{}
+ModeTable.overrideStateNames = T{}
+ModeTable.keybinds = T{}
 
 local getCurrentMode = function()
-  return modeTable.modeList[modeTable.currentMode]
+  return ModeTable.modeList[ModeTable.currentMode]
 end
 
 local getCurrentWeaponGroup = function()
-  return modeTable.weaponGroupList[modeTable.currentWeaponGroup]
+  return ModeTable.weaponGroupList[ModeTable.currentWeaponGroup]
 end
 
 local getCurrentSecondaryGroup = function()
-  return modeTable.secondaryGroupList[modeTable.currentSecondaryGroup]
+  return ModeTable.secondaryGroupList[ModeTable.currentSecondaryGroup]
 end
 
 return {
@@ -131,10 +131,10 @@ return {
       print(helpers.AddModHeader(chat.error("Failed to load builder lib")))
       return 
     end
-    builder:process(modeTable.modes)
-    builder:process(modeTable.weaponGroups)
-    builder:process(modeTable.secondaryGroups)
-    builder:process(modeTable.overrideLayers)
+    builder:process(ModeTable.modes)
+    builder:process(ModeTable.weaponGroups)
+    builder:process(ModeTable.secondaryGroups)
+    builder:process(ModeTable.overrideLayers)
     return builder:get()
   end,
   registerKeybinds = function()
@@ -143,79 +143,79 @@ return {
     chatManager:QueueCommand(-1, "/bind F12 /lac fwd nextMode")
     chatManager:QueueCommand(-1, "/bind F11 /lac fwd nextWeaponGroup")
     chatManager:QueueCommand(-1, "/bind F10 /lac fwd nextSecondaryGroup")
-    for i, v in ipairs(modeTable.keybinds) do
+    for i, v in ipairs(ModeTable.keybinds) do
       chatManager:QueueCommand(-1, "/bind "..v.." /lac fwd nextOverride "..i)
     end
-    for i, _ in ipairs(modeTable.weaponGroups) do
+    for i, _ in ipairs(ModeTable.weaponGroups) do
       chatManager:QueueCommand(-1, "/bind "..defaultWeaponBindings[i].." /lac fwd setActiveWeaponGroup "..i)
     end
-    for i, _ in ipairs(modeTable.secondaryGroups) do
+    for i, _ in ipairs(ModeTable.secondaryGroups) do
       chatManager:QueueCommand(-1, "/bind "..defaultSecondaryBindings[i].." /lac fwd setActiveSecondaryGroup "..i)
     end
   end,
   enableWeaponGroups = function()
     print(helpers.AddModHeader(chat.success('Enabled weapon groups')))
-    modeTable.weaponsEnabled = true
+    ModeTable.weaponsEnabled = true
   end,
   enableSecondaryGroups = function()
     print(helpers.AddModHeader(chat.success('Enabled secondary weapon groups')))
-    modeTable.secondaryEnabled = true
+    ModeTable.secondaryEnabled = true
   end,
   enableOverrideLayers = function()
     print(helpers.AddModHeader(chat.success('Enabled override layers')))
-    modeTable.overrideLayersEnabled = true
+    ModeTable.overrideLayersEnabled = true
   end,
   registerSets = function (mode, sets)
-    if modeTable.modes[mode] == nil then
-      modeTable.modes[mode] = sets
-      modeTable.modeList[#modeTable.modeList + 1] = mode
+    if ModeTable.modes[mode] == nil then
+      ModeTable.modes[mode] = sets
+      ModeTable.modeList[#ModeTable.modeList + 1] = mode
     end
   end,
   registerWeaponGroup = function(group, set)
-    if modeTable.weaponGroups[group] == nil then
-      modeTable.weaponGroups[group] = set
-      modeTable.weaponGroupList[#modeTable.weaponGroupList + 1] = group
+    if ModeTable.weaponGroups[group] == nil then
+      ModeTable.weaponGroups[group] = set
+      ModeTable.weaponGroupList[#ModeTable.weaponGroupList + 1] = group
     end
   end,
   registerSecondaryGroup = function(group, set)
-    if modeTable.secondaryGroups[group] == nil then
-      modeTable.secondaryGroups[group] = set
-      modeTable.secondaryGroupList[#modeTable.secondaryGroupList + 1] = group
+    if ModeTable.secondaryGroups[group] == nil then
+      ModeTable.secondaryGroups[group] = set
+      ModeTable.secondaryGroupList[#ModeTable.secondaryGroupList + 1] = group
     end
   end,
   registerOverride = function(layerName, sets, stateName, keybind)
-    local foundIndex = modeTable.overrideLayerNames:find(layerName)
+    local foundIndex = ModeTable.overrideLayerNames:find(layerName)
     if foundIndex then
       if not stateName then
         print(helpers.AddModHeader(chat.error('Cannot add additional states to an existing override layer without supplying a state name.')))
         return
       end
-      local layerSize = #modeTable.overrideLayers[foundIndex]
-      modeTable.overrideLayers[foundIndex][layerSize + 1] = sets
-      modeTable.overrideStateNames[foundIndex][#modeTable.overrideStateNames[foundIndex] + 1] = stateName
+      local layerSize = #ModeTable.overrideLayers[foundIndex]
+      ModeTable.overrideLayers[foundIndex][layerSize + 1] = sets
+      ModeTable.overrideStateNames[foundIndex][#ModeTable.overrideStateNames[foundIndex] + 1] = stateName
     else
-      local nextIdx = #modeTable.overrideLayerNames + 1
-      modeTable.overrideLayers[nextIdx] = {{}, sets}
-      modeTable.overrideLayerNames[nextIdx] = layerName
-      modeTable.overrideStateNames[nextIdx] = T{"OFF"}
-      modeTable.overrideLayerStates[nextIdx] = 1
+      local nextIdx = #ModeTable.overrideLayerNames + 1
+      ModeTable.overrideLayers[nextIdx] = {{}, sets}
+      ModeTable.overrideLayerNames[nextIdx] = layerName
+      ModeTable.overrideStateNames[nextIdx] = T{"OFF"}
+      ModeTable.overrideLayerStates[nextIdx] = 1
       if stateName then
-        modeTable.overrideStateNames[nextIdx][2] = stateName
+        ModeTable.overrideStateNames[nextIdx][2] = stateName
       else
-        modeTable.overrideStateNames[nextIdx][2] = "ON"
+        ModeTable.overrideStateNames[nextIdx][2] = "ON"
       end
       if keybind then
-        modeTable.keybinds[nextIdx] = keybind
+        ModeTable.keybinds[nextIdx] = keybind
       else
-        modeTable.keybinds[nextIdx] = defaultBindings[nextIdx]
+        ModeTable.keybinds[nextIdx] = defaultBindings[nextIdx]
       end
     end
   end,
   applyOverrides = function(baseSet, outerKey, innerKey, secondaryInnerKey)
-    if not modeTable.overrideLayersEnabled then return baseSet end
+    if not ModeTable.overrideLayersEnabled then return baseSet end
     local outputSet = baseSet
-    for i, v in ipairs(modeTable.overrideLayers) do
-      local layerState = modeTable.overrideLayerStates[i]
+    for i, v in ipairs(ModeTable.overrideLayers) do
+      local layerState = ModeTable.overrideLayerStates[i]
       if v[layerState][outerKey] ~= nil then
         if innerKey ~= nil and v[layerState][outerKey][innerKey] ~= nil then
           if secondaryInnerKey ~= nil and v[layerState][outerKey][innerKey][secondaryInnerKey] ~= nil then
@@ -230,26 +230,26 @@ return {
     return outputSet
   end,
   getSets = function()
-    return modeTable.modes[getCurrentMode()]
+    return ModeTable.modes[getCurrentMode()]
   end,
   getWeaponGroup = function()
-    return modeTable.weaponGroups[getCurrentWeaponGroup()]
+    return ModeTable.weaponGroups[getCurrentWeaponGroup()]
   end,
   getSecondaryGroup = function()
-    return modeTable.secondaryGroups[getCurrentSecondaryGroup()]
+    return ModeTable.secondaryGroups[getCurrentSecondaryGroup()]
   end,
   setActiveMode = function(key)
     local index = tonumber(key)
     if index ~= nil then
-      if index > #modeTable.modeList then
+      if index > #ModeTable.modeList then
         print(helpers.AddModHeader(chat.error('Mode index out of bounds.')))
       else
-        modeTable.currentMode = index
+        ModeTable.currentMode = index
       end
-    elseif modeTable.modes[key] ~= nil then
-      for i, v in pairs(modeTable.modeList) do
+    elseif ModeTable.modes[key] ~= nil then
+      for i, v in pairs(ModeTable.modeList) do
         if v == key then
-          modeTable.currentMode = i
+          ModeTable.currentMode = i
           break
         end
       end
@@ -258,17 +258,17 @@ return {
     end
   end,
   setActiveWeaponGroup = function(key)
-    if not modeTable.weaponsEnabled then
+    if not ModeTable.weaponsEnabled then
       print(helpers.AddModHeader(chat.error('Weapon Groups are not enabled.')))
       return
     end
     local index = tonumber(key)
     if index ~= nil then
-      modeTable.currentWeaponGroup = index
-    elseif modeTable.weaponGroups[key] ~= nil then
-      for i, v in pairs(modeTable.weaponGroupList) do
+      ModeTable.currentWeaponGroup = index
+    elseif ModeTable.weaponGroups[key] ~= nil then
+      for i, v in pairs(ModeTable.weaponGroupList) do
         if v == key then
-          modeTable.currentWeaponGroup = i
+          ModeTable.currentWeaponGroup = i
           break
         end
       end
@@ -277,16 +277,16 @@ return {
     end
   end,
   setActiveSecondaryGroup = function(key)
-    if not modeTable.secondaryEnabled then
+    if not ModeTable.secondaryEnabled then
       print(helpers.AddModHeader(chat.error('Secondary Weapon Groups are not enabled.')))
       return
     end    local index = tonumber(key)
     if index ~= nil then
-      modeTable.currentSecondaryGroup = index
-    elseif modeTable.secondaryGroups[key] ~= nil then
-      for i, v in pairs(modeTable.secondaryGroupList) do
+      ModeTable.currentSecondaryGroup = index
+    elseif ModeTable.secondaryGroups[key] ~= nil then
+      for i, v in pairs(ModeTable.secondaryGroupList) do
         if v == key then
-          modeTable.currentSecondaryGroup = i
+          ModeTable.currentSecondaryGroup = i
           break
         end
       end
@@ -295,42 +295,42 @@ return {
     end
   end,
   nextMode = function()
-    if #modeTable.modeList == modeTable.currentMode then
-      modeTable.currentMode = 1
+    if #ModeTable.modeList == ModeTable.currentMode then
+      ModeTable.currentMode = 1
     else
-      modeTable.currentMode = modeTable.currentMode + 1
+      ModeTable.currentMode = ModeTable.currentMode + 1
     end
   end,
   nextWeaponGroup = function()
-    if #modeTable.weaponGroupList == modeTable.currentWeaponGroup then
-      modeTable.currentWeaponGroup = 1
+    if #ModeTable.weaponGroupList == ModeTable.currentWeaponGroup then
+      ModeTable.currentWeaponGroup = 1
     else
-      modeTable.currentWeaponGroup = modeTable.currentWeaponGroup + 1
+      ModeTable.currentWeaponGroup = ModeTable.currentWeaponGroup + 1
     end
   end,
   nextOverrideState = function(layer)
     local l = tonumber(layer)
     if l == nil then
-      l = modeTable.overrideStateNames:find(layer)
+      l = ModeTable.overrideStateNames:find(layer)
     end
-    if #modeTable.overrideLayers[l] == modeTable.overrideLayerStates[l] then
-      modeTable.overrideLayerStates[l] = 1
+    if #ModeTable.overrideLayers[l] == ModeTable.overrideLayerStates[l] then
+      ModeTable.overrideLayerStates[l] = 1
     else
-      modeTable.overrideLayerStates[l] = modeTable.overrideLayerStates[l] + 1
+      ModeTable.overrideLayerStates[l] = ModeTable.overrideLayerStates[l] + 1
     end
   end,
   nextSecondaryGroup = function()
-    if #modeTable.secondaryGroupList == modeTable.currentSecondaryGroup then
-      modeTable.currentSecondaryGroup = 1
+    if #ModeTable.secondaryGroupList == ModeTable.currentSecondaryGroup then
+      ModeTable.currentSecondaryGroup = 1
     else
-      modeTable.currentSecondaryGroup = modeTable.currentSecondaryGroup + 1
+      ModeTable.currentSecondaryGroup = ModeTable.currentSecondaryGroup + 1
     end
   end,
   setWindowPosX = function(x)
-    modeTable.imgui.windowPosX = x
+    ModeTable.imgui.windowPosX = x
   end,
   setWindowPosY = function(y)
-    modeTable.imgui.windowPosY = y
+    ModeTable.imgui.windowPosY = y
   end,
   initializeWindow = function()
     local red = {0.91, 0.323, 0.091, 1}
@@ -338,7 +338,7 @@ return {
     local blue = {0.446, 0.516, 0.970, 1}
     local beige = {0.839, 0.827, 0.729, 1}
     ashita.events.register('d3d_present', 'present_cb', function()
-      if modeTable and modeTable.enableWindow then
+      if ModeTable and ModeTable.enableWindow then
         local flags = bit.bor(
           ImGuiWindowFlags_NoDecoration,
           ImGuiWindowFlags_AlwaysAutoResize,
@@ -349,13 +349,13 @@ return {
         imgui.SetNextWindowBgAlpha(0.8)
         imgui.SetNextWindowSize({-1, -1}, ImGuiCond_Always)
         imgui.SetNextWindowSizeConstraints({-1, -1}, {FLT_MAX, FLT_MAX})
-        imgui.SetNextWindowPos({modeTable.imgui.windowPosX, modeTable.imgui.windowPosY}, ImGuiCond_Always, {0, 0})
+        imgui.SetNextWindowPos({ModeTable.imgui.windowPosX, ModeTable.imgui.windowPosY}, ImGuiCond_Always, {0, 0})
         if (imgui.Begin('smart.lac', true, flags)) then
           local showSeparator = false
           imgui.SetWindowFontScale(1)
           imgui.Text("Smart.LAC")
           imgui.Separator()
-          if modeTable.secondaryEnabled then 
+          if ModeTable.secondaryEnabled then 
             showSeparator = true
             imgui.TextColored(red, '(F10)')
             imgui.SameLine()
@@ -363,7 +363,7 @@ return {
             imgui.SameLine()
             imgui.TextColored(beige, getCurrentSecondaryGroup() or 'None')
           end
-          if modeTable.weaponsEnabled then
+          if ModeTable.weaponsEnabled then
             showSeparator = true
             imgui.TextColored(red, '(F11)')
             imgui.SameLine()
@@ -371,7 +371,7 @@ return {
             imgui.SameLine()
             imgui.TextColored(beige, getCurrentWeaponGroup() or 'None')
           end
-          if #modeTable.modeList > 1 then
+          if #ModeTable.modeList > 1 then
             showSeparator = true
             imgui.TextColored(red, '(F12)')
             imgui.SameLine()
@@ -379,14 +379,14 @@ return {
             imgui.SameLine()
             imgui.TextColored(beige, getCurrentMode() or 'None')  
           end
-          if modeTable.overrideLayersEnabled then
+          if ModeTable.overrideLayersEnabled then
             if showSeparator then imgui.Separator() end
-            for i, v in ipairs(modeTable.overrideLayers) do
-              imgui.TextColored(red, "("..modeTable.keybinds[i]..")")
+            for i, v in ipairs(ModeTable.overrideLayers) do
+              imgui.TextColored(red, "("..ModeTable.keybinds[i]..")")
               imgui.SameLine()
-              imgui.Text(modeTable.overrideLayerNames[i]..":")
+              imgui.Text(ModeTable.overrideLayerNames[i]..":")
               imgui.SameLine()
-              local state = modeTable.overrideStateNames[i][modeTable.overrideLayerStates[i]]
+              local state = ModeTable.overrideStateNames[i][ModeTable.overrideLayerStates[i]]
               if state == "OFF" then
                 imgui.TextColored(red, state)
               elseif state == "ON" then
@@ -402,9 +402,9 @@ return {
     end)
   end,
   setWindowVisibility = function(b)
-    modeTable.enableWindow = b
+    ModeTable.enableWindow = b
   end,
   toggleWindowVisibility = function()
-    modeTable.enableWindow = not modeTable.enableWindow
+    ModeTable.enableWindow = not ModeTable.enableWindow
   end
 }
