@@ -99,13 +99,11 @@ modeTable.weaponsEnabled = false
 modeTable.weaponGroups = {}
 modeTable.weaponGroupList = {}
 modeTable.currentWeaponGroup = 1
-modeTable.weaponGroupTitle = "Weapon Set"
 
 modeTable.secondaryEnabled = false
 modeTable.secondaryGroups = {}
 modeTable.secondaryGroupList = {}
 modeTable.currentSecondaryGroup = 1
-modeTable.secondaryGroupTitle = "Secondary"
 
 modeTable.overrideLayersEnabled = false
 modeTable.overrideLayers = T{}
@@ -328,12 +326,6 @@ return {
       modeTable.currentSecondaryGroup = modeTable.currentSecondaryGroup + 1
     end
   end,
-  setWeaponGroupTitle = function(string)
-    modeTable.weaponGroupTitle = string
-  end,
-  setSecondaryGroupTitle = function(string)
-    modeTable.secondaryGroupTitle = string
-  end,
   setWindowPosX = function(x)
     modeTable.imgui.windowPosX = x
   end,
@@ -344,6 +336,7 @@ return {
     local red = {0.91, 0.323, 0.091, 1}
     local green = {0.091, 0.91, 0.105, 1}
     local blue = {0.446, 0.516, 0.970, 1}
+    local beige = {0.839, 0.827, 0.729, 1}
     ashita.events.register('d3d_present', 'present_cb', function()
       if modeTable and modeTable.enableWindow then
         local flags = bit.bor(
@@ -366,17 +359,17 @@ return {
             showSeparator = true
             imgui.TextColored(red, '(F10)')
             imgui.SameLine()
-            imgui.Text(modeTable.secondaryGroupTitle..':')
+            imgui.Text('Secondary:')
             imgui.SameLine()
-            imgui.Text(getCurrentSecondaryGroup() or 'None')
+            imgui.TextColored(beige, getCurrentSecondaryGroup() or 'None')
           end
           if modeTable.weaponsEnabled then
             showSeparator = true
             imgui.TextColored(red, '(F11)')
             imgui.SameLine()
-            imgui.Text(modeTable.weaponGroupTitle..":")
+            imgui.Text('Weapon:')
             imgui.SameLine()
-            imgui.Text(getCurrentWeaponGroup() or 'None')
+            imgui.TextColored(beige, getCurrentWeaponGroup() or 'None')
           end
           if #modeTable.modeList > 1 then
             showSeparator = true
@@ -384,7 +377,7 @@ return {
             imgui.SameLine()
             imgui.Text('Mode:')
             imgui.SameLine()
-            imgui.Text(getCurrentMode() or 'None')  
+            imgui.TextColored(beige, getCurrentMode() or 'None')  
           end
           if modeTable.overrideLayersEnabled then
             if showSeparator then imgui.Separator() end
