@@ -1,6 +1,3 @@
-## Update: 28-NOV-24
-Hey folks, wanted to let you know that development on this framework will be paused while I take a break from FFXI.
-
 # Smart.LAC
 A framework for LuAshitacast that allows for declarative use of LuAshitacast
 
