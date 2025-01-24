@@ -13,6 +13,7 @@ local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
 local accessories = gFunc.LoadFile('smart.lac/accessories.lua')
 ---@type jobHandlers
 local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
+---@diagnostic disable-next-line: lowercase-global
 modes = gFunc.LoadFile('smart.lac/modes.lua')
 
 if not modes then return nil end
@@ -247,7 +248,6 @@ local midshot = function()
 	return helpers.GenericAbilityHandler(sets, 'midshot')
 end
 
----@param sets sets
 local weaponskill = function()
 	local sets = modes.getSets()
 	helpers.GenericAbilityHandler(sets, 'weaponskill')
@@ -258,7 +258,6 @@ end
 
 
 return (function()
-	---@param sets sets
 	---@return smartProfile
 	local retFunc = function()
 
@@ -308,6 +307,7 @@ return (function()
 		end
 	end
 	return (function()
+		---@param sets sets
 		return function(sets)
 			if sets ~= nil then
 				modes.registerSets('default', (shared ~= nil and shared.defaults ~= nil) and sets:merge(shared.defaults) or sets)
