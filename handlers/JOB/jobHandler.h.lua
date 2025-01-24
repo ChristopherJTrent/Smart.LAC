@@ -3,4 +3,9 @@
 
 ---@meta
 ---@class jobHandler
----@field ability actionHandler
+---@field default actionHandler?
+---@field ability actionHandler?
+---@field precast actionHandler?
+---@field midcast actionHandler?
+---@field preshot actionHandler?
+---@field midshot actionHandler?
