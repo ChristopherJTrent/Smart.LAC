@@ -12,3 +12,4 @@
 ---@field GetWeaponskillProperty fun(ability: Action): skillchainData
 ---@field GenericAbilityHandler fun(sets: sets, key:string):boolean
 ---@field CleanupSets fun(sets: sets):sets
+---@field CreateRequiredFiles function
