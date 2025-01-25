@@ -171,7 +171,6 @@ local CreateRequiredFiles = function()
 	---@diagnostic disable-next-line: undefined-field
 	local characterRoot = ("%sconfig\\addons\\luashitacast\\%s_%s"):fmt(AshitaCore:GetInstallPath(), s.name, s.server_id)
 	local indexPath = characterRoot.."\\index.lua"
-	print(indexPath)
 	if not fileExists(indexPath) then
 		print("creating index")
 		local index = io.open(indexPath, 'w+')
@@ -185,9 +184,65 @@ local CreateRequiredFiles = function()
 		local globe = io.open(globalsPath, "w+")
 		assert(globe ~= nil, "Globals file unexpectedly nil")
 		globe:write('return {\n\tdebug = false\n}\n')
+		globe:close()
+	end
+	local sharedPath = characterRoot..'\\shared.lua'
+	if not fileExists(sharedPath) then
+		print('creating shared.lua')
+		local shared = io.open(sharedPath, 'w+')
+		assert(shared ~= nil, 'Shared file unexpectedly nil')
+		shared:write('return {}')
+		shared:close()
 	end
 end
 
+local miniSemver = function(string)
+	local function split(s,delimiter)
+		delimiter = delimiter or '%s'
+		local t={}
+		local i=1
+		for str in string.gmatch(s, '([^'..delimiter..']+)') do
+			t[i] = str
+			i = i + 1
+		end
+		return t
+	end
+	local fields = split(string, '.')
+	local ret = {major = tonumber(fields[1]), minor = tonumber(fields[2]), patch = tonumber(fields[3])}
+	if ret.major == nil or ret.minor == nil or ret.patch == nil then
+		print('invalid semver string "'..string..'"')
+		return nil
+	end
+	return ret
+end
+
+local performUpdateCheck = function()
+	local largestUpdate = ''
+	local http = require('socket\\ssl\\https')
+	local body, statusCode, _, _= http.request('https://raw.githubusercontent.com/ChristopherJTrent/Smart.LAC/refs/heads/master/version')
+	if statusCode ~= 200 then
+		print('failed to download version info')
+	else
+		local locVerPath = ("%s\\config\\luashitacast\\Smart.LAC\\version")
+		local f = io.open(locVerPath, 'r')
+		if f ~= nil then
+			local webVersion = miniSemver(body)
+			local localVersion = miniSemver(f:read("a"))
+			if webVersion == nil or localVersion == nil then
+				print(AddModHeader('version check failed. Please check the github for updates.'))
+			else
+				largestUpdate = localVersion.patch < webVersion.patch and 'patch' or largestUpdate
+				largestUpdate = localVersion.minor < webVersion.minor and 'minor' or largestUpdate
+				largestUpdate = localVersion.major < webVersion.major and 'major' or largestUpdate
+			end
+		end
+	end
+	if largestUpdate ~= '' then
+		print(AddModHeader('New '..largestUpdate.." update available, please update Smart.LAC at your earliest convenience."))
+	end
+end
+
+performUpdateCheck()
 
 ---@type helpers
 return {
