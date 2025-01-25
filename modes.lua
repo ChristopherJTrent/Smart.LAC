@@ -139,10 +139,12 @@ return {
   end,
   registerKeybinds = function()
     local chatManager = AshitaCore:GetChatManager()
-    chatManager:QueueCommand(-1, "/unbind all")
-    chatManager:QueueCommand(-1, "/bind F12 /lac fwd nextMode")
-    chatManager:QueueCommand(-1, "/bind F11 /lac fwd nextWeaponGroup")
-    chatManager:QueueCommand(-1, "/bind F10 /lac fwd nextSecondaryGroup")
+    chatManager:QueueCommand(-1, "/unbind all");
+    (function()
+      chatManager:QueueCommand(-1, "/bind F12 /lac fwd nextMode")
+      chatManager:QueueCommand(-1, "/bind F11 /lac fwd nextWeaponGroup")
+      chatManager:QueueCommand(-1, "/bind F10 /lac fwd nextSecondaryGroup")
+    end):once(0.25)
     for i, v in ipairs(ModeTable.keybinds) do
       chatManager:QueueCommand(-1, "/bind "..v.." /lac fwd nextOverride "..i)
     end
