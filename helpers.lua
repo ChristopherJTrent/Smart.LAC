@@ -10,6 +10,7 @@ local function EquipWithDefault(sets, key, overrides)
 end
 
 local function EnsureSugaredTable(t)
+	if t == nil then return t end
 	if(not t.contains) then
 		return T(t)
 	end
@@ -156,6 +157,37 @@ local function CleanupSets(sets)
 	end
 end
 
+local fileExists = function(filepath)
+	local f = io.open(filepath, "r")
+	if f ~= nil then
+		f:close()
+		return true
+	else return false end
+end
+
+local CreateRequiredFiles = function()
+	local s = require('settings')
+	-- Diag: string:fmt is provided by ashita outside the normal filetree used for development.
+	---@diagnostic disable-next-line: undefined-field
+	local characterRoot = ("%sconfig\\addons\\luashitacast\\%s_%s"):fmt(AshitaCore:GetInstallPath(), s.name, s.server_id)
+	local indexPath = characterRoot.."\\index.lua"
+	print(indexPath)
+	if not fileExists(indexPath) then
+		print("creating index")
+		local index = io.open(indexPath, 'w+')
+		assert(index ~= nil, "Index file unexpectedly nil")
+		index:write('return {\n\townedBelts = T{\n\n\t},\n\townedGorgets=T{\n\n\t},\n\timgui = T{\n\t\tposX=0,\n\t\tposY=0\n\t}\n}\n')
+		index:close()
+	end
+	local globalsPath = characterRoot.."\\globals.lua"
+	if not fileExists(globalsPath) then
+		print('creating globals')
+		local globe = io.open(globalsPath, "w+")
+		assert(globe ~= nil, "Globals file unexpectedly nil")
+		globe:write('return {\n\tdebug = false\n}\n')
+	end
+end
+
 
 ---@type helpers
 return {
@@ -188,4 +220,5 @@ return {
 	GenericAbilityHandler = GenericAbilityHandler,
 	CleanupSets = CleanupSets,
 	customFlattenTable = customFlattenTable,
+	CreateRequiredFiles = CreateRequiredFiles
 }

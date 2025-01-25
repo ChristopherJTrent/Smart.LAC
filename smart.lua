@@ -1,23 +1,27 @@
 --luacheck: globals gFunc gData gSettings gProfile chat T
----@type globals?
-local globals = gFunc.LoadFile('globals.lua')
 ---@type skills?
 local skills = gFunc.LoadFile('smart.lac/data/skills.lua')
 ---@type playerData?
-local data = gFunc.LoadFile('index.lua')
----@type playerData?
 local validData = gFunc.LoadFile('smart.lac/data/index.lua')
+
 ---@type helpers?
 local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
+if helpers == nil then 
+	print("Smart.LAC [FATAL]: failed to load helpers.")
+	return nil
+end
+helpers.CreateRequiredFiles()
+
+---@type playerData?
+local data = gFunc.LoadFile('index.lua')
+---@type globals?
+local globals = gFunc.LoadFile('globals.lua')
 ---@type accessories
 local accessories = gFunc.LoadFile('smart.lac/accessories.lua')
 ---@type jobHandlers
 local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
 ---@diagnostic disable-next-line: lowercase-global
-modes = gFunc.LoadFile('smart.lac/modes.lua')
-
-if not modes then return nil end
-if(skills==nil or data==nil or validData==nil or globals == nil or helpers == nil or jobHandlers == nil) then
+if(skills==nil or data==nil or validData==nil or globals == nil or jobHandlers == nil) then
 	print ("Failed to load a file.")
 	print("--------------------\nGlobals")
 	print (globals)
@@ -36,6 +40,11 @@ if(skills==nil or data==nil or validData==nil or globals == nil or helpers == ni
 	return nil
 end
 
+
+
+modes = gFunc.LoadFile('smart.lac/modes.lua')
+
+if not modes then return nil end
 local load = function()
 	local success = true
 
