@@ -19,7 +19,9 @@
 ---@field nextWeaponGroup function changes the currently active weapon group to the next one in the group list. will loop around at the end.
 ---@field nextSecondaryGroup function changes the currently active secondary group to the next one in the group list. will loop around at the end.
 ---@field nextOverrideState fun(layer: string) changes the override state of the provided layer to the next one in its list.
----@field setWindowPosX fun(x: integer) moves the mode display widget to the specified X coordinate on screen
----@field setWindowPosY fun(y: integer) moves the mode display widget to the specified Y coordinate on screen
+---@field setWindowPosX fun(x: number) moves the mode display widget to the specified X coordinate on screen
+---@field setWindowPosY fun(y: number) moves the mode display widget to the specified Y coordinate on screen
 ---@field setWindowVisibility fun(b: boolean) changes whether the mode display widget is visible
 ---@field toggleWindowVisibility function toggles the visibility of the mode display widget
+---@field initializeWindow function
+---@field applyOverrides fun(baseSet: set, outerKey:string, innerKey:string, secondaryInnerKey:string?)
