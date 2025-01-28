@@ -21,7 +21,7 @@ local accessories = gFunc.LoadFile('smart.lac/accessories.lua')
 ---@type jobHandlers?
 local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
 ---@diagnostic disable-next-line: lowercase-global
-if(skills==nil or data==nil or validData==nil or globals == nil or jobHandlers == nil) then
+if(skills==nil or data==nil or validData==nil or globals == nil or jobHandlers == nil or accessories == nil) then
 	print ("Failed to load a file.")
 	print("--------------------\nGlobals")
 	print (globals)
@@ -188,6 +188,7 @@ local default = function()
 
 
 	if(sets['general']) then
+		---@type EntityStatus
 		local status = player.Status
 		if(not status) then return end
 		
@@ -264,7 +265,10 @@ local weaponskill = function()
 	local sets = modes.getSets()
 	helpers.GenericAbilityHandler(sets, 'weaponskill')
 	if(sets.settings ~= nil and sets.settings.allowElementalAccessories == true) then
-		accessories.DoBeltAndGorget(helpers.GetWeaponskillProperty(gData.GetAction()), data)
+		---@type Action?
+		local action = gData.GetAction()
+		if action == nil then return nil end
+		accessories.DoBeltAndGorget(helpers.GetWeaponskillProperty(action), data)
 	end
 end
 
