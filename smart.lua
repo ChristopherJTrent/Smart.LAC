@@ -16,9 +16,9 @@ helpers.CreateRequiredFiles()
 local data = gFunc.LoadFile('index.lua')
 ---@type globals?
 local globals = gFunc.LoadFile('globals.lua')
----@type accessories
+---@type accessories?
 local accessories = gFunc.LoadFile('smart.lac/accessories.lua')
----@type jobHandlers
+---@type jobHandlers?
 local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
 ---@diagnostic disable-next-line: lowercase-global
 if(skills==nil or data==nil or validData==nil or globals == nil or jobHandlers == nil) then
@@ -41,8 +41,10 @@ if(skills==nil or data==nil or validData==nil or globals == nil or jobHandlers =
 end
 
 
-
+---@type modes?
+---@diagnostic disable-next-line: lowercase-global
 modes = gFunc.LoadFile('smart.lac/modes.lua')
+assert(modes ~= nil, "[Fatal] Modes is unexpectedly nil.")
 
 if not modes then return nil end
 local load = function()
@@ -71,6 +73,7 @@ local load = function()
 	local sets = modes.getSets()
 
 	local validator = gFunc.LoadFile('smart.lac/handlers/validations.lua')
+	assert(validator ~= nil, "Validator unexpectedly nil.")
 	validator(sets)
 
 	if not helpers.ValidateSets(sets) then
