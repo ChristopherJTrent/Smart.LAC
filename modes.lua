@@ -5,6 +5,8 @@ local imgui = require('imgui')
 local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
 local index = gFunc.LoadFile('index.lua')
 
+if not imgui or not helpers or not index then return nil end
+
 local defaultBindings = {
   "1",
   "2",
@@ -144,6 +146,8 @@ return {
       chatManager:QueueCommand(-1, "/bind F12 /lac fwd nextMode")
       chatManager:QueueCommand(-1, "/bind F11 /lac fwd nextWeaponGroup")
       chatManager:QueueCommand(-1, "/bind F10 /lac fwd nextSecondaryGroup")
+      -- function:once is defined by the ashita SDK.
+      ---@diagnostic disable-next-line: undefined-field
     end):once(0.25)
     for i, v in ipairs(ModeTable.keybinds) do
       chatManager:QueueCommand(-1, "/bind "..v.." /lac fwd nextOverride "..i)
