@@ -3,7 +3,7 @@
 
 ---@meta
 ---@class jobHandler
----@field default actionHandler?
+---@field default fun(sets:sets, status:EntityStatus)
 ---@field ability actionHandler?
 ---@field precast actionHandler?
 ---@field midcast actionHandler?
