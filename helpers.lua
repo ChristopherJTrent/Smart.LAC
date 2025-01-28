@@ -4,15 +4,6 @@ local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
 assert(skills ~= nil, "Skills file unexpectedly nil.")
 assert(jobHandlers ~= nil, "Job handlers unexpectedly nil.")
 
----@param sets sets
----@param key string
----@param overrides set
-local function EquipWithDefault(sets, key, overrides)
-	if sets[key].default == nil then return nil end
-	local combined = gFunc.Combine(sets[key].default, overrides)
-	gFunc.EquipSet(combined)
-end
-
 local function EnsureSugaredTable(t)
 	if t == nil then return t end
 	if(not t.contains) then
