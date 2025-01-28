@@ -12,6 +12,7 @@
         "gData",
         "gSettings",
         "AshitaCore",
-        "chat"
+        "chat",
+        "ashita"
     ]
 }
