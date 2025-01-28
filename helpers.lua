@@ -1,4 +1,8 @@
 local skills = gFunc.LoadFile('smart.lac/data/skills.lua')
+local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
+
+assert(skills ~= nil, "Skills file unexpectedly nil.")
+assert(jobHandlers ~= nil, "Job handlers unexpectedly nil.")
 
 ---@param sets sets
 ---@param key string
@@ -29,16 +33,22 @@ end
 
 local function getSpellBaseName(spell)
 	local start, _ = string.find(spell, ' ')
+	local colon = string.find(spell, ':')
+	if colon ~= nil then
+		start = colon
+	end
 	if start == nil then return spell end
 	local name = string.sub(spell, 1, start-1)
 	return name
 end
 
 local function ValidatePlayerData(t)
-	---@type playerData
+	---@type playerData?
 	local validData = gFunc.LoadFile('smart.lac/data/index.lua')
-	---@type globals
+	assert(validData ~= nil, 'ValidData unexpectedly nil')
+	---@type globals?
 	local globals = gFunc.LoadFile('globals.lua')
+	assert(globals ~= nil, "character globals unexpectedly nil.")
 	local belts = ContainsAllKeys(validData.ownedBelts, t.ownedBelts)
 	local gorgets = ContainsAllKeys(validData.ownedGorgets, t.ownedGorgets)
 	if(globals.debug) then
@@ -94,8 +104,8 @@ end
 ---@return boolean success?
 local function GenericAbilityHandler(sets, key)
 	if not sets[key] then return false end
-	local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
 	local action = gData.GetAction()
+	if not jobHandlers or not action then return false end
 
 	if sets[key] and sets[key]['customHandler'] ~= nil and type(sets[key]['customHandler']) == "function" then
 		if sets[key]['customHandler'](sets) then return true end
@@ -232,13 +242,13 @@ local performUpdateCheck = function()
 				print(AddModHeader('version check failed. Please check the github for updates.'))
 			else
 				largestUpdate = localVersion.patch < webVersion.patch and 'patch' or largestUpdate
-				largestUpdate = localVersion.minor < webVersion.minor and 'minor' or largestUpdate
-				largestUpdate = localVersion.major < webVersion.major and 'major' or largestUpdate
+				largestUpdate = localVersion.minor < webVersion.minor and 'minor update' or largestUpdate
+				largestUpdate = localVersion.major < webVersion.major and 'major update' or largestUpdate
 			end
 		end
 	end
 	if largestUpdate ~= '' then
-		print(AddModHeader('New '..largestUpdate.." update available, please update Smart.LAC at your earliest convenience."))
+		print(AddModHeader('New '..largestUpdate.." available, please update Smart.LAC at your earliest convenience."))
 	end
 end
 
