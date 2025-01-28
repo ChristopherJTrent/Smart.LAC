@@ -240,6 +240,8 @@ local performUpdateCheck = function()
 	end
 	if largestUpdate ~= '' then
 		print(AddModHeader('New '..largestUpdate.." available, please update Smart.LAC at your earliest convenience."))
+	else
+		print(AddModHeader(chat.colors.SpringGreen..'Update Check Successful, current version: '..chat.colors.Reset..body))
 	end
 end
 
