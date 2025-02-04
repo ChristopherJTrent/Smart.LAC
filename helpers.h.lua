@@ -13,3 +13,4 @@
 ---@field GenericAbilityHandler fun(sets: sets, key:string):boolean
 ---@field CleanupSets fun(sets: sets):sets
 ---@field CreateRequiredFiles function
+---@field PerformUpdateCheck function
