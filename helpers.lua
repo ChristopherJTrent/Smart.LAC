@@ -224,7 +224,8 @@ local performUpdateCheck = function()
 	if statusCode ~= 200 then
 		print('failed to download version info')
 	else
-		local locVerPath = ("%s\\config\\luashitacast\\Smart.LAC\\version")
+		---@diagnostic disable-next-line: undefined-field
+		local locVerPath = ("%s\\config\\luashitacast\\Smart.LAC\\version"):fmt(AshitaCore:GetInstallPath())
 		local f = io.open(locVerPath, 'r')
 		if f ~= nil then
 			local webVersion = miniSemver(body)
@@ -244,8 +245,6 @@ local performUpdateCheck = function()
 		print(AddModHeader(chat.colors.SpringGreen..'Update Check Successful, current version: '..chat.colors.Reset..body))
 	end
 end
-
-performUpdateCheck()
 
 ---@type helpers
 return {
@@ -278,5 +277,6 @@ return {
 	GenericAbilityHandler = GenericAbilityHandler,
 	CleanupSets = CleanupSets,
 	customFlattenTable = customFlattenTable,
-	CreateRequiredFiles = CreateRequiredFiles
+	CreateRequiredFiles = CreateRequiredFiles,
+	PerformUpdateCheck = function() end
 }
