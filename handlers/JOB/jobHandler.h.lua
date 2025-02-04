@@ -1,4 +1,4 @@
----@alias actionHandler fun(action:Action, sets:sets): boolean
+---@alias actionHandler fun(action:Action, sets:sets): boolean | set
 ---actionHandler returns true if an action was handled, false otherwise.
 
 ---@meta
