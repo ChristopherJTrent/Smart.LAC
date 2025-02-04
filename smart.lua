@@ -49,7 +49,7 @@ assert(modes ~= nil, "[Fatal] Modes is unexpectedly nil.")
 if not modes then return nil end
 local load = function()
 	local success = true
-
+	helpers.PerformUpdateCheck()
 	local sub = gData.GetPlayer().SubJob
 
 	gSettings.AllowAddSet = true
