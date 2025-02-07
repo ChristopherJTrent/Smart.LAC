@@ -29,7 +29,7 @@ return {
         elseif action.Skill == "Enhancing Magic" then
             if sets.midcast['Enhancing Magic'] ~= nil then 
                 local groups = T{
-                    skill = T{"Aquaveil", "Stoneskin"},
+                    skill = T{"Aquaveil", "Stoneskin", "Temper", "Temper II"},
                     duration = T{"Blink", "Haste", "Haste II", "Flurry", "Flurry II"} -- check for barspells
                 }
                 
@@ -42,13 +42,15 @@ return {
                 if string.find(action.Name, "bar") ~= nil then
                     return gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].duration)
                 end
-                if string.find(action.Name, "^En.*") ~= nil then
-                    if sets.midcast.enspell then
-                        return gFunc.Combine(sets.midcast['Enhancing Magic'].default, sets.midcast.enspell)
-                    end
+                if sets.midcast.skill ~= nil and string.find(action.Name, "^En.*") ~= nil then
+                    return gFunc.Combine(finalSet, sets.midcast.skill)
                 end
-                if sets.midcast.gainspell ~= nil and string.find(action.Name, "Gain") ~= nil then
-                    return sets.midcast.gainspell
+                if string.find(action.Name, "Gain") ~= nil then
+                    return gFunc.Combine(
+                        finalSet, 
+                        sets.midcast['Enhancing Magic'].skill ~= nil and sets.midcast['Enhancing Magic'].skill or {}, 
+                        sets.midcast['Enhancing Magic'].gainspell ~= nil and sets.midcast['Enhancing Magic'].gainspell or {}
+                    )
                 end
                 if sets.midcast['Enhancing Magic'].default ~= nil then
                     return sets.midcast['Enhancing Magic'].default
