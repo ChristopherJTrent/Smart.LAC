@@ -4,8 +4,9 @@ require('common')
 local imgui = require('imgui')
 local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
 local index = gFunc.LoadFile('index.lua')
+local globals = gFunc.LoadFile('globals.lua')
 
-if not imgui or not helpers or not index then return nil end
+if not imgui or not helpers or not index or not globals then return nil end
 
 local defaultBindings = {
   "1",
@@ -146,29 +147,35 @@ return {
       chatManager:QueueCommand(-1, "/bind F12 /lac fwd nextMode")
       chatManager:QueueCommand(-1, "/bind F11 /lac fwd nextWeaponGroup")
       chatManager:QueueCommand(-1, "/bind F10 /lac fwd nextSecondaryGroup")
+      for i, v in ipairs(ModeTable.keybinds) do
+        chatManager:QueueCommand(-1, "/bind "..v.." /lac fwd nextOverride "..i)
+      end
+      for i, _ in ipairs(ModeTable.weaponGroups) do
+        chatManager:QueueCommand(-1, "/bind "..defaultWeaponBindings[i].." /lac fwd setActiveWeaponGroup "..i)
+      end
+      for i, _ in ipairs(ModeTable.secondaryGroups) do
+        chatManager:QueueCommand(-1, "/bind "..defaultSecondaryBindings[i].." /lac fwd setActiveSecondaryGroup "..i)
+      end
       -- function:once is defined by the ashita SDK.
       ---@diagnostic disable-next-line: undefined-field
     end):once(0.25)
-    for i, v in ipairs(ModeTable.keybinds) do
-      chatManager:QueueCommand(-1, "/bind "..v.." /lac fwd nextOverride "..i)
-    end
-    for i, _ in ipairs(ModeTable.weaponGroups) do
-      chatManager:QueueCommand(-1, "/bind "..defaultWeaponBindings[i].." /lac fwd setActiveWeaponGroup "..i)
-    end
-    for i, _ in ipairs(ModeTable.secondaryGroups) do
-      chatManager:QueueCommand(-1, "/bind "..defaultSecondaryBindings[i].." /lac fwd setActiveSecondaryGroup "..i)
-    end
   end,
   enableWeaponGroups = function()
-    print(helpers.AddModHeader(chat.success('Enabled weapon groups')))
+    if globals.debug then 
+      print(helpers.AddModHeader(chat.success('Enabled weapon groups')))
+    end
     ModeTable.weaponsEnabled = true
   end,
   enableSecondaryGroups = function()
-    print(helpers.AddModHeader(chat.success('Enabled secondary weapon groups')))
+    if globals.debug then 
+      print(helpers.AddModHeader(chat.success('Enabled secondary weapon groups')))
+    end
     ModeTable.secondaryEnabled = true
   end,
   enableOverrideLayers = function()
-    print(helpers.AddModHeader(chat.success('Enabled override layers')))
+    if globals.debug then 
+      print(helpers.AddModHeader(chat.success('Enabled override layers')))
+    end
     ModeTable.overrideLayersEnabled = true
   end,
   registerSets = function (mode, sets)
