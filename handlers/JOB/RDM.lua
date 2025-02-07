@@ -47,12 +47,17 @@ return {
                         return gFunc.Combine(sets.midcast['Enhancing Magic'].default, sets.midcast.enspell)
                     end
                 end
+                if sets.midcast.gainspell ~= nil and string.find(action.Name, "Gain") ~= nil then
+                    return sets.midcast.gainspell
+                end
                 if sets.midcast['Enhancing Magic'].default ~= nil then
                     return sets.midcast['Enhancing Magic'].default
                 else
                     return false
                 end
             end
+
         end
+
     end
 }
