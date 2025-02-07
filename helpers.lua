@@ -220,6 +220,7 @@ end
 local performUpdateCheck = function()
 	local largestUpdate = ''
 	local http = require('socket\\ssl\\https')
+	http.TIMEOUT = 1
 	local body, statusCode, _, _= http.request('https://raw.githubusercontent.com/ChristopherJTrent/Smart.LAC/refs/heads/master/version')
 	if statusCode ~= 200 then
 		print('failed to download version info')
@@ -278,5 +279,5 @@ return {
 	CleanupSets = CleanupSets,
 	customFlattenTable = customFlattenTable,
 	CreateRequiredFiles = CreateRequiredFiles,
-	PerformUpdateCheck = function() end
+	PerformUpdateCheck = performUpdateCheck
 }
