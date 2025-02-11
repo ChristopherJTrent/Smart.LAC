@@ -29,7 +29,6 @@ end
 gFunc.LoadFile = function(path)
 	local sep = package.config:sub(1, 1)
 	local frameworkRoot = string.gsub(arg[0], string.format("%stests.lua", sep), "")
-	print(frameworkRoot)
 	path = string.gsub(path, "smart.lac/", '')
 	local paths = T{
 		path,
