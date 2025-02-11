@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 ---@type jobHandler
 local ninja = require('handlers.JOB.NIN')
 local lu = require('luaunit')

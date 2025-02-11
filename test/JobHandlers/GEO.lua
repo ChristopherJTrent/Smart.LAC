@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 ---@type jobHandler
 local geomancer = require('handlers.JOB.GEO')
 local lu = require('luaunit')

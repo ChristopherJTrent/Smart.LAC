@@ -1,6 +1,7 @@
 
 TestSuite = {}
 local lu = require('luaunit')
+---@diagnostic disable-next-line: different-requires
 require('test.common')
 
 require('test.JobHandlers.jobHandlers')

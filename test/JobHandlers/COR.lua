@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 ---@type jobHandler
 local corsair = require('handlers.JOB.COR')
 local lu = require('luaunit')
