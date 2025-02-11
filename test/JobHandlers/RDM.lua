@@ -71,4 +71,20 @@ function TestRedMage:testSpecializedEnfeebling()
 		Head = '1',
 		Body = '1'
 	})
-end	
+
+	lu.assertEquals(redMage.midcast({
+		Name = "Poison",
+		Skill = "Enfeebling Magic"
+	}, self.sets), {
+		Head = '1',
+		Hands = '1'
+	})
+	self.sets.highSkill = nil
+	lu.assertEquals(redMage.midcast({
+		Name = "Distract III",
+		Skill = 'Enfeebling Magic'
+	}, self.sets), {
+		Head = '1',
+		Legs = '1'
+	})
+end
