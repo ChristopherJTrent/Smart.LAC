@@ -146,7 +146,7 @@ function TestRedMage:testSpecializedEnfeebling()
 		Head = '1',
 		Hands = '1'
 	})
-	self.sets.highSkill = nil
+	self.sets.midcast['Enfeebling Magic'].highSkill = nil
 	lu.assertEquals(redMage.midcast({
 		Name = "Distract III",
 		Skill = 'Enfeebling Magic'
