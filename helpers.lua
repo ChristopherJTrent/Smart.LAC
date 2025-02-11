@@ -213,6 +213,8 @@ local function smartFileExists(name)
 end
 
 local CreateRequiredFiles = function()
+	if TESTING_MODE ~= nil then return end
+	local s = require('settings')
 	-- Diag: string:fmt is provided by ashita outside the normal filetree used for development.
 	---@diagnostic disable-next-line: undefined-field
 	local characterRoot = ("%sconfig\\addons\\luashitacast\\%s_%s"):fmt(AshitaCore:GetInstallPath(), s.name, s.server_id)
