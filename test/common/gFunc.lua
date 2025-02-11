@@ -1,7 +1,7 @@
 gFunc = {}
 
 local function fileExists(path)
-	local f = io.open(path, 'r')
+	local f = io.open(path, 'r+')
 	if f~= nil then
 		io.close(f)
 		return true
@@ -29,6 +29,8 @@ end
 gFunc.LoadFile = function(path)
 	local sep = package.config:sub(1, 1)
 	local frameworkRoot = string.gsub(arg[0], string.format("%stests.lua", sep), "")
+	print(frameworkRoot)
+	path = string.gsub(path, "smart.lac/", '')
 	local paths = T{
 		path,
 		string.format('%s.lua', path),
@@ -37,14 +39,16 @@ gFunc.LoadFile = function(path)
 		string.format("%s%s%s", frameworkRoot, sep, path),
 		string.format("%s%s%s.lua", frameworkRoot, sep, path),
 	}
+
 	for token in string.gmatch(package.path, "[^;]+") do
         paths:append(string.gsub(token, '?', path));
     end
 
 	local filePath
-	for _, path in ipairs(paths) do
-		if fileExists(path) then
-			filePath = path
+	for _, _path in ipairs(paths) do
+		print(_path)
+		if fileExists(_path) then
+			filePath = _path
 			break
 		end
 	end
@@ -52,7 +56,7 @@ gFunc.LoadFile = function(path)
 	if filePath == nil then
 		error("Attempted to load file that does not exist.")
 	end
-	
+	print(filePath)
 	local func, loadError = loadfile(filePath)
 	if not func then
 		error('Attempted to load a file that isn\'t lua code')
