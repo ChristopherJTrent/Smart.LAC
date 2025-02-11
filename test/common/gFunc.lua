@@ -1,3 +1,5 @@
+local lu = require('luaunit')
+
 gFunc = {}
 
 local function fileExists(path)
@@ -45,7 +47,6 @@ gFunc.LoadFile = function(path)
 
 	local filePath
 	for _, _path in ipairs(paths) do
-		print(_path)
 		if fileExists(_path) then
 			filePath = _path
 			break
@@ -55,7 +56,6 @@ gFunc.LoadFile = function(path)
 	if filePath == nil then
 		error("Attempted to load file that does not exist.")
 	end
-	print(filePath)
 	local func, loadError = loadfile(filePath)
 	if not func then
 		error('Attempted to load a file that isn\'t lua code')
@@ -72,4 +72,16 @@ gFunc.LoadFile = function(path)
 	end
 
 	return fileValue
+end
+
+gFunc.EquipSet = function(set)
+	if EXPECTED_SET ~= nil then
+		lu.assertEquals(set, EXPECTED_SET)
+	end
+end
+
+gFunc.LockSet = function(set, _)
+	if EXPECTED_SET ~= nil then
+		lu.assertEquals(set, EXPECTED_SET)
+	end
 end
