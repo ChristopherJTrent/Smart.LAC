@@ -1,3 +1,5 @@
+---@diagnostic disable: missing-fields
+---@type jobHandler
 local bard = require('handlers.JOB.BRD')
 local lu = require('luaunit')
 
