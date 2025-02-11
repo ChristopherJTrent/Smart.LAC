@@ -167,6 +167,7 @@ local fileExists = function(filepath)
 end
 
 local CreateRequiredFiles = function()
+	if TESTING_MODE ~= nil then return end
 	local s = require('settings')
 	-- Diag: string:fmt is provided by ashita outside the normal filetree used for development.
 	---@diagnostic disable-next-line: undefined-field
