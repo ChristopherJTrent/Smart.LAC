@@ -4,7 +4,7 @@ return {
 			if(sets['ability'].phantomRoll) then
 				return sets.ability.phantomRoll
 			end
-		elseif (action.type == "Quick Draw") then
+		elseif (action.Type == "Quick Draw") then
 			if (sets.ability.quickDraw) then
 				return sets.ability.quickDraw
 			end
