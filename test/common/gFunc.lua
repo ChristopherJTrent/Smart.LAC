@@ -1,5 +1,7 @@
 local lu = require('luaunit')
 
+FORCE_LOAD_FAILURES = T{}
+
 gFunc = {}
 
 local function fileExists(path)
@@ -29,6 +31,9 @@ gFunc.Combine = function(base, override)
 end
 
 gFunc.LoadFile = function(path)
+	if FORCE_LOAD_FAILURES:hasval(path) then
+		return nil
+	end
 	local sep = package.config:sub(1, 1)
 	local frameworkRoot = string.gsub(arg[0], string.format("%stests.lua", sep), "")
 	path = string.gsub(path, "smart.lac/", '')
