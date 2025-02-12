@@ -7,7 +7,18 @@ gData.GetPlayer = function()
 		MainJob = PLAYER_MAINJOB,
 		SubJob = PLAYER_SUBJOB,
 		Status = PLAYER_STATUS,
+	}
+end
 
+
+function gData.GetAction()
+	---@type Action
+	return {
+		Type = ACTION_TYPE,
+		Skill = ACTION_SKILL,
+		Name = ACTION_NAME,
+		ActionType = ACTION_ACTIONTYPE,
+		Id = ACTION_ID
 	}
 end
 
