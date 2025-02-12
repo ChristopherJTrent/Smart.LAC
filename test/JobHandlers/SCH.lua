@@ -3,7 +3,7 @@
 local scholar = require('handlers.JOB.SCH')
 local lu = require('luaunit')
 
-local TestScholar = {
+TestScholar = {
 	sets = T{
 		midcast = T{
 			helix = T{
