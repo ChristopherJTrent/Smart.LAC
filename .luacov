@@ -1,0 +1,10 @@
+return {
+	reporter = "html",
+	reportfile = "luacov.report.html",
+	exclude = {
+		"luaunit",
+		"test",
+		"skills",
+		"imgui"
+	}
+}

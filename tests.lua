@@ -2,6 +2,7 @@
 TestSuite = {}
 TESTING_MODE = function() end
 local lu = require('luaunit')
+require('luacov')
 ---@diagnostic disable-next-line: different-requires
 require('test.common')
 
