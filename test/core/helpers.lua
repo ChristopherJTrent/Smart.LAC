@@ -124,6 +124,9 @@ function TestHelpers:testValidateSets()
 		},
 		settings = T{}
 	}))
+	FORCE_LOAD_FAILURES = T{"smart.lac/data/JOB.lua"}
+	lu.assertFalse(helpers.ValidateSets({}))
+	FORCE_LOAD_FAILURES = T{}
 end
 
 function TestHelpers:testAddModHeader()
