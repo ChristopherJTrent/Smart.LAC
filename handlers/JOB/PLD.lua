@@ -17,9 +17,6 @@ return {
                 return sets.midcast.enmity
             end
         end
-        if sets.midcast.phalanx ~= nil and action.Name == "Phalanx" then
-            return sets.midcast.phalanx
-        end
         return false
     end,
     ability = function(action, sets)
