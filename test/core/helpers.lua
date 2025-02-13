@@ -226,3 +226,38 @@ function TestHelpers:testBuffs()
 
 	helpers.GenericAbilityHandler(self.sets, 'weaponskill')
 end
+
+function TestHelpers:testCleanupSets()
+	lu.assertNotNil(helpers.CleanupSets)
+	lu.assertEquals(helpers.CleanupSets({}), {})
+	lu.assertEquals(helpers.CleanupSets({
+		settings = T{
+			DisableWeaponWarning = true
+		}
+	}), {
+		settings = T{
+			DisableWeaponWarning = true
+		}
+	})
+	lu.assertEquals(helpers.CleanupSets({
+		weaponskill = {
+			default = {
+				Main = "Naegling"
+			}
+		}
+	}), {weaponskill = {default = {}}})
+	lu.assertEquals(helpers.CleanupSets({
+		weaponskill = T{
+			default = T{
+				Main = "Naegling",
+				Head = "Nyame Helm"
+			}
+		}
+	}), {
+		weaponskill = T{
+			default = T{
+				Head = "Nyame Helm"
+			}
+		}
+	})
+end
