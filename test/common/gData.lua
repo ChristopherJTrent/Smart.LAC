@@ -5,6 +5,7 @@ gData = {
 gData.GetPlayer = function()
 	return {
 		MainJob = PLAYER_MAINJOB,
+		MainJobLevel = PLAYER_MAINJOB_LEVEL,
 		SubJob = PLAYER_SUBJOB,
 		Status = PLAYER_STATUS,
 	}
