@@ -157,18 +157,19 @@ local function CleanupSets(sets)
 		if type(set) ~= "table" then return set end
 		for k, v in pairs(set) do
 			if type(v) ~= "table" then
-				retval[k] = (v=="Main" or v=="Sub") and nil or v
+				if not T{"Main", "Sub", "Range"}:contains(k) then
+					retval[k] = v
+				end
+			else
+				retval[k] = __Cleanup(v)
 			end
-			retval[k] = __Cleanup(v)
 		end
 		return retval
 	end
 	for k, v in pairs(sets) do
-		if k == "Weapons" or k == "settings" then
-			cleaned[k] = v
-		end
 		cleaned[k] = __Cleanup(v)
 	end
+	return cleaned
 end
 
 local fileExists = function(filepath)
