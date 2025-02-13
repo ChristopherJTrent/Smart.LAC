@@ -21,6 +21,7 @@ TestGeomancer = T{
 
 function TestGeomancer:testMidcast()
 	lu.assertEquals(geomancer.midcast({}, {}), false)
+	lu.assertFalse(geomancer.midcast({Name = 'Cure II'}, {midcast = {}}))
 end
 
 function TestGeomancer:testGeocolure()
