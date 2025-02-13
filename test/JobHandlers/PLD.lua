@@ -28,14 +28,16 @@ function TestPaladin:testAbilityMissing()
 	lu.assertEquals(paladin.ability({}, {}), false)
 end
 
-function TestPaladin:testMidcastEnmity()
+function TestPaladin:testMidcast()
 	lu.assertEquals(paladin.midcast({
 		Name = "Flash"
 	}, self.sets), { Head = "1" })
+	lu.assertFalse(paladin.midcast({Name = 'Cure II'}, {midcast = {}}))
 end
 
-function TestPaladin:testAbilityEnmity()
+function TestPaladin:testAbility()
 	lu.assertEquals(paladin.ability({
 		Name = "Sentinel"
 	}, self.sets), { Body = '1' })
+	lu.assertFalse(paladin.ability({Name = "Invincible"},{ability = {}}))
 end
