@@ -69,6 +69,8 @@ function TestHelpers:testEnsureSugaredTable()
 	lu.assertNotNil(helpers.EnsureSugaredTable)
 	lu.assertNil(helpers.EnsureSugaredTable(nil))
 	lu.assertNotNil(helpers.EnsureSugaredTable({}).contains)
+	local t = T{}
+	lu.assertEquals(helpers.EnsureSugaredTable(t), t)
 end
 
 function TestHelpers:testContainsAllKeys()
