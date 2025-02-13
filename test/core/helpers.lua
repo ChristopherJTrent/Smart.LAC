@@ -54,6 +54,7 @@ function TestHelpers:setUp()
 end
 function TestHelpers:tearDown()
 	PLAYER_MAINJOB = nil
+	PLAYER_MAINJOB_LEVEL = 99
 	PLAYER_SUBJOB = nil
 	PLAYER_STATUS = nil
 	ACTION_TYPE = nil
