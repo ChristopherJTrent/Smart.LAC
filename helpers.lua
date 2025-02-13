@@ -168,6 +168,8 @@ end
 
 local CreateRequiredFiles = function()
 	if TESTING_MODE ~= nil then return end
+	-- This file is tested manually
+	-- luacov: disable
 	local s = require('settings')
 	-- Diag: string:fmt is provided by ashita outside the normal filetree used for development.
 	---@diagnostic disable-next-line: undefined-field
@@ -196,9 +198,12 @@ local CreateRequiredFiles = function()
 		shared:write('return {}')
 		shared:close()
 	end
+	-- luacov: enable
 end
 
 local miniSemver = function(string)
+	-- this function is tested manually
+	-- luacov: disable
 	local function split(s,delimiter)
 		delimiter = delimiter or '%s'
 		local t={}
@@ -216,9 +221,12 @@ local miniSemver = function(string)
 		return nil
 	end
 	return ret
+	-- luacov: enable
 end
 
 local performUpdateCheck = function()
+	-- this function is tested manually
+	-- luacov: disable
 	local largestUpdate = ''
 	local beta = false
 	local http = require('socket\\ssl\\https')
@@ -256,6 +264,7 @@ local performUpdateCheck = function()
 	else
 		print(AddModHeader(chat.colors.SpringGreen..'Update Check Successful, current version: '..chat.colors.Reset..body))
 	end
+	-- luacov: enable
 end
 
 ---@type helpers
