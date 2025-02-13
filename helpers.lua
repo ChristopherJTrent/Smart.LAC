@@ -172,11 +172,13 @@ local function CleanupSets(sets)
 end
 
 local fileExists = function(filepath)
+	-- luacov: disable
 	local f = io.open(filepath, "r")
 	if f ~= nil then
 		f:close()
 		return true
 	else return false end
+	-- luacov: enable
 end
 
 ---@param name string
