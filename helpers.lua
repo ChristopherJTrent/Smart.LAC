@@ -13,7 +13,7 @@ local function EnsureSugaredTable(t)
 end
 
 local function ContainsAllKeys(t, other)
-	for k, _ in ipairs(t) do
+	for k, _ in pairs(t) do
 		if(not other.containskey) then T(other) end
 		if(not other:containskey(k)) then
 			return false
