@@ -1,6 +1,7 @@
 local lu = require('luaunit')
 
 FORCE_LOAD_FAILURES = T{}
+LOADFILE_REPLACE_CONTENT = T{}
 
 gFunc = {}
 
@@ -33,6 +34,9 @@ end
 gFunc.LoadFile = function(path)
 	if FORCE_LOAD_FAILURES:hasval(path) then
 		return nil
+	end
+	if T(LOADFILE_REPLACE_CONTENT):haskey(path) then 
+		return LOADFILE_REPLACE_CONTENT[path]
 	end
 	local sep = package.config:sub(1, 1)
 	local frameworkRoot = string.gsub(arg[0], string.format("%stests.lua", sep), "")
