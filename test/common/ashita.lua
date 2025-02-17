@@ -16,3 +16,20 @@ chat = T{
 		return "error"..string
 	end
 }
+AshitaCore = {}
+---@class ExpectedChatCommands
+---@field mode integer
+---@field command string
+AshitaCore.ExpectedChatCommands = T{}
+function AshitaCore:GetChatManager()
+	local ChatManager = {}
+	function ChatManager:QueueCommand(mode, command)
+		for i, v in ipairs(AshitaCore.ExpectedChatCommands) do
+			if v.mode == mode and v.command == command then
+				table.remove(AshitaCore.ExpectedChatCommands, i)
+				break
+			end
+		end
+	end
+	return ChatManager
+end
