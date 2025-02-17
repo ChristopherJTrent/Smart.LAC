@@ -141,6 +141,8 @@ return {
     return builder:get()
   end,
   registerKeybinds = function()
+    -- luacov: disable
+    -- this function is tested manually
     local chatManager = AshitaCore:GetChatManager()
     chatManager:QueueCommand(-1, "/unbind all");
     (function()
@@ -159,6 +161,7 @@ return {
       -- function:once is defined by the ashita SDK.
       ---@diagnostic disable-next-line: undefined-field
     end):once(0.25)
+    -- luacov: enable
   end,
   enableWeaponGroups = function()
     if globals.debug then 
@@ -365,7 +368,7 @@ return {
   nextOverrideState = function(layer)
     local l = tonumber(layer)
     if l == nil then
-      l = ModeTable.overrideStateNames:find(layer)
+      l = ModeTable.overrideLayerNames:find(layer)
     end
     if #ModeTable.overrideLayers[l] == ModeTable.overrideLayerStates[l] then
       ModeTable.overrideLayerStates[l] = 1
@@ -411,6 +414,8 @@ return {
 		end
   end,
   initializeWindow = function()
+    -- luacov: disable
+    -- this function is tested manually
     local red = {0.91, 0.323, 0.091, 1}
     local green = {0.091, 0.91, 0.105, 1}
     local blue = {0.446, 0.516, 0.970, 1}
@@ -478,6 +483,7 @@ return {
         end
       end
     end)
+    -- luacov: enable
   end,
   setWindowVisibility = function(b)
     ModeTable.enableWindow = b
