@@ -23,6 +23,4 @@ return {
 		['Shadow Gorget']  = true,
 		['Fotia Gorget']   = true
 	},
-	posX = 0,
-	posY = 0,
 }
