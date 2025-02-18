@@ -143,7 +143,10 @@ return {
   registerKeybinds = function()
     local chatManager = AshitaCore:GetChatManager()
     chatManager:QueueCommand(-1, "/unbind all");
+    -- luacov: disable
+    -- this line causes an error in luacov if it's checked.
     (function()
+      --luacov: enable
       chatManager:QueueCommand(-1, "/bind F12 /lac fwd nextMode")
       chatManager:QueueCommand(-1, "/bind F11 /lac fwd nextWeaponGroup")
       chatManager:QueueCommand(-1, "/bind F10 /lac fwd nextSecondaryGroup")
@@ -414,7 +417,7 @@ return {
   end,
   initializeWindow = function()
     -- luacov: disable
-    -- this function is tested manually
+    -- this function is tested manually and cannot be meaningfully unit tested.
     local red = {0.91, 0.323, 0.091, 1}
     local green = {0.091, 0.91, 0.105, 1}
     local blue = {0.446, 0.516, 0.970, 1}
