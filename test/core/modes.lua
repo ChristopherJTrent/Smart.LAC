@@ -290,6 +290,115 @@ function TestModes:testNextOverrideState()
 	lu.assertEquals(ModeTable.overrideLayerStates[1], 1)
 end
 
-function TestModes:testGetSets()
+function TestModes:testSetActiveMode()
+	self.modes.registerSets("test1", {"test1"})
+	self.modes.registerSets("test2", {"test2"})
 
+	self.modes.setActiveMode("2")
+	lu.assertEquals(ModeTable.currentMode, 2)
+	self.modes.setActiveMode("3")
+	lu.assertEquals(ModeTable.currentMode, 2)
+
+	self.modes.setActiveMode("test1")
+	lu.assertEquals(ModeTable.currentMode, 1)
+	lu.assertEquals(self.modes.getSets(), {'test1'})
+
+	self.modes.setActiveMode('test3')
+	lu.assertEquals(ModeTable.currentMode, 1)
+end
+
+function TestModes:testSetActiveWeaponGroup()
+	lu.assertNil(self.modes.setActiveWeaponGroup("test"))
+	self.modes.enableWeaponGroups()
+	self.modes.registerWeaponGroup("naegling", {Main = "Naegling"})
+	self.modes.registerWeaponGroup("almace", {Main = "Almace"})
+	self.modes.registerWeaponGroup("tizona", {Main = "Tizona"})
+	
+	self.modes.setActiveWeaponGroup("2")
+	lu.assertEquals(ModeTable.currentWeaponGroup, 2)
+	lu.assertEquals(self.modes.getWeaponGroup(), {Main = "Almace"})
+
+	self.modes.setActiveWeaponGroup("tizona")
+	lu.assertEquals(ModeTable.currentWeaponGroup, 3)
+	lu.assertEquals(self.modes.getWeaponGroup(), {Main = "Tizona"})
+
+	self.modes.setActiveWeaponGroup("maxentius")
+	lu.assertEquals(ModeTable.currentWeaponGroup, 3)
+	lu.assertEquals(self.modes.getWeaponGroup(), {Main = "Tizona"})
+end
+
+function TestModes:testSetActiveSecondaryGroup()
+	lu.assertNil(self.modes.setActiveSecondaryGroup("test"))
+	self.modes.enableSecondaryGroups()
+	self.modes.registerSecondaryGroup("Fomalhaut", {Range = "Fomalhaut"})
+	self.modes.registerSecondaryGroup("Gastraphetes", {Range = "Gastraphetes"})
+	self.modes.registerSecondaryGroup("Armageddon", {Range = "Armageddon"})
+
+	self.modes.setActiveSecondaryGroup("2")
+	lu.assertEquals(ModeTable.currentSecondaryGroup, 2)
+	lu.assertEquals(self.modes.getSecondaryGroup(), {Range = "Gastraphetes"})
+
+	self.modes.setActiveSecondaryGroup("Armageddon")
+	lu.assertEquals(ModeTable.currentSecondaryGroup, 3)
+	lu.assertEquals(self.modes.getSecondaryGroup(), {Range = "Armageddon"})
+
+	self.modes.setActiveSecondaryGroup("Annihilator")
+	lu.assertEquals(ModeTable.currentSecondaryGroup, 3)
+	lu.assertEquals(self.modes.getSecondaryGroup(), {Range = "Armageddon"})
+end
+
+function TestModes:testNextMode()
+	self.modes.registerSets("test1", {"tests"})
+	self.modes.registerSets("test2", {"tests"})
+	lu.assertEquals(ModeTable.currentMode, 1)
+	self.modes.nextMode()
+	lu.assertEquals(ModeTable.currentMode, 2)
+	self.modes.nextMode()
+	lu.assertEquals(ModeTable.currentMode, 1)
+end
+
+function TestModes:testNextWeaponGroup()
+	self.modes.enableWeaponGroups()
+
+	self.modes.registerWeaponGroup("Ukonvasara", {Main = "Ukonvasara"})
+	self.modes.registerWeaponGroup("Chango", {Main = "Chango"})
+
+	lu.assertEquals(ModeTable.currentWeaponGroup, 1)
+	self.modes.nextWeaponGroup()
+	lu.assertEquals(ModeTable.currentWeaponGroup, 2)
+	self.modes.nextWeaponGroup()
+	lu.assertEquals(ModeTable.currentWeaponGroup, 1)
+end
+
+function TestModes:testNextSecondaryGroup()
+	self.modes.enableSecondaryGroups()
+	
+	self.modes.registerSecondaryGroup("Death Penalty", {Range = "Death Penalty"})
+	self.modes.registerSecondaryGroup("Ataktos", {Range = "Ataktos"})
+
+	lu.assertEquals(ModeTable.currentSecondaryGroup, 1)
+	self.modes.nextSecondaryGroup()
+	lu.assertEquals(ModeTable.currentSecondaryGroup, 2)
+	self.modes.nextSecondaryGroup()
+	lu.assertEquals(ModeTable.currentSecondaryGroup, 1)
+end
+
+function TestModes:testSetWindowPosX()
+	lu.assertEquals(ModeTable.imgui.windowPosX, 3200)
+	self.modes.setWindowPosX(100)
+	lu.assertEquals(ModeTable.imgui.windowPosX, 100)
+end
+
+function TestModes:testSetWindowPosY()
+	lu.assertEquals(ModeTable.imgui.windowPosY, 750)
+	self.modes.setWindowPosY(100)
+	lu.assertEquals(ModeTable.imgui.windowPosY, 100)
+end
+
+function TestModes:testSetWindowVisibility()
+	lu.assertTrue(ModeTable.enableWindow)
+	self.modes.setWindowVisibility(false)
+	lu.assertFalse(ModeTable.enableWindow)
+	self.modes.toggleWindowVisibility()
+	lu.assertTrue(ModeTable.enableWindow)
 end
