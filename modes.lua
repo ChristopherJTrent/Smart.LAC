@@ -141,8 +141,6 @@ return {
     return builder:get()
   end,
   registerKeybinds = function()
-    -- luacov: disable
-    -- this function is tested manually
     local chatManager = AshitaCore:GetChatManager()
     chatManager:QueueCommand(-1, "/unbind all");
     (function()
@@ -152,16 +150,15 @@ return {
       for i, v in ipairs(ModeTable.keybinds) do
         chatManager:QueueCommand(-1, "/bind "..v.." /lac fwd nextOverride "..i)
       end
-      for i, _ in ipairs(ModeTable.weaponGroups) do
+      for i, _ in ipairs(ModeTable.weaponGroupList) do
         chatManager:QueueCommand(-1, "/bind "..defaultWeaponBindings[i].." /lac fwd setActiveWeaponGroup "..i)
       end
-      for i, _ in ipairs(ModeTable.secondaryGroups) do
+      for i, _ in ipairs(ModeTable.secondaryGroupList) do
         chatManager:QueueCommand(-1, "/bind "..defaultSecondaryBindings[i].." /lac fwd setActiveSecondaryGroup "..i)
       end
       -- function:once is defined by the ashita SDK.
       ---@diagnostic disable-next-line: undefined-field
     end):once(0.25)
-    -- luacov: enable
   end,
   enableWeaponGroups = function()
     if globals.debug then 
@@ -181,6 +178,7 @@ return {
     end
     ModeTable.overrideLayersEnabled = true
   end,
+  ---@deprecated
   registerSets = function (mode, sets)
     if ModeTable.modes[mode] == nil then
       ModeTable.modes[mode] = sets
@@ -245,6 +243,7 @@ return {
     end
     return outputSet
   end,
+  ---@deprecated
   getSets = function()
     return ModeTable.modes[getCurrentMode()]
   end,
