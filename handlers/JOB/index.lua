@@ -1,7 +1,6 @@
 ---@alias jobHandlers table<string, jobHandler>
 ---@type jobHandlers
-return (function()
-	return T{
+return T{
 		COR = gFunc.LoadFile('smart.lac/handlers/JOB/COR.lua'),
 		GEO = gFunc.LoadFile('smart.lac/handlers/JOB/GEO.lua'),
 		SCH = gFunc.LoadFile('smart.lac/handlers/JOB/SCH.lua'),
@@ -9,5 +8,4 @@ return (function()
 		NIN = gFunc.LoadFile('smart.lac/handlers/JOB/NIN.lua'),
 		BRD = gFunc.LoadFile('smart.lac/handlers/JOB/BRD.lua'),
 		PLD = gFunc.LoadFile('smart.lac/handlers/JOB/PLD.lua')
-	}
-end)()
+}
