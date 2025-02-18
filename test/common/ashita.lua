@@ -1,3 +1,4 @@
+local lu = require('luaunit')
 ashita = {}
 ashita.events = {}
 ashita.events.register = function(a, b, c) end
@@ -27,9 +28,10 @@ function AshitaCore:GetChatManager()
 		for i, v in ipairs(AshitaCore.ExpectedChatCommands) do
 			if v.mode == mode and v.command == command then
 				table.remove(AshitaCore.ExpectedChatCommands, i)
-				break
+				return
 			end
 		end
+		lu.assertFalse(true)
 	end
 	return ChatManager
 end
