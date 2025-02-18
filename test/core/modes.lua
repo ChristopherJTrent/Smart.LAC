@@ -141,9 +141,53 @@ end
 function TestModes:testRegisterKeybinds()
 	---@type ExpectedChatCommands[]
 	AshitaCore.ExpectedChatCommands = T{
-		{mode = -1, command = "/unbind all"}
-		
+		{mode = -1, command = "/unbind all"},
+		{mode = -1, command = "/bind F12 /lac fwd nextMode"},
+		{mode = -1, command = "/bind F11 /lac fwd nextWeaponGroup"},
+		{mode = -1, command = "/bind F10 /lac fwd nextSecondaryGroup"},
 	}
+	self.modes.registerKeybinds()
+	lu.assertEquals(AshitaCore.ExpectedChatCommands, {})
+
+	---@type ExpectedChatCommands[]
+	AshitaCore.ExpectedChatCommands = T{
+		{mode = -1, command = "/unbind all"},
+		{mode = -1, command = "/bind F12 /lac fwd nextMode"},
+		{mode = -1, command = "/bind F11 /lac fwd nextWeaponGroup"},
+		{mode = -1, command = "/bind F10 /lac fwd nextSecondaryGroup"},
+		{mode = -1, command = "/bind 1 /lac fwd nextOverride 1"}
+	}
+	self.modes.registerOverride('test', {})
+	self.modes.registerKeybinds()
+	lu.assertEquals(AshitaCore.ExpectedChatCommands, {})
+
+	---@type ExpectedChatCommands[]
+	AshitaCore.ExpectedChatCommands = T{
+		{mode = -1, command = "/unbind all"},
+		{mode = -1, command = "/bind F12 /lac fwd nextMode"},
+		{mode = -1, command = "/bind F11 /lac fwd nextWeaponGroup"},
+		{mode = -1, command = "/bind F10 /lac fwd nextSecondaryGroup"},
+		{mode = -1, command = "/bind 1 /lac fwd nextOverride 1"},
+		{mode = -1, command = "/bind ^1 /lac fwd setActiveWeaponGroup 1"}
+	}
+	
+	self.modes.registerWeaponGroup('Naegling', {Main = "Naegling"})
+	self.modes.registerKeybinds()
+	lu.assertEquals(AshitaCore.ExpectedChatCommands, {})
+
+	---@type ExpectedChatCommands[]
+	AshitaCore.ExpectedChatCommands = T{
+		{mode = -1, command = "/unbind all"},
+		{mode = -1, command = "/bind F12 /lac fwd nextMode"},
+		{mode = -1, command = "/bind F11 /lac fwd nextWeaponGroup"},
+		{mode = -1, command = "/bind F10 /lac fwd nextSecondaryGroup"},
+		{mode = -1, command = "/bind 1 /lac fwd nextOverride 1"},
+		{mode = -1, command = "/bind ^1 /lac fwd setActiveWeaponGroup 1"},
+		{mode = -1, command = "/bind !1 /lac fwd setActiveSecondaryGroup 1"}
+	}
+	self.modes.registerSecondaryGroup('Ullr', { Range = "Ullr"})
+	self.modes.registerKeybinds()
+	lu.assertEquals(AshitaCore.ExpectedChatCommands, {})
 end
 
 function TestModes:testApplyOverrides()
