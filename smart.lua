@@ -246,8 +246,9 @@ local weaponskill = function()
 	end
 end
 
-
+-- luacov: disable
 return (function()
+	-- luacov: enable
 	---@return smartProfile
 	local retFunc = function()
 
@@ -296,9 +297,13 @@ return (function()
 			end
 		end
 	end
+	-- luacov: disable
+	-- lines which return an anonymous function misbehave in luacov
 	return (function()
+		-- luacov: enable
 		---@param sets sets
 		return function(sets)
+			modes._setup()
 			if sets ~= nil then
 				modes.registerSets('default', (shared ~= nil and shared.defaults ~= nil) and sets:merge(shared.defaults) or sets)
 				modes.setActiveMode('default')
