@@ -83,7 +83,10 @@ end
 
 function TestHelpers:testValidatePlayerData()
 	lu.assertNotNil(helpers.ValidatePlayerData)
-	lu.assertTrue(helpers.ValidatePlayerData({ownedBelts = {['Fotia Belt'] = true}, ownedGorgets = {['Fotia Gorget'] = true}, DisableWeaponWarning = false}))
+	lu.assertTrue(helpers.ValidatePlayerData({
+		ownedBelts = {['Fotia Belt'] = true}, 
+		ownedGorgets = {['Fotia Gorget'] = true}
+	}))
 end
 
 function TestHelpers:testCustomFlattenTable()
