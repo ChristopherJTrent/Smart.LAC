@@ -5,7 +5,8 @@ ashita.events.register = function(a, b, c) end
 chat = T{
 	colors = T{
 		LawnGreen = "[LG]",
-		Reset = "[RS]"
+		Reset = "[RS]",
+		SpringGreen = "[SG]"
 	},
 	success = function(string)
 		return "success"..string
