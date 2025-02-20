@@ -39,9 +39,9 @@ local function ValidatePlayerData(t)
 	assert(validData ~= nil, 'ValidData unexpectedly nil')
 	---@type globals?
 	local globals = gFunc.LoadFile('globals.lua')
-	assert(globals ~= nil, "character globals unexpectedly nil.")
-	local belts = ContainsAllKeys(validData.ownedBelts, t.ownedBelts)
-	local gorgets = ContainsAllKeys(validData.ownedGorgets, t.ownedGorgets)
+	if globals == nil then return false end
+	local belts = ContainsAllKeys(t.ownedBelts, validData.ownedBelts) and t.ownedBelts ~= nil
+	local gorgets = ContainsAllKeys(t.ownedGorgets, validData.ownedGorgets) and t.ownedGorgets ~= nil
 	if(globals.debug) then
 		print("Belts: "..(belts and "true" or "false"))
 		print("Gorgets: "..(gorgets and "true" or "false"))
@@ -230,6 +230,7 @@ end
 local performUpdateCheck = function()
 	-- this function is tested manually
 	-- luacov: disable
+	if TESTING_MODE ~= nil then return end
 	local largestUpdate = ''
 	local beta = false
 	local http = require('socket\\ssl\\https')
