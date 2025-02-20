@@ -75,46 +75,6 @@ local defaultSecondaryBindings = T{
   "!+0",
 }
 
-ModeTable = {}
-ModeTable.enableWindow = true
-ModeTable.imgui = {}
-if index.imgui then
-  if index.imgui.posX then
-    ModeTable.imgui.windowPosX = index.imgui.posX
-  else 
-    ModeTable.imgui.windowPosX = 3200
-  end
-  if index.imgui.posY then
-    ModeTable.imgui.windowPosY = index.imgui.posY
-  else 
-    ModeTable.imgui.windowPosY = 750
-  end
-else 
-  ModeTable.imgui.windowPosX = 3200
-  ModeTable.imgui.windowPosY = 750
-end
-
-ModeTable.modeList = {}
-ModeTable.currentMode = 1
-ModeTable.modes = {}
-
-ModeTable.weaponsEnabled = false
-ModeTable.weaponGroups = {}
-ModeTable.weaponGroupList = {}
-ModeTable.currentWeaponGroup = 1
-
-ModeTable.secondaryEnabled = false
-ModeTable.secondaryGroups = {}
-ModeTable.secondaryGroupList = {}
-ModeTable.currentSecondaryGroup = 1
-
-ModeTable.overrideLayersEnabled = false
-ModeTable.overrideLayers = T{}
-ModeTable.overrideLayerStates = T{}
-ModeTable.overrideLayerNames = T{}
-ModeTable.overrideStateNames = T{}
-ModeTable.keybinds = T{}
-
 local getCurrentMode = function()
   return ModeTable.modeList[ModeTable.currentMode]
 end
@@ -126,8 +86,51 @@ end
 local getCurrentSecondaryGroup = function()
   return ModeTable.secondaryGroupList[ModeTable.currentSecondaryGroup]
 end
+local setup = function()
+  ModeTable = {}
+  ModeTable.enableWindow = true
+  ModeTable.imgui = {}
+  if index.imgui then
+    if index.imgui.posX then
+      ModeTable.imgui.windowPosX = index.imgui.posX
+    else 
+      ModeTable.imgui.windowPosX = 3200
+    end
+    if index.imgui.posY then
+      ModeTable.imgui.windowPosY = index.imgui.posY
+    else 
+      ModeTable.imgui.windowPosY = 750
+    end
+  else 
+    ModeTable.imgui.windowPosX = 3200
+    ModeTable.imgui.windowPosY = 750
+  end
+  
+  ModeTable.modeList = {}
+  ModeTable.currentMode = 1
+  ModeTable.modes = {}
+  
+  ModeTable.weaponsEnabled = false
+  ModeTable.weaponGroups = {}
+  ModeTable.weaponGroupList = {}
+  ModeTable.currentWeaponGroup = 1
+  
+  ModeTable.secondaryEnabled = false
+  ModeTable.secondaryGroups = {}
+  ModeTable.secondaryGroupList = {}
+  ModeTable.currentSecondaryGroup = 1
+  
+  ModeTable.overrideLayersEnabled = false
+  ModeTable.overrideLayers = T{}
+  ModeTable.overrideLayerStates = T{}
+  ModeTable.overrideLayerNames = T{}
+  ModeTable.overrideStateNames = T{}
+  ModeTable.keybinds = T{}
+end
 
+setup()
 return {
+  _setup = setup, -- You should not be calling this function. 
   generatePackerConfig = function()
     local builder = gFunc.LoadFile('smart.lac/packerBuilder.lua')
     if not builder then 
