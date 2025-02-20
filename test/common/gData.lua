@@ -2,6 +2,8 @@ gData = {
 	buffCounts = {}
 }
 
+gSettings = {}
+gProfile = {}
 gData.GetPlayer = function()
 	return {
 		MainJob = PLAYER_MAINJOB,
