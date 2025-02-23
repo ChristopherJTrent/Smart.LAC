@@ -160,19 +160,19 @@ local function CleanupSets(sets)
 end
 
 local fileExists = function(filepath)
-	-- luacov: disable
+	 
 	local f = io.open(filepath, "r")
 	if f ~= nil then
 		f:close()
 		return true
 	else return false end
-	-- luacov: enable
+	 
 end
 
 local CreateRequiredFiles = function()
 	if TESTING_MODE ~= nil then return end
 	-- This file is tested manually
-	-- luacov: disable
+	 
 	local s = require('settings')
 	-- Diag: string:fmt is provided by ashita outside the normal filetree used for development.
 	---@diagnostic disable-next-line: undefined-field
@@ -201,12 +201,12 @@ local CreateRequiredFiles = function()
 		shared:write('return {}')
 		shared:close()
 	end
-	-- luacov: enable
+	 
 end
 
 local miniSemver = function(string)
 	-- this function is tested manually
-	-- luacov: disable
+	 
 	local function split(s,delimiter)
 		delimiter = delimiter or '%s'
 		local t={}
@@ -224,16 +224,17 @@ local miniSemver = function(string)
 		return nil
 	end
 	return ret
-	-- luacov: enable
+	 
 end
 
 local performUpdateCheck = function()
-	-- this function is tested manually
-	-- luacov: disable
-	if TESTING_MODE ~= nil then return end
 	local largestUpdate = ''
 	local beta = false
-	local http = require('socket\\ssl\\https')
+	local http = gFunc.LoadFile('socket/ssl/https')
+	if http == nil then 
+		print(AddModHeader(chat.error("failed to check for updates.")))
+		return
+	end
 	http.TIMEOUT = 1
 	local body, statusCode, _, _= http.request('https://raw.githubusercontent.com/ChristopherJTrent/Smart.LAC/refs/heads/master/version')
 	if statusCode ~= 200 then
@@ -268,7 +269,6 @@ local performUpdateCheck = function()
 	else
 		print(AddModHeader(chat.colors.SpringGreen..'Update Check Successful, current version: '..chat.colors.Reset..body))
 	end
-	-- luacov: enable
 end
 
 ---@type helpers
