@@ -36,3 +36,7 @@ function AshitaCore:GetChatManager()
 	end
 	return ChatManager
 end
+
+function AshitaCore:GetInstallPath()
+	return string.gsub(arg[0], string.format("%stests.lua", package.config:sub(1, 1)), "")
+end
