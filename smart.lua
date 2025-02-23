@@ -74,7 +74,7 @@ local load = function()
 
 	local validator = gFunc.LoadFile('smart.lac/handlers/validations.lua')
 	assert(validator ~= nil, "Validator unexpectedly nil.")
-	validator(sets)
+	validator.validate(sets)
 
 	if not helpers.ValidateSets(sets) then
 		print(helpers.AddModHeader(chat.warning('Failed to validate sets')))
@@ -140,10 +140,16 @@ local command = function(args)
 			if #args ~= 2 then
 				print(helpers.AddModHeader(chat.error('setWeaponGroup requires exactly 1 argument')))
 			else
-				modes.setActiveMode(args[2])
+				modes.setActiveWeaponGroup(args[2])
 			end
 		end,
-
+		setSecondaryGroup = function(args)
+			if #args ~= 2 then
+				print(helpers.AddModHeader(chat.error('setSecondaryGroup requires exactly 1 argument')))
+			else
+				modes.setActiveSecondaryGroup(args[2])
+			end
+		end,
 		setWindowLocation = function(args) 
 			if #args ~= 3 then
 				print(helpers.AddModHeader("setWindowLocation requires exactly 3 arguments"))
@@ -178,7 +184,11 @@ local command = function(args)
 			AshitaCore:GetChatManager():QueueCommand(-1, "/tc palette change \""..subjob.." JAs\"")
 		end
 	}
-	switch[args[1]](args)
+	if switch[args[1]] ~= nil then
+		switch[args[1]](args)
+	else
+		print(helpers.AddModHeader(chat.error("Unknown Smart.LAC command: "..args[1])))
+	end
 end
 
 local default = function()
@@ -272,9 +282,9 @@ local weaponskill = function()
 	end
 end
 
--- luacov: disable
+ 
 return (function()
-	-- luacov: enable
+	 
 	---@return smartProfile
 	local retFunc = function()
 
@@ -323,10 +333,10 @@ return (function()
 			end
 		end
 	end
-	-- luacov: disable
+	 
 	-- lines which return an anonymous function misbehave in luacov
 	return (function()
-		-- luacov: enable
+		 
 		---@param sets sets
 		return function(sets)
 			modes._setup()
