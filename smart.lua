@@ -12,6 +12,8 @@ if helpers == nil then
 end
 helpers.CreateRequiredFiles()
 
+AugmentTypes = gFunc.LoadFile('smart.lac/AugmentTypes.lua')
+
 ---@type playerData?
 local data = gFunc.LoadFile('index.lua')
 ---@type globals?
@@ -50,6 +52,9 @@ if not modes then return nil end
 local load = function()
 	local success = true
 	helpers.PerformUpdateCheck()
+
+	AugmentTypes = nil
+
 	local sub = gData.GetPlayer().SubJob
 
 	gSettings.AllowAddSet = true
