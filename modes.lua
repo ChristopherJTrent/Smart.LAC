@@ -227,7 +227,7 @@ return {
   applyOverrides = function(baseSet, outerKey, innerKey, secondaryInnerKey)
     if not ModeTable.overrideLayersEnabled then return baseSet end
     local outputSet = baseSet
-    for _, v in ipairs({ModeTable.weaponGroups[getCurrentWeaponGroup].overrides, ModeTable.secondaryGroups[getCurrentSecondaryGroup]}) do
+    for _, v in ipairs({ModeTable.weaponGroups[getCurrentWeaponGroup()].overrides, ModeTable.secondaryGroups[getCurrentSecondaryGroup()].overrides}) do
       if v ~= nil then
         if v[outerKey] ~= nil then
           if v[outerKey][innerKey] ~= nil then
