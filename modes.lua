@@ -227,6 +227,19 @@ return {
   applyOverrides = function(baseSet, outerKey, innerKey, secondaryInnerKey)
     if not ModeTable.overrideLayersEnabled then return baseSet end
     local outputSet = baseSet
+    for _, v in ipairs({ModeTable.weaponGroups[getCurrentWeaponGroup].overrides, ModeTable.secondaryGroups[getCurrentSecondaryGroup]}) do
+      if v ~= nil then
+        if v[outerKey] ~= nil then
+          if v[outerKey][innerKey] ~= nil then
+            if v[outerKey][innerKey][secondaryInnerKey] ~= nil then
+              outputSet = gFunc.Combine(outputSet, v[outerKey][innerKey][secondaryInnerKey])
+            else
+              outputSet = gFunc.Combine(outputSet, v[outerKey][innerKey])
+            end
+          end
+        end
+      end
+    end
     for i, v in ipairs(ModeTable.overrideLayers) do
       local layerState = ModeTable.overrideLayerStates[i]
       if v[layerState][outerKey] ~= nil then
@@ -246,10 +259,22 @@ return {
     return ModeTable.modes[getCurrentMode()]
   end,
   getWeaponGroup = function()
-    return ModeTable.weaponGroups[getCurrentWeaponGroup()]
+    local current = ModeTable.weaponGroups[getCurrentWeaponGroup()]
+    return {
+      Main = current.Main,
+      Sub = current.Sub,
+      Range = current.Range,
+      Ammo = current.Ammo
+    }
   end,
   getSecondaryGroup = function()
-    return ModeTable.secondaryGroups[getCurrentSecondaryGroup()]
+    local current = ModeTable.secondaryGroups[getCurrentSecondaryGroup()]
+    return {
+      Main = current.Main,
+      Sub = current.Sub,
+      Range = current.Range,
+      Ammo = current.Ammo
+    }
   end,
   setActiveMode = function(key)
     local index = tonumber(key)
