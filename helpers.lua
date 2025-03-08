@@ -103,6 +103,7 @@ local function GenericAbilityHandler(sets, key)
 	end
 
 	local finalSet = sets[key].default ~= nil and sets[key].default or {}
+	finalSet = modes.applyOverrides(finalSet, key, 'default')
 	finalSet = sets[key][action.Type] and gFunc.Combine(finalSet, sets[key][action.Type]) or finalSet
 	finalSet = sets[key][action.Skill] and gFunc.Combine(finalSet, sets[key][action.Skill]) or finalSet
 	

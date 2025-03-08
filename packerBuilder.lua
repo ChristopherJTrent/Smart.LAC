@@ -22,6 +22,8 @@ function ret:process(t)
                     self.deduplicated[#self.deduplicated + 1] = v
                     self.hash[v] = true
                 end
+            elseif type(v) == 'function' then
+                -- do nothing
             elseif v.Name then
                 if self.hash[v.Name] == nil then
                     self.hash[v.Name] = true
