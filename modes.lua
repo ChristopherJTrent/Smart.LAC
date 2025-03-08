@@ -1,6 +1,7 @@
 --luacheck: globals require modeTable print ashita bit
 
 require('common')
+gFunc.LoadFile('smart.lac/definitions/constraints')
 local imgui = require('imgui')
 local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
 local index = gFunc.LoadFile('index.lua')
@@ -227,7 +228,10 @@ return {
   applyOverrides = function(baseSet, outerKey, innerKey, secondaryInnerKey)
     if not ModeTable.overrideLayersEnabled then return baseSet end
     local outputSet = baseSet
-    for _, v in ipairs({ModeTable.weaponGroups[getCurrentWeaponGroup()].overrides, ModeTable.secondaryGroups[getCurrentSecondaryGroup()].overrides}) do
+    for _, v in ipairs({
+      (ModeTable.weaponGroups[getCurrentWeaponGroup()] or {}).overrides, 
+      (ModeTable.secondaryGroups[getCurrentSecondaryGroup()] or {}).overrides}
+    ) do
       if v ~= nil then
         if v[outerKey] ~= nil then
           if v[outerKey][innerKey] ~= nil then
@@ -340,10 +344,22 @@ return {
     end
   end,
   nextWeaponGroup = function()
-    if #ModeTable.weaponGroupList == ModeTable.currentWeaponGroup then
-      ModeTable.currentWeaponGroup = 1
-    else
-      ModeTable.currentWeaponGroup = ModeTable.currentWeaponGroup + 1
+    local startingIndex = ModeTable.currentWeaponGroup
+    while true do
+      if #ModeTable.weaponGroupList == ModeTable.currentWeaponGroup then
+        ModeTable.currentWeaponGroup = 1
+      else
+        ModeTable.currentWeaponGroup = ModeTable.currentWeaponGroup + 1
+      end
+      local current = ModeTable.weaponGroups[getCurrentWeaponGroup()]
+      if ModeTable.currentWeaponGroup == startingIndex then
+        print(helpers.AddModHeader(chat.warning('Could not find acceptable weapon group.')))
+        break
+      elseif current.constraints == nil then
+        break
+      elseif T(current.constraints):all(function(v) return v() end) then
+        break
+      end
     end
   end,
   nextOverrideState = function(layer)
