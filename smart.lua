@@ -190,14 +190,14 @@ local default = function()
 	-- return nil
 	local player = gData.GetPlayer()
 	local sets = modes.getSets()
-	if ModeTable.weaponsEnabled then
+	if player.Status ~= "Zoning" and ModeTable.weaponsEnabled then
 		local currentWeaponSet = ModeTable.weaponGroups[ModeTable.weaponGroupList[ModeTable.currentWeaponGroup]]
 		if currentWeaponSet.constraints and not T(currentWeaponSet.constraints):all(function(v) return v() end) then
 			print(helpers.AddModHeader(chat.color1(92, "Weapon group constraint failed. Bumping weapon group...")))
 			modes.nextWeaponGroup()
 		end
 	end
-	if ModeTable.secondaryEnabled then
+	if player.Status ~= "Zoning" and ModeTable.secondaryEnabled then
 		local currentWeaponSet = ModeTable.secondaryGroups[ModeTable.secondaryGroupList[ModeTable.currentSecondaryGroup]]
 		if currentWeaponSet.constraints and not T(currentWeaponSet.constraints):all(function(v) return v() end) then
 			print(helpers.AddModHeader(chat.color1(92, 'Secondary group constraint failed. Bumping secondary group...')))
