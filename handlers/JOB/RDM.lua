@@ -39,23 +39,28 @@ return {
                              or {}
                 for _, group in ipairs(groups) do
                     if sets.midcast['Enhancing Magic'][group.Name] ~= nil and group.Spells:hasval(action.Name) then
-                        return gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'][group.Name])
+                        finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'][group.Name])
                     end
                 end
                 if string.find(action.Name, "Bar") ~= nil then
-                    return gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].duration)
+                    finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].duration)
                 end
                 if sets.midcast['Enhancing Magic'].skill ~= nil and string.find(action.Name, "En") ~= nil then
-                    return gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].skill)
+                    finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].skill)
                 end
                 if string.find(action.Name, "Gain") ~= nil then
-                    return gFunc.Combine(
+                    finalSet = gFunc.Combine(
                         gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].skill ~= nil and sets.midcast['Enhancing Magic'].skill or {}), 
                         sets.midcast['Enhancing Magic'].gainspell ~= nil and sets.midcast['Enhancing Magic'].gainspell or {}
                     )
                 end
-                if sets.midcast['Enhancing Magic'].default ~= nil then
-                    return sets.midcast['Enhancing Magic'].default
+                if gData.GetPlayer().Name ~= gData.GetActionTarget().Name then
+                    if sets.midcast['Enhancing Magic'].targetOther ~= nil then
+                        finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].targetOther)
+                    end
+                end
+                if finalSet ~= {} then
+                    return finalSet
                 else
                     return false
                 end
