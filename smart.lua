@@ -42,6 +42,20 @@ if(skills==nil or data==nil or validData==nil or globals == nil or jobHandlers =
 	return nil
 end
 
+local SkillNames = {
+	"H2H",
+	"Dagger",
+	"Sword",
+	"Great Sword",
+	"Axe",
+	"Great Axe",
+	"Scythe",
+	"Polearm",
+	"Katana",
+	"Great Katana",
+	"Club",
+	"Staff",
+}
 
 ---@type modes?
 ---@diagnostic disable-next-line: lowercase-global
@@ -181,29 +195,49 @@ local command = function(args)
 		subjobPalette = function()
 			local subjob = gData.GetPlayer().SubJob
 			AshitaCore:GetChatManager():QueueCommand(-1, "/tc palette change \""..subjob.." JAs\"")
+		end,
+		weaponskillPalette = function()
+			local mainhand = ModeTable.weaponGroups[ModeTable.weaponGroupList[ModeTable.currentWeaponGroup]].Main or ""
+			if mainhand ~= "" then
+				local skill = SkillNames[AshitaCore:GetResourceManager():GetItemByName(mainhand, 0).Skill]
+				AshitaCore:GetChatManager():QueueCommand(-1, "/tc palette change \""..skill.." Weaponskills\"")
+			end
 		end
 	}
 	switch[args[1]](args)
 end
 
 local default = function()
+	if ModeTable.lastMainhandBumpAttempt ~= nil or ModeTable.lastOffhandBumpAttempt ~= nil then
+		local current = os.time()
+		if current - (ModeTable.lastMainhandBumpAttempt or 0) < 20 or current - (ModeTable.lastOffhandBumpAttempt or 0) < 20 then
+			return
+		end
+	end
+	ModeTable.lastOffhandBumpAttempt = nil
 	-- return nil
 	local player = gData.GetPlayer()
 	local sets = modes.getSets()
-	if player.Status ~= "Zoning" and ModeTable.weaponsEnabled then
+	if player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.weaponsEnabled then
 		local currentWeaponSet = ModeTable.weaponGroups[ModeTable.weaponGroupList[ModeTable.currentWeaponGroup]]
-		if currentWeaponSet.constraints and not T(currentWeaponSet.constraints):all(function(v) return v() end) then
-			print(helpers.AddModHeader(chat.color1(92, "Weapon group constraint failed. Bumping weapon group...")))
-			modes.nextWeaponGroup()
+		if currentWeaponSet and currentWeaponSet.constraints and not T(currentWeaponSet.constraints):all(function(v) return v() end) then
+			if ModeTable.lastMainhandBumpAttempt == nil then
+				ModeTable.lastMainhandBumpAttempt = os.time()
+			else
+				ModeTable.lastMainhandBumpAttempt = nil
+				print(helpers.AddModHeader(chat.color1(92, "Weapon group constraint failed. Bumping weapon group...")))
+				modes.nextWeaponGroup()
+			end
 		end
 	end
-	if player.Status ~= "Zoning" and ModeTable.secondaryEnabled then
+	if player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.secondaryEnabled then
 		local currentWeaponSet = ModeTable.secondaryGroups[ModeTable.secondaryGroupList[ModeTable.currentSecondaryGroup]]
 		if currentWeaponSet.constraints and not T(currentWeaponSet.constraints):all(function(v) return v() end) then
 			print(helpers.AddModHeader(chat.color1(92, 'Secondary group constraint failed. Bumping secondary group...')))
 			modes.nextSecondaryGroup()
 		end
 	end
+
 
 	if(sets['general']) then
 		---@type EntityStatus
@@ -222,6 +256,8 @@ local default = function()
 			set = gFunc.Combine(set, modes.getSecondaryGroup())
 		end
 		
+		set = modes.applyOverrides(set, "general", status)
+		
 		if jobHandlers[player.MainJob] ~= nil and jobHandlers[player.MainJob].default ~= nil then
 			local mainJobOverride = jobHandlers[player.MainJob].default(sets, status)
 			if mainJobOverride then
@@ -235,7 +271,6 @@ local default = function()
 			end
 		end
 
-		set = modes.applyOverrides(set, "general", status)
 
 		if (sets.general.buffs) then
 			for k, v in pairs(sets.general.buffs) do
