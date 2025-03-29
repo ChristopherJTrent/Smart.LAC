@@ -214,7 +214,7 @@ local default = function()
 			return
 		end
 	end
-	ModeTable.lastOffhandBumpAttempt = nil
+	
 	-- return nil
 	local player = gData.GetPlayer()
 	local sets = modes.getSets()
@@ -233,8 +233,13 @@ local default = function()
 	if player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.secondaryEnabled then
 		local currentWeaponSet = ModeTable.secondaryGroups[ModeTable.secondaryGroupList[ModeTable.currentSecondaryGroup]]
 		if currentWeaponSet.constraints and not T(currentWeaponSet.constraints):all(function(v) return v() end) then
-			print(helpers.AddModHeader(chat.color1(92, 'Secondary group constraint failed. Bumping secondary group...')))
-			modes.nextSecondaryGroup()
+			if ModeTable.lastOffhandBumpAttempt == nil then
+				ModeTable.lastOffhandBumpAttempt = os.time()
+			else 
+				ModeTable.lastOffhandBumpAttempt = nil
+				print(helpers.AddModHeader(chat.color1(92, 'Secondary group constraint failed. Bumping secondary group...')))
+				modes.nextSecondaryGroup()
+			end
 		end
 	end
 
