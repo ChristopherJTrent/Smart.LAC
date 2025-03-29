@@ -1,5 +1,3 @@
-# Smart.LAC
-A framework for LuAshitacast that allows for declarative use of LuAshitacast
+Development on this framework has ceased for the forseeable future. Direct all complaints to @ThornyFFXI
 
-## Setup
-Take a look at the [Repo Wiki](https://github.com/ChristopherJTrent/Smart.LAC/wiki) for more information.
+No support will be provided. I no longer play this game.
