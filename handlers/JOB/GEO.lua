@@ -1,4 +1,10 @@
 return {
+	default = function(sets, status) 
+		local pet = gData.GetPet()
+		if sets.general.geocolure and pet ~= nil then
+			return sets.general.geocolure
+		end
+	end,
 	midcast = function(action, sets)
 		if not sets.midcast then return false end
 		---@type Action
