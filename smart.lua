@@ -208,9 +208,14 @@ local command = function(args)
 end
 
 local default = function()
+	local main = gData.GetPlayer().MainJob
+	local sub = gData.GetPlayer().SubJob
+	if main == nil or sub == nil or main == "NON" then
+		return
+	end
 	if ModeTable.lastMainhandBumpAttempt ~= nil or ModeTable.lastOffhandBumpAttempt ~= nil then
 		local current = os.time()
-		if current - (ModeTable.lastMainhandBumpAttempt or 0) < 20 or current - (ModeTable.lastOffhandBumpAttempt or 0) < 20 then
+		if current - (ModeTable.lastMainhandBumpAttempt or 0) < 10 or current - (ModeTable.lastOffhandBumpAttempt or 0) < 10 then
 			return
 		end
 	end
