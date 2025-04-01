@@ -8,7 +8,7 @@ return T{
 		local naSpells = T{'Blindna', 'Esuna', 'Paralyna', 'Poisona', 'Silena', 'Stona', 'Viruna'}
 		if sets.midcast then
 			local finalSet = sets.midcast.default or {}
-			if sets.midcast.barspell and barSpells:any(function(v) v:contains(action.Name) end) then
+			if sets.midcast.barSpell and barSpells:any(function(v) v:contains(action.Name) end) then
 				finalSet = gFunc.Combine(finalSet, sets.midcast.barSpell)
 			end
 			if sets.midcast.barElement and barSpells.element:contains(action.Name) then
