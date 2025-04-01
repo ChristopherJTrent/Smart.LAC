@@ -16,7 +16,7 @@ return T{
 			elseif sets.midcast.barStatus and barSpells.status:contains(action.Name) then
 				finalSet = gFunc.Combine(finalSet, sets.midcast.barStatus)
 			end
-			if sets.midcast.naSpells and naSpells:contains(action.Name) then
+			if sets.midcast.naSpell and naSpells:contains(action.Name) then
 				finalSet = gFunc.Combine(finalSet, sets.midcast.naSpells)
 			end
 			return finalSet
