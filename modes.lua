@@ -322,7 +322,8 @@ return {
     if not ModeTable.secondaryEnabled then
       print(helpers.AddModHeader(chat.error('Secondary Weapon Groups are not enabled.')))
       return
-    end    local index = tonumber(key)
+    end    
+    local index = tonumber(key)
     if index ~= nil then
       ModeTable.currentSecondaryGroup = index
     elseif ModeTable.secondaryGroups[key] ~= nil then
