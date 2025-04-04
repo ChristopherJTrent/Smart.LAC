@@ -159,10 +159,16 @@ local command = function(args)
 			if #args ~= 2 then
 				print(helpers.AddModHeader(chat.error('setWeaponGroup requires exactly 1 argument')))
 			else
-				modes.setActiveMode(args[2])
+				modes.setActiveWeaponGroup(args[2])
 			end
 		end,
-
+		setSecondaryGroup = function(args)
+			if #args ~= 2 then
+				print(helpers.AddModHeader(chat.error('setSecondaryGroup requires exactly 1 argument.')))
+			else
+				modes.setActiveSecondaryGroup(args[2])
+			end
+		end,
 		setWindowLocation = function(args) 
 			if #args ~= 3 then
 				print(helpers.AddModHeader("setWindowLocation requires exactly 3 arguments"))
