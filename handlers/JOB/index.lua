@@ -8,6 +8,7 @@ return (function()
 		RDM = gFunc.LoadFile('smart.lac/handlers/JOB/RDM.lua'),
 		NIN = gFunc.LoadFile('smart.lac/handlers/JOB/NIN.lua'),
 		BRD = gFunc.LoadFile('smart.lac/handlers/JOB/BRD.lua'),
-		PLD = gFunc.LoadFile('smart.lac/handlers/JOB/PLD.lua')
+		PLD = gFunc.LoadFile('smart.lac/handlers/JOB/PLD.lua'),
+		WHM = gFunc.LoadFile('smart.lac/handlers/JOB/WHM.lua')
 	}
 end)()
