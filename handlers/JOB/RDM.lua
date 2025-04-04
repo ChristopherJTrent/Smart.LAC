@@ -3,13 +3,13 @@ return {
         if sets.midcast == nil then return false end
         if action.Skill == "Enfeebling Magic" then
             if sets.midcast['Enfeebling Magic'] == nil then return false end
-            local finalSet = sets.midcast['Enfeebling Magic'].default ~= nil 
+            local finalSet = sets.midcast['Enfeebling Magic'].default ~= nil
                          and sets.midcast['Enfeebling Magic'].default
                          or  {}
             local groups = T{
+                {Name = "skill", Spells = T{"Distract III", "Frazzle III", "Poison", "Poison II"}},
                 {Name = "highSkill", Spells = T{"Distract III", "Frazzle III"} },
                 {Name = "lowSkill", Spells = T{"Poison", "Poison II"} },
-                {Name = "skill", Spells = T{"Distract III", "Frazzle III", "Poison", "Poison II"}},
                 {Name = "duration", Spells = T{"Inundation"}},
                 {Name = "mAccDuration", Spells = T{"Sleep", "Sleep II", "Bind", "Break", "Silence"}},
                 {Name = "mAccPotency", Spells = T{"Gravity", "Gravity II"}},
@@ -19,13 +19,13 @@ return {
             }
             for _, group in ipairs(groups) do
                 if sets.midcast['Enfeebling Magic'][group.Name] ~= nil and T(group.Spells):hasval(action.Name) then
-                    return gFunc.Combine(finalSet, sets.midcast['Enfeebling Magic'][group.Name])
+                    finalSet = gFunc.Combine(finalSet, sets.midcast['Enfeebling Magic'][group.Name])
                 end
             end
-            if sets.midcast['Enfeebling Magic'].default ~= nil then
-                return sets.midcast['Enfeebling Magic'].default 
-            else 
-                return false 
+            if finalSet == {} then
+                return false
+            else
+                return finalSet
             end
         elseif action.Skill == "Enhancing Magic" then
             if sets.midcast['Enhancing Magic'] ~= nil then 
