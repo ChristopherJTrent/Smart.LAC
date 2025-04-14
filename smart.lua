@@ -66,8 +66,12 @@ assert(modes ~= nil, "[Fatal] Modes is unexpectedly nil.")
 if not modes then return nil end
 local load = function()
 	local success = true
+	print(chat.colors.SpringGreen..'Welcome to Smart.LAC!'..chat.colors.Reset)
+	
 	if not globals.disableUpdateCheck then
 		helpers.PerformUpdateCheck()
+	else
+		print(helpers.AddModHeader('Update check is disabled. Please check for updates periodically.'))
 	end
 	AugmentTypes = nil
 
@@ -75,7 +79,6 @@ local load = function()
 
 	gSettings.AllowAddSet = true
 
-	print(chat.colors.SpringGreen..'Welcome to Smart.LAC!'..chat.colors.Reset)
 
 	data.ownedBelts = helpers.EnsureSugaredTable(data.ownedBelts)
 	data.ownedGorgets = helpers.EnsureSugaredTable(data.ownedGorgets)
