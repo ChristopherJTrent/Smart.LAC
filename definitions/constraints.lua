@@ -20,3 +20,9 @@ function Constraint.Invert(constraint)
         return not constraint()
     end
 end
+
+function Constraint.HasSubjob(subjob) 
+    return function()
+        return gData.GetPlayer().SubJob == subjob
+    end
+end
