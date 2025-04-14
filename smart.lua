@@ -1,4 +1,5 @@
 --luacheck: globals gFunc gData gSettings gProfile chat T
+Smart_Version = "0.6.6"
 ---@type skills?
 local skills = gFunc.LoadFile('smart.lac/data/skills.lua')
 ---@type playerData?
@@ -65,8 +66,9 @@ assert(modes ~= nil, "[Fatal] Modes is unexpectedly nil.")
 if not modes then return nil end
 local load = function()
 	local success = true
-	helpers.PerformUpdateCheck()
-
+	if not globals.disableUpdateCheck then
+		helpers.PerformUpdateCheck()
+	end
 	AugmentTypes = nil
 
 	local sub = gData.GetPlayer().SubJob

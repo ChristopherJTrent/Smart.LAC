@@ -185,7 +185,11 @@ local CreateRequiredFiles = function()
 		print('creating globals')
 		local globe = io.open(globalsPath, "w+")
 		assert(globe ~= nil, "Globals file unexpectedly nil")
-		globe:write('return {\n\tdebug = false\n}\n')
+		globe:write([[return {
+			debug = false,
+			//set this to true if you experience crashes on load
+			disableUpdateCheck = false
+		}]])
 		globe:close()
 	end
 	local sharedPath = characterRoot..'\\shared.lua'
@@ -225,29 +229,30 @@ local performUpdateCheck = function()
 	http.TIMEOUT = 1
 	local body, statusCode, _, _= http.request('https://raw.githubusercontent.com/ChristopherJTrent/Smart.LAC/refs/heads/master/version')
 	if statusCode ~= 200 then
-		print('failed to download version info')
+		print('Failed to download version info. Please check the github for updates')
 	else
-		---@diagnostic disable-next-line: undefined-field
-		local locVerPath = ("%sconfig\\addons\\luashitacast\\Smart.LAC\\version"):fmt(AshitaCore:GetInstallPath())
-		local f = io.open(locVerPath, 'r+')
-		if f ~= nil then
-			local webVersion = miniSemver(body)
-			local localVersion = miniSemver(f:read("a"))
-			f:close()
-			if webVersion == nil or localVersion == nil then
-				print(AddModHeader('version check failed. Please check the github for updates.'))
-			else
-				largestUpdate = localVersion.patch < webVersion.patch and 'patch' or largestUpdate
-				largestUpdate = localVersion.minor < webVersion.minor and 'minor update' or largestUpdate
-				largestUpdate = localVersion.major < webVersion.major and 'major update' or largestUpdate
-				if localVersion.patch > webVersion.patch or localVersion.minor > webVersion.minor or localVersion.major > webVersion.major then
-					beta = true
-				end
-			end
-		else 
+		-- ---@diagnostic disable-next-line: undefined-field
+		-- local locVerPath = ("%sconfig\\addons\\luashitacast\\Smart.LAC\\version"):fmt(AshitaCore:GetInstallPath())
+		-- local f = io.open(locVerPath, 'r+')
+		-- if f ~= nil then
+		local webVersion = miniSemver(body)
+		local localVersion = miniSemver(Smart_Version)
+		-- local localVersion = miniSemver(f:read("a"))
+		-- f:close()
+		if webVersion == nil or localVersion == nil then
 			print(AddModHeader('version check failed. Please check the github for updates.'))
-			return
+		else
+			largestUpdate = localVersion.patch < webVersion.patch and 'patch' or largestUpdate
+			largestUpdate = localVersion.minor < webVersion.minor and 'minor update' or largestUpdate
+			largestUpdate = localVersion.major < webVersion.major and 'major update' or largestUpdate
+			if localVersion.patch > webVersion.patch or localVersion.minor > webVersion.minor or localVersion.major > webVersion.major then
+				beta = true
+			end
 		end
+		-- else 
+		-- 	print(AddModHeader('version check failed. Please check the github for updates.'))
+		-- 	return
+		-- end
 	end
 	if largestUpdate ~= '' then
 		print(AddModHeader('New '..largestUpdate.." available, please update Smart.LAC at your earliest convenience."))
