@@ -43,6 +43,10 @@ if(skills==nil or data==nil or validData==nil or globals == nil or jobHandlers =
 	return nil
 end
 
+if helpers.ProfileFileExists('common') then
+	gFunc.LoadFile('common')
+end
+
 local SkillNames = {
 	"H2H",
 	"Dagger",
