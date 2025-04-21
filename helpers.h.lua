@@ -14,3 +14,4 @@
 ---@field CleanupSets fun(sets: sets):sets
 ---@field CreateRequiredFiles function
 ---@field PerformUpdateCheck function
+---@field ProfileFileExists fun(name: string):boolean

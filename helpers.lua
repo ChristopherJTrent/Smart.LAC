@@ -1,8 +1,15 @@
 local skills = gFunc.LoadFile('smart.lac/data/skills.lua')
 local jobHandlers = gFunc.LoadFile('smart.lac/handlers/JOB/index.lua')
+local platformPathSeparator = package.config:sub(1,1) -- on windows this will most often be a \, on unix, a /, on weird systems, something else.
+local s = require('settings')
 
 assert(skills ~= nil, "Skills file unexpectedly nil.")
 assert(jobHandlers ~= nil, "Job handlers unexpectedly nil.")
+
+local function BuildPlatformPath(...)
+	local elements = {...}
+	return table.concat(elements, platformPathSeparator)
+end
 
 local function EnsureSugaredTable(t)
 	if t == nil then return t end
@@ -167,8 +174,25 @@ local fileExists = function(filepath)
 	else return false end
 end
 
+---@param name string
+local function profileFileExists(name, forceLua)
+	forceLua = forceLua or true
+	if forceLua and not name:match("\\.lua$") then
+		name = name..".lua"
+	end
+	local path = BuildPlatformPath(
+		AshitaCore:GetInstallPath(),
+		"config",
+		"addons",
+		"luashitacast",
+		---@diagnostic disable-next-line: undefined-field
+		("%s_%s"):fmt(s.name, s.server_id),
+		name
+	)
+	return fileExists(path)
+end
+
 local CreateRequiredFiles = function()
-	local s = require('settings')
 	-- Diag: string:fmt is provided by ashita outside the normal filetree used for development.
 	---@diagnostic disable-next-line: undefined-field
 	local characterRoot = ("%sconfig\\addons\\luashitacast\\%s_%s"):fmt(AshitaCore:GetInstallPath(), s.name, s.server_id)
@@ -295,5 +319,6 @@ return {
 	CleanupSets = CleanupSets,
 	customFlattenTable = customFlattenTable,
 	CreateRequiredFiles = CreateRequiredFiles,
-	PerformUpdateCheck = performUpdateCheck
+	PerformUpdateCheck = performUpdateCheck,
+	ProfileFileExists = profileFileExists
 }
