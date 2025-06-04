@@ -1,5 +1,5 @@
 local DualWieldAbilityID = AshitaCore:GetResourceManager():GetAbilityByName("Dual Wield", 0).Id
-
+---@class Constraints
 Constraint = {
 }
 
