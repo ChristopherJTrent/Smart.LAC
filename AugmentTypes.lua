@@ -237,7 +237,7 @@ end
 ---@param rank integer
 ---@returns string
 function AugmentTypes.FastCast(rank)
-	return '"Fast Cast+' ..tostring(rank)
+	return '"Fast Cast"+' ..tostring(rank)
 end
 
 --- This function is only available at build time. It will be garbage collected on profile load to save memory.
