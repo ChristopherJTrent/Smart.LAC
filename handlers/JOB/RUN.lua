@@ -12,7 +12,7 @@ return {
                 "Stinking Gas",
                 "Geist Wall",
                 "Soporific",
-                "Cold Wave"
+                "Cold Wave",
             }
             if enmitySpells:contains(action.Name) then
                 return sets.midcast.enmity
