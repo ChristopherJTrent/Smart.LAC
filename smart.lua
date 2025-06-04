@@ -79,7 +79,7 @@ local load = function()
 	end
 	AugmentTypes = nil
 
-	local sub = gData.GetPlayer().SubJob
+	Subjob = gData.GetPlayer().SubJob
 
 	gSettings.AllowAddSet = true
 
@@ -122,6 +122,9 @@ local load = function()
 	modes.initializeWindow()
 
 	modes.registerKeybinds()
+
+	modes.TriggerPrimaryBumpChecker(true)
+	modes.TriggerSecondaryBumpChecker(true)
 
 	print(helpers.AddModHeader(helpers.SucceedOrWarn(success, 'All validations passed', 'Some validations failed, check chat output for info.')))
 end
@@ -238,29 +241,11 @@ local default = function()
 	-- return nil
 	local player = gData.GetPlayer()
 	local sets = modes.getSets()
-	if player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.weaponsEnabled then
-		local currentWeaponSet = ModeTable.weaponGroups[ModeTable.weaponGroupList[ModeTable.currentWeaponGroup]]
-		if currentWeaponSet and currentWeaponSet.constraints and not T(currentWeaponSet.constraints):all(function(v) return v() end) then
-			if ModeTable.lastMainhandBumpAttempt == nil then
-				ModeTable.lastMainhandBumpAttempt = os.time()
-			else
-				ModeTable.lastMainhandBumpAttempt = nil
-				print(helpers.AddModHeader(chat.color1(92, "Weapon group constraint failed. Bumping weapon group...")))
-				modes.nextWeaponGroup()
-			end
-		end
+	if helpers.SubJobHasChanged() or (player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.weaponsEnabled) then
+		modes.TriggerPrimaryBumpChecker()
 	end
-	if player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.secondaryEnabled then
-		local currentWeaponSet = ModeTable.secondaryGroups[ModeTable.secondaryGroupList[ModeTable.currentSecondaryGroup]]
-		if currentWeaponSet.constraints and not T(currentWeaponSet.constraints):all(function(v) return v() end) then
-			if ModeTable.lastOffhandBumpAttempt == nil then
-				ModeTable.lastOffhandBumpAttempt = os.time()
-			else 
-				ModeTable.lastOffhandBumpAttempt = nil
-				print(helpers.AddModHeader(chat.color1(92, 'Secondary group constraint failed. Bumping secondary group...')))
-				modes.nextSecondaryGroup()
-			end
-		end
+	if helpers.SubJobHasChanged() or (player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.secondaryEnabled) then
+		modes.TriggerSecondaryBumpChecker()
 	end
 
 
