@@ -24,4 +24,6 @@
 ---@field setWindowVisibility fun(b: boolean) changes whether the mode display widget is visible
 ---@field toggleWindowVisibility function toggles the visibility of the mode display widget
 ---@field initializeWindow function
+---@field TriggerPrimaryBumpChecker fun(force?: boolean): void
+---@field TriggerSecondaryBumpChecker fun(force?: boolean): void
 ---@field applyOverrides fun(baseSet: set, outerKey:string, innerKey:string, secondaryInnerKey:string?)

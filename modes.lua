@@ -387,6 +387,30 @@ return {
   setWindowPosY = function(y)
     ModeTable.imgui.windowPosY = y
   end,
+  TriggerPrimaryBumpChecker = function(force)
+    local current = ModeTable.weaponGroups[getCurrentWeaponGroup()]
+    if current and current and  current.constraints and not T(current.constraints):all(function(v) return v() end) then
+      if not force and ModeTable.lastMainhandBumpAttempt == nil then
+				ModeTable.lastMainhandBumpAttempt = os.time()
+			else
+				ModeTable.lastMainhandBumpAttempt = nil
+				print(helpers.AddModHeader(chat.color1(92, "Weapon group constraint failed. Bumping weapon group...")))
+				modes.nextWeaponGroup()
+			end
+    end
+  end,
+  TriggerSecondaryBumpChecker = function(force)
+    local currentWeaponSet = ModeTable.secondaryGroups[getCurrentSecondaryGroup()]
+    if not force and currentWeaponSet and  currentWeaponSet.constraints and not T(currentWeaponSet.constraints):all(function(v) return v() end) then
+			if ModeTable.lastOffhandBumpAttempt == nil then
+				ModeTable.lastOffhandBumpAttempt = os.time()
+			else 
+				ModeTable.lastOffhandBumpAttempt = nil
+				print(helpers.AddModHeader(chat.color1(92, 'Secondary group constraint failed. Bumping secondary group...')))
+				modes.nextSecondaryGroup()
+			end
+		end
+  end,
   initializeWindow = function()
     local red = {0.91, 0.323, 0.091, 1}
     local green = {0.091, 0.91, 0.105, 1}
