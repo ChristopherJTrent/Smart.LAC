@@ -287,6 +287,12 @@ local performUpdateCheck = function()
 	end
 end
 
+local subJobHasChanged = function() 
+	---@type Player
+	local player = gData.GetPlayer()
+	return player.SubJob and player.SubJob ~= "NON" and player.SubJob ~= Subjob
+end
+
 ---@type helpers
 return {
 	slotNames = T{
@@ -320,5 +326,6 @@ return {
 	customFlattenTable = customFlattenTable,
 	CreateRequiredFiles = CreateRequiredFiles,
 	PerformUpdateCheck = performUpdateCheck,
-	ProfileFileExists = profileFileExists
+	ProfileFileExists = profileFileExists,
+	SubJobHasChanged = subJobHasChanged
 }

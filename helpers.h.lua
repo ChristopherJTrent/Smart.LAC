@@ -15,3 +15,4 @@
 ---@field CreateRequiredFiles function
 ---@field PerformUpdateCheck function
 ---@field ProfileFileExists fun(name: string):boolean
+---@field SubJobHasChanged function
