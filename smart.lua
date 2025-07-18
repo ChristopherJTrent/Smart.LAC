@@ -133,67 +133,8 @@ local unload = function()
   modes.setWindowVisibility(false)
 end
 -- This is the only callback that natively accepts an argument
+-- Lazy-loaded 
 local command = gFunc.LoadFIle("handlers/command")
-
-local function temp(args)	
-	local switch = {
-		setWeaponGroup = function(args)
-			if #args ~= 2 then
-				print(Helpers.AddModHeader(chat.error('setWeaponGroup requires exactly 1 argument')))
-			else
-				modes.setActiveWeaponGroup(args[2])
-			end
-		end,
-		setSecondaryGroup = function(args)
-			if #args ~= 2 then
-				print(Helpers.AddModHeader(chat.error('setSecondaryGroup requires exactly 1 argument.')))
-			else
-				modes.setActiveSecondaryGroup(args[2])
-			end
-		end,
-		setWindowLocation = function(args) 
-			if #args ~= 3 then
-				print(Helpers.AddModHeader("setWindowLocation requires exactly 3 arguments"))
-			elseif string.lower(args[2]) == 'x' then
-				modes.setWindowPosX(tonumber(args[3]) or ModeTable.imgui.windowPosX)
-			elseif string.lower(args[2]) == 'y' then
-				modes.setWindowPosY(tonumber(args[3]) or ModeTable.imgui.windowPosY)
-			else 
-				print(Helpers.AddModHeader("second argument must be either x or y"))
-			end
-		end,
-
-		nextMode = function()
-			modes.nextMode()
-		end,
-
-		nextWeaponGroup = function()
-			modes.nextWeaponGroup()
-		end,
-		nextSecondaryGroup = function()
-			modes.nextSecondaryGroup()
-		end,
-		nextOverride = function(args)
-			if #args ~= 2 then 
-				print(Helpers.AddModHeader(chat.error('nextOverride requires a layer index')))
-			else
-				modes.nextOverrideState(args[2])
-			end
-		end,
-		subjobPalette = function()
-			local subjob = gData.GetPlayer().SubJob
-			AshitaCore:GetChatManager():QueueCommand(-1, "/tc palette change \""..subjob.." JAs\"")
-		end,
-		weaponskillPalette = function()
-			local mainhand = ModeTable.weaponGroups[ModeTable.weaponGroupList[ModeTable.currentWeaponGroup]].Main or ""
-			if mainhand ~= "" then
-				local skill = SkillNames[AshitaCore:GetResourceManager():GetItemByName(mainhand, 0).Skill]
-				AshitaCore:GetChatManager():QueueCommand(-1, "/tc palette change \""..skill.." Weaponskills\"")
-			end
-		end
-	}
-	switch[args[1]](args)
-end
 
 local default = function()
 	local main = gData.GetPlayer().MainJob
