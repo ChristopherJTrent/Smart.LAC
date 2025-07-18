@@ -192,6 +192,21 @@ local function profileFileExists(name, forceLua)
 	return fileExists(path)
 end
 
+local function smartFileExists(name)
+	if not name:match("\\.lua$") then
+		name = name..".lua"
+	end
+	local path = BuildPlatformPath(
+		AshitaCore:GetInstallPath(),
+		"config",
+		"addons",
+		"luashitacast",
+		"Smart.LAC",
+		name
+	)
+	return fileExists(path)
+end
+
 local CreateRequiredFiles = function()
 	-- Diag: string:fmt is provided by ashita outside the normal filetree used for development.
 	---@diagnostic disable-next-line: undefined-field
@@ -327,5 +342,6 @@ return {
 	CreateRequiredFiles = CreateRequiredFiles,
 	PerformUpdateCheck = performUpdateCheck,
 	ProfileFileExists = profileFileExists,
+	SmartFileExists = smartFileExists,
 	SubJobHasChanged = subJobHasChanged
 }

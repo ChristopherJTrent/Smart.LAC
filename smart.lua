@@ -133,7 +133,9 @@ local unload = function()
   modes.setWindowVisibility(false)
 end
 -- This is the only callback that natively accepts an argument
-local command = function(args)
+local command = gFunc.LoadFIle("handlers/command")
+
+local function temp(args)	
 	local switch = {
 		equip = function(args)
 			local switch = {
