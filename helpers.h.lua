@@ -1,6 +1,6 @@
 ---@meta
 ---@alias abilityHandler fun(sets: sets):boolean
----@class helpers
+---@class Helpers
 ---if the argument isn't an Ashita meta-table, make it one.
 ---@field EnsureSugaredTable fun(t: table): table
 ---@field ContainsAllKeys fun(t: table, other: table): boolean

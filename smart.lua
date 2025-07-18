@@ -5,13 +5,13 @@ local skills = gFunc.LoadFile('smart.lac/data/skills.lua')
 ---@type playerData?
 local validData = gFunc.LoadFile('smart.lac/data/index.lua')
 
----@type helpers?
-local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
-if helpers == nil then 
-	print("Smart.LAC [FATAL]: failed to load helpers.")
+---@type Helpers?
+Helpers = gFunc.LoadFile('smart.lac/Helpers.lua')
+if Helpers == nil then 
+	print("Smart.LAC [FATAL]: failed to load Helpers.")
 	return nil
 end
-helpers.CreateRequiredFiles()
+Helpers.CreateRequiredFiles()
 
 AugmentTypes = gFunc.LoadFile('smart.lac/AugmentTypes.lua')
 
@@ -35,7 +35,7 @@ if(skills==nil or data==nil or validData==nil or globals == nil or jobHandlers =
 	print("--------------------\nindex.lua for validation")
 	print (validData)
 	print("--------------------\nhelper functions")
-	print (helpers)
+	print (Helpers)
 	print("--------------------\naccessories table for validation")
 	print (accessories)
 	print("--------------------\nSpecialized Job handlers")
@@ -43,7 +43,7 @@ if(skills==nil or data==nil or validData==nil or globals == nil or jobHandlers =
 	return nil
 end
 
-if helpers.ProfileFileExists('common') then
+if Helpers.ProfileFileExists('common') then
 	gFunc.LoadFile('common')
 end
 
@@ -73,9 +73,9 @@ local load = function()
 	print(chat.colors.SpringGreen..'Welcome to Smart.LAC!'..chat.colors.Reset)
 	
 	if not globals.disableUpdateCheck then
-		helpers.PerformUpdateCheck()
+		Helpers.PerformUpdateCheck()
 	else
-		print(helpers.AddModHeader('Update check is disabled. Please check for updates periodically.'))
+		print(Helpers.AddModHeader('Update check is disabled. Please check for updates periodically.'))
 	end
 	AugmentTypes = nil
 
@@ -84,8 +84,8 @@ local load = function()
 	gSettings.AllowAddSet = true
 
 
-	data.ownedBelts = helpers.EnsureSugaredTable(data.ownedBelts)
-	data.ownedGorgets = helpers.EnsureSugaredTable(data.ownedGorgets)
+	data.ownedBelts = Helpers.EnsureSugaredTable(data.ownedBelts)
+	data.ownedGorgets = Helpers.EnsureSugaredTable(data.ownedGorgets)
 
 	if globals and globals.debug  then
 		print(data.ownedBelts.contains ~= nil
@@ -93,8 +93,8 @@ local load = function()
 				or chat.error("    Table sugaring failed."))
 	end
 
-	if not helpers.ValidatePlayerData(data) then
-		print(helpers.AddModHeader(chat.warning('Failed to validate index.lua')))
+	if not Helpers.ValidatePlayerData(data) then
+		print(Helpers.AddModHeader(chat.warning('Failed to validate index.lua')))
 		success = false
 	end
 
@@ -104,15 +104,15 @@ local load = function()
 	assert(validator ~= nil, "Validator unexpectedly nil.")
 	validator(sets)
 
-	if not helpers.ValidateSets(sets) then
-		print(helpers.AddModHeader(chat.warning('Failed to validate sets')))
+	if not Helpers.ValidateSets(sets) then
+		print(Helpers.AddModHeader(chat.warning('Failed to validate sets')))
 		success = false
 	end
 
 	if sets.general and sets.general.Idle  then
 		gFunc.EquipSet(sets.general.Idle)
 	else
-		print(helpers.AddModHeader(helpers.SucceedOrWarn(false, "",
+		print(Helpers.AddModHeader(Helpers.SucceedOrWarn(false, "",
 														"Failed to equip default idle set, please check your gear.")))
 		success = false
 	end
@@ -126,7 +126,7 @@ local load = function()
 	modes.TriggerPrimaryBumpChecker(true)
 	modes.TriggerSecondaryBumpChecker(true)
 
-	print(helpers.AddModHeader(helpers.SucceedOrWarn(success, 'All validations passed', 'Some validations failed, check chat output for info.')))
+	print(Helpers.AddModHeader(Helpers.SucceedOrWarn(success, 'All validations passed', 'Some validations failed, check chat output for info.')))
 end
 
 local unload = function()
@@ -137,61 +137,29 @@ local command = gFunc.LoadFIle("handlers/command")
 
 local function temp(args)	
 	local switch = {
-		equip = function(args)
-			local switch = {
-				function(_) print("equip requires at least 2 arguments") end,
-				function(_) print("equip requires at least 2 arguments") end,
-				function(a)
-					local sets = modes.getSets()
-					gFunc.LockSet(sets[a[2]][a[3]], 15)
-				end,
-				function(a)
-					local sets = modes.getSets()
-					gFunc.LockSet(sets[a[2]][a[3]][a[4]], 15)
-				end,
-				function(a)
-					local sets = modes.getSets()
-					gFunc.LockSet(sets[a[2]][a[3]][a[4]][a[5]], 15)
-				end,
-				function(a)
-					local sets = modes.getSets()
-					gFunc.LockSet(sets[a[2]][a[3]][a[4]][a[5]][a[6]], 15)
-				end
-			}
-			switch[#args](args)
-		end,
-
-		setMode = function(args)
-			if #args ~= 2 then
-				print(helpers.AddModHeader("setMode requires exactly 1 argument."))
-			else
-				modes.setActiveMode(args[2])
-			end
-		end,
-
 		setWeaponGroup = function(args)
 			if #args ~= 2 then
-				print(helpers.AddModHeader(chat.error('setWeaponGroup requires exactly 1 argument')))
+				print(Helpers.AddModHeader(chat.error('setWeaponGroup requires exactly 1 argument')))
 			else
 				modes.setActiveWeaponGroup(args[2])
 			end
 		end,
 		setSecondaryGroup = function(args)
 			if #args ~= 2 then
-				print(helpers.AddModHeader(chat.error('setSecondaryGroup requires exactly 1 argument.')))
+				print(Helpers.AddModHeader(chat.error('setSecondaryGroup requires exactly 1 argument.')))
 			else
 				modes.setActiveSecondaryGroup(args[2])
 			end
 		end,
 		setWindowLocation = function(args) 
 			if #args ~= 3 then
-				print(helpers.AddModHeader("setWindowLocation requires exactly 3 arguments"))
+				print(Helpers.AddModHeader("setWindowLocation requires exactly 3 arguments"))
 			elseif string.lower(args[2]) == 'x' then
 				modes.setWindowPosX(tonumber(args[3]) or ModeTable.imgui.windowPosX)
 			elseif string.lower(args[2]) == 'y' then
 				modes.setWindowPosY(tonumber(args[3]) or ModeTable.imgui.windowPosY)
 			else 
-				print(helpers.AddModHeader("second argument must be either x or y"))
+				print(Helpers.AddModHeader("second argument must be either x or y"))
 			end
 		end,
 
@@ -207,7 +175,7 @@ local function temp(args)
 		end,
 		nextOverride = function(args)
 			if #args ~= 2 then 
-				print(helpers.AddModHeader(chat.error('nextOverride requires a layer index')))
+				print(Helpers.AddModHeader(chat.error('nextOverride requires a layer index')))
 			else
 				modes.nextOverrideState(args[2])
 			end
@@ -243,10 +211,10 @@ local default = function()
 	-- return nil
 	local player = gData.GetPlayer()
 	local sets = modes.getSets()
-	if helpers.SubJobHasChanged() or (player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.weaponsEnabled) then
+	if Helpers.SubJobHasChanged() or (player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.weaponsEnabled) then
 		modes.TriggerPrimaryBumpChecker()
 	end
-	if helpers.SubJobHasChanged() or (player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.secondaryEnabled) then
+	if Helpers.SubJobHasChanged() or (player.Status ~= nil and player.Status ~= "Zoning" and ModeTable.secondaryEnabled) then
 		modes.TriggerSecondaryBumpChecker()
 	end
 
@@ -298,42 +266,42 @@ end
 
 local ability = function()
 	local sets = modes.getSets()
-	return helpers.GenericAbilityHandler(sets, "ability")
+	return Helpers.GenericAbilityHandler(sets, "ability")
 end
 
 local item = function()
 	local sets = modes.getSets()
-	return helpers.GenericAbilityHandler(sets, "item")
+	return Helpers.GenericAbilityHandler(sets, "item")
 end
 
 local precast = function()
 	local sets = modes.getSets()
-	return helpers.GenericAbilityHandler(sets, "precast")
+	return Helpers.GenericAbilityHandler(sets, "precast")
 end
 
 local midcast = function()
 	local sets = modes.getSets()
-	return helpers.GenericAbilityHandler(sets, "midcast")
+	return Helpers.GenericAbilityHandler(sets, "midcast")
 end
 
 local preshot = function()
 	local sets = modes.getSets()
-	return helpers.GenericAbilityHandler(sets, "preshot")
+	return Helpers.GenericAbilityHandler(sets, "preshot")
 end
 
 local midshot = function()
 	local sets = modes.getSets()
-	return helpers.GenericAbilityHandler(sets, 'midshot')
+	return Helpers.GenericAbilityHandler(sets, 'midshot')
 end
 
 local weaponskill = function()
 	local sets = modes.getSets()
-	helpers.GenericAbilityHandler(sets, 'weaponskill')
+	Helpers.GenericAbilityHandler(sets, 'weaponskill')
 	if(sets.settings ~= nil and sets.settings.allowElementalAccessories == true) then
 		---@type Action?
 		local action = gData.GetAction()
 		if action == nil then return nil end
-		accessories.DoBeltAndGorget(helpers.GetWeaponskillProperty(action), data)
+		accessories.DoBeltAndGorget(Helpers.GetWeaponskillProperty(action), data)
 	end
 end
 

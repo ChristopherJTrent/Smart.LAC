@@ -308,7 +308,7 @@ local subJobHasChanged = function()
 	return player.SubJob and player.SubJob ~= "NON" and player.SubJob ~= Subjob
 end
 
----@type helpers
+---@type Helpers
 return {
 	slotNames = T{
 		"Main",

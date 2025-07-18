@@ -1,5 +1,3 @@
-local helpers = gFunc.LoadFile('smart.lac/helpers')
-
 local commands = T{
 	cache = T{}
 }
@@ -11,7 +9,7 @@ function commands:call(name, args)
 		self.cache[name] = gFunc.LoadFile("handlers/command/"..name)
 		self.cache[name](args)
 	else
-		print(helpers.AddModHeader(chat.error("Cound not find command "..name..". Check your spelling and note that command names are case-sensitive.")))
+		print(Helpers.AddModHeader(chat.error("Cound not find command "..name..". Check your spelling and note that command names are case-sensitive.")))
 	end
 end
 

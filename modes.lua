@@ -3,11 +3,10 @@
 require('common')
 gFunc.LoadFile('smart.lac/definitions/constraints')
 local imgui = require('imgui')
-local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
 local index = gFunc.LoadFile('index.lua')
 local globals = gFunc.LoadFile('globals.lua')
 
-if not imgui or not helpers or not index or not globals then return nil end
+if not imgui or not Helpers or not index or not globals then return nil end
 
 local defaultBindings = {
   "1",
@@ -132,7 +131,7 @@ return {
   generatePackerConfig = function()
     local builder = gFunc.LoadFile('smart.lac/packerBuilder.lua')
     if not builder then 
-      print(helpers.AddModHeader(chat.error("Failed to load builder lib")))
+      print(Helpers.AddModHeader(chat.error("Failed to load builder lib")))
       return 
     end
     builder:process(ModeTable.modes)
@@ -163,19 +162,19 @@ return {
   end,
   enableWeaponGroups = function()
     if globals.debug then 
-      print(helpers.AddModHeader(chat.success('Enabled weapon groups')))
+      print(Helpers.AddModHeader(chat.success('Enabled weapon groups')))
     end
     ModeTable.weaponsEnabled = true
   end,
   enableSecondaryGroups = function()
     if globals.debug then 
-      print(helpers.AddModHeader(chat.success('Enabled secondary weapon groups')))
+      print(Helpers.AddModHeader(chat.success('Enabled secondary weapon groups')))
     end
     ModeTable.secondaryEnabled = true
   end,
   enableOverrideLayers = function()
     if globals.debug then 
-      print(helpers.AddModHeader(chat.success('Enabled override layers')))
+      print(Helpers.AddModHeader(chat.success('Enabled override layers')))
     end
     ModeTable.overrideLayersEnabled = true
   end,
@@ -201,7 +200,7 @@ return {
     local foundIndex = ModeTable.overrideLayerNames:find(layerName)
     if foundIndex then
       if not stateName then
-        print(helpers.AddModHeader(chat.error('Cannot add additional states to an existing override layer without supplying a state name.')))
+        print(Helpers.AddModHeader(chat.error('Cannot add additional states to an existing override layer without supplying a state name.')))
         return
       end
       local layerSize = #ModeTable.overrideLayers[foundIndex]
@@ -284,7 +283,7 @@ return {
     local index = tonumber(key)
     if index ~= nil then
       if index > #ModeTable.modeList then
-        print(helpers.AddModHeader(chat.error('Mode index out of bounds.')))
+        print(Helpers.AddModHeader(chat.error('Mode index out of bounds.')))
       else
         ModeTable.currentMode = index
       end
@@ -296,12 +295,12 @@ return {
         end
       end
     else
-      print(helpers.AddModHeader("Could not set mode "..key.." because that mode isn't registered."))
+      print(Helpers.AddModHeader("Could not set mode "..key.." because that mode isn't registered."))
     end
   end,
   setActiveWeaponGroup = function(key)
     if not ModeTable.weaponsEnabled then
-      print(helpers.AddModHeader(chat.error('Weapon Groups are not enabled.')))
+      print(Helpers.AddModHeader(chat.error('Weapon Groups are not enabled.')))
       return
     end
     local index = tonumber(key)
@@ -315,12 +314,12 @@ return {
         end
       end
     else
-      print(helpers.AddModHeader("Could not set weapon group "..key.." because that group isn't registered."))
+      print(Helpers.AddModHeader("Could not set weapon group "..key.." because that group isn't registered."))
     end
   end,
   setActiveSecondaryGroup = function(key)
     if not ModeTable.secondaryEnabled then
-      print(helpers.AddModHeader(chat.error('Secondary Weapon Groups are not enabled.')))
+      print(Helpers.AddModHeader(chat.error('Secondary Weapon Groups are not enabled.')))
       return
     end    
     local index = tonumber(key)
@@ -334,7 +333,7 @@ return {
         end
       end
     else
-      print(helpers.AddModHeader("Could not set secondary weapon group "..key.." because that group isn't registered."))
+      print(Helpers.AddModHeader("Could not set secondary weapon group "..key.." because that group isn't registered."))
     end
   end,
   nextMode = function()
@@ -354,7 +353,7 @@ return {
       end
       local current = ModeTable.weaponGroups[getCurrentWeaponGroup()]
       if ModeTable.currentWeaponGroup == startingIndex then
-        print(helpers.AddModHeader(chat.warning('Could not find acceptable weapon group.')))
+        print(Helpers.AddModHeader(chat.warning('Could not find acceptable weapon group.')))
         break
       elseif current.constraints == nil then
         break
@@ -394,7 +393,7 @@ return {
 				ModeTable.lastMainhandBumpAttempt = os.time()
 			else
 				ModeTable.lastMainhandBumpAttempt = nil
-				print(helpers.AddModHeader(chat.color1(92, "Weapon group constraint failed. Bumping weapon group...")))
+				print(Helpers.AddModHeader(chat.color1(92, "Weapon group constraint failed. Bumping weapon group...")))
 				modes.nextWeaponGroup()
 			end
     end
@@ -406,7 +405,7 @@ return {
 				ModeTable.lastOffhandBumpAttempt = os.time()
 			else 
 				ModeTable.lastOffhandBumpAttempt = nil
-				print(helpers.AddModHeader(chat.color1(92, 'Secondary group constraint failed. Bumping secondary group...')))
+				print(Helpers.AddModHeader(chat.color1(92, 'Secondary group constraint failed. Bumping secondary group...')))
 				modes.nextSecondaryGroup()
 			end
 		end

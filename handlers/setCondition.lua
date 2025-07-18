@@ -1,7 +1,3 @@
----@diagnostic disable: undefined-field
-local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
-if(not helpers) then return end
-
 ---@return boolean
 ---@param target Player | Pet | Entity | Environment
 ---@param node conditionNode
@@ -25,7 +21,7 @@ local handleNode = function(target, node)
 	elseif (target == 'Environment') then
 		return oHandleNode(gData.GetEnvironment(), node)
 	else
-		print(helpers.addModHeader(chat.error('Invalid condition target "'..target..'". Condition will be considered false.')))
+		print(Helpers.addModHeader(chat.error('Invalid condition target "'..target..'". Condition will be considered false.')))
 		return false
 	end
 end

@@ -1,5 +1,4 @@
 local globals = gFunc.LoadFile('globals.lua')
-local helpers = gFunc.LoadFile('smart.lac/helpers.lua')
 ---@alias skillchainProp '"Transfixion"' | '"Compression"' | '"Liquefaction"' | '"Scission"' | '"Reverberation"' | '"Detonation"' | '"Induration"' | '"Impaction"' | '"Gravitation"' | '"Distortion"' | '"Fragmentation"' | '"Fusion"' | '"Light"' | '"Darkness"'
 
 ---@class util
@@ -35,7 +34,7 @@ local applicableGorgets = T{
 ---@param minimumLevel number
 ---@return string?
 local getAccessoryForProperty = function(owned, accessoryProperties, ability, minimumLevel)
-	if(type(ability) == "number") then ability = helpers.getWeaponskillProperties({id = ability}) end
+	if(type(ability) == "number") then ability = Helpers.getWeaponskillProperties({id = ability}) end
 	if(gData.GetPlayer().MainJobLevel < minimumLevel) then return nil end
 	if(owned['Fotia Belt']) then return 'Fotia Belt' end
 	if(owned['Fotia Gorget']) then return 'Fotia Gorget' end
