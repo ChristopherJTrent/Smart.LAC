@@ -15,4 +15,6 @@
 ---@field CreateRequiredFiles function
 ---@field PerformUpdateCheck function
 ---@field ProfileFileExists fun(name: string):boolean
+---@field SmartFileExists fun(name: string):boolean
 ---@field SubJobHasChanged function
+---@field BuildPlatformPath fun(...:string):string
