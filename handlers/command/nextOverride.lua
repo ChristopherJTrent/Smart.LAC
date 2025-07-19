@@ -1,7 +1,7 @@
-return function()
-	if #args ~= 2 then 
+return function(args)
+	if #args ~= 1 then 
 		print(Helpers.AddModHeader(chat.error('nextOverride requires a layer index')))
 	else
-		modes.nextOverrideState(args[2])
+		modes.nextOverrideState(args[1])
 	end
 end
