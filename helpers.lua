@@ -343,5 +343,6 @@ return {
 	PerformUpdateCheck = performUpdateCheck,
 	ProfileFileExists = profileFileExists,
 	SmartFileExists = smartFileExists,
-	SubJobHasChanged = subJobHasChanged
+	SubJobHasChanged = subJobHasChanged,
+	BuildPlatformPath = BuildPlatformPath
 }
