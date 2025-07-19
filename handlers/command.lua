@@ -3,10 +3,10 @@ local commands = T{
 }
 
 function commands:call(name, args) 
-	if self.cache.hasKey(name) then
+	if self.cache:containskey(name) then
 		self.cache[name](args)
-	elseif smartFileExists("handlers/command/"..name) then
-		self.cache[name] = gFunc.LoadFile("handlers/command/"..name)
+	elseif Helpers.SmartFileExists(Helpers.BuildPlatformPath("handlers","command",name)) then
+		self.cache[name] = gFunc.LoadFile(Helpers.BuildPlatformPath("Smart.LAC","handlers","command",name..".lua"))
 		self.cache[name](args)
 	else
 		print(Helpers.AddModHeader(chat.error("Cound not find command "..name..". Check your spelling and note that command names are case-sensitive.")))
@@ -14,5 +14,5 @@ function commands:call(name, args)
 end
 
 return function(args)
-	commands:call(args[1], args:slice(2, 999))
+	commands:call(args[1], T(args):slice(2, 999))
 end
