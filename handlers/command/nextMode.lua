@@ -1,3 +1,1 @@
-return function()
-	modes.nextMode()
-end
+return modes.nextMode

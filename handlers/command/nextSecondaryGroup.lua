@@ -1,3 +1,1 @@
-return function()
-	modes.nextSecondaryGroup()
-end
+return modes.nextSecondaryGroup

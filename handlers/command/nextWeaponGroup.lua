@@ -1,3 +1,1 @@
-return function()
-	modes.nextWeaponGroup()
-end
+return modes.nextWeaponGroup
