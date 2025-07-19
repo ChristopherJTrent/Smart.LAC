@@ -134,7 +134,7 @@ local unload = function()
 end
 -- This is the only callback that natively accepts an argument
 -- Lazy-loaded 
-local command = gFunc.LoadFIle("handlers/command")
+local command = gFunc.LoadFile(Helpers.BuildPlatformPath("Smart.LAC","handlers","command.lua"))
 
 local default = function()
 	local main = gData.GetPlayer().MainJob
