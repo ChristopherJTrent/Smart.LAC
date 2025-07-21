@@ -2,7 +2,6 @@ return function(args)
 	local sets = modes.getSets()
 	local switch = {
 		function(_) print("equip requries at least 2 arguments") end,
-		function(_) print("equip requries at least 2 arguments") end,
 		function(a)
 			gFunc.LockSet(sets[a[1]][a[2]], 15)
 		end,
