@@ -12,4 +12,4 @@ This repo uses a custom code style.
 * When breaking up large boolean operations, break up long lines by adding a new line *before* the boolean operator
 * indent multiline boolean operations with tabs until they (mostly) match the line above
 * When creating a class, define the table and add methods using the : operator
-* Any new classes must include a <name>.h.lua file that defines the types createds
+* Any new classes must include a <name>.h.lua file that defines the types created
