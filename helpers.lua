@@ -134,7 +134,12 @@ local function GenericAbilityHandler(sets, key)
 	finalSet = modes.applyOverrides(finalSet, key, action.Name)
 	if sets[key].buffs ~= nil then
 		for k, v in pairs(sets[key].buffs) do
-			if gData.GetBuffCount(k) > 0 then
+			if k:contains("&&") then
+				if k:split("&&"):all(function(v) return gData.GetBuffCount(v) > 0 end) then
+					finalSet=gFunc.Combine(finalSet, v)
+					finalSet = modes.applyOverrides(finalSet, key, 'buffs', k)
+				end
+			elseif gData.GetBuffCount(k) > 0 then
 				finalSet = gFunc.Combine(finalSet, v)
 				finalSet = modes.applyOverrides(finalSet, key, 'buffs', k)
 			end
