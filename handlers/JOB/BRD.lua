@@ -1,4 +1,5 @@
 ---@type jobHandler
+require('common')
 return {
     midcast = function(action, sets)
         if action.Type == "Bard Song" then

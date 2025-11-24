@@ -1,0 +1,20 @@
+return {
+    setup = function()
+        package.path = package.path..';.'
+        T = require('spec.mocks.table.lua')
+    end,
+    default = {
+        reporter = "html",
+        runreport = true,
+        deletestats = true,
+        reportfile = "luacov.report.html",
+        verbose = true,
+        output = "gtest",
+        include = {
+            "smart",
+            "packerBuilder",
+            "handlers%/.+$"
+        },
+        includeuntestedfiles = true
+    }
+}

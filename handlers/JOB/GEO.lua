@@ -1,3 +1,4 @@
+require('common')
 return {
 	default = function(sets, status) 
 		local pet = gData.GetPet()

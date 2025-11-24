@@ -1,1 +1,1 @@
-require('test.common')
+require('spec.common')
