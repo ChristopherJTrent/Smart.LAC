@@ -1,3 +1,4 @@
+require('common')
 return {
 	midcast = function(action, sets)
 		if sets.midcast == nil then return false end

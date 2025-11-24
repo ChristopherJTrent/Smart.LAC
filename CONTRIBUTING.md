@@ -21,4 +21,4 @@ Tests are currently only supported on *nix. It is likely possible to get them ru
 * Moonscript
 
 ### Writing Tests ###  
-Smart's specs are written in [Moonscript](https://moonscript.org/). This allows for a much more expressive DSL, and generally makes the entire testing process much more enjoyable.
+Smart's specs are written in [Moonscript](https://moonscript.org/). This allows for a much more expressive DSL, and generally makes the entire testing process much more enjoyable. Non-Moonscript tests are supported by the library, but PRs containing non-Moonscript tests will be rejected until the tests are rewritten in the approved language.

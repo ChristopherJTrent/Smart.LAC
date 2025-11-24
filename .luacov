@@ -1,10 +1,12 @@
 return {
-	reporter = "html",
-	reportfile = "luacov.report.html",
-	exclude = {
-		"luaunit",
-		"test",
-		"skills",
-		"imgui"
+	default = {
+		reporter = "html",
+		reportfile = "luacov.report.html",
+		exclude = {
+			"luaunit",
+			"test",
+			"skills",
+			"imgui"
+		}
 	}
 }

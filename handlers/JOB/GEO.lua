@@ -1,3 +1,4 @@
+require('common')
 return {
 	midcast = function(action, sets)
 		if not sets.midcast then return false end
