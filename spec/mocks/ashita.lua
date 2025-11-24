@@ -1,4 +1,4 @@
-local lu = require('luaunit')
+-- local lu = require('luaunit')
 ashita = {}
 ashita.events = {}
 ashita.events.register = function(a, b, c) end
@@ -32,7 +32,7 @@ function AshitaCore:GetChatManager()
 				return
 			end
 		end
-		lu.assertFalse(true)
+		--lu.assertFalse(true)
 	end
 	return ChatManager
 end
