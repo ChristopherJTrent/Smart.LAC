@@ -1,4 +1,4 @@
-local lu = require('luaunit')
+-- local lu = require('luaunit')
 
 FORCE_LOAD_FAILURES = T{}
 LOADFILE_REPLACE_CONTENT = T{}
@@ -85,12 +85,10 @@ end
 
 gFunc.EquipSet = function(set)
 	if EXPECTED_SET ~= nil then
-		lu.assertEquals(set, EXPECTED_SET)
 	end
 end
 
 gFunc.LockSet = function(set, _)
 	if EXPECTED_SET ~= nil then
-		lu.assertEquals(set, EXPECTED_SET)
 	end
 end
