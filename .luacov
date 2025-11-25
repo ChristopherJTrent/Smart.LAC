@@ -1,12 +1,15 @@
 return {
-	default = {
-		reporter = "html",
-		reportfile = "luacov.report.html",
-		exclude = {
-			"luaunit",
-			"test",
-			"skills",
-			"imgui"
-		}
-	}
+	reporter = "html",
+	reportfile = "luacov.report.html",
+	exclude = {
+		"luaunit",
+		"spec",
+		"skills",
+		"imgui",
+		"/usr/*",
+		"luacov$",
+		"busted$",
+		".*%.h%.lua"
+	},
+	includeuntestedfiles = true
 }
