@@ -1,14 +1,18 @@
 describe "BRD job handler", ->
+	local Handler
     setup ->
-        _G.handler = require('handlers.JOB.BRD')
+        Handler = require('handlers.JOB.BRD')
 
     it "should exist", ->
-        assert.are_not.equals handler, nil
+        assert.are_not.equals Handler, nil
+
+	it 'should have a midcast handler', ->
+		assert.are_not.equals Handler.midcast, nil
     
     describe 'midcast', ->
-        local sets
+        local Sets
         setup ->
-            sets = {
+            Sets = {
                 midcast: {
                     dummySongs: {
                         Body: "Fili Hongreline +3"
@@ -20,10 +24,25 @@ describe "BRD job handler", ->
                     }
                 }
             }
-
-        it "should handle dummy songs", ->
-            assert.are.same {Body: "Fili Hongreline +3"}, handler.midcast({Type: "Bard Song", Name: "Fowl Aubade"}, sets)
-        it "should not handle non-dummy songs", ->
-            assert.is.false handler.midcast({Type: "Bard Song", Name: ""}, sets)
-        it "should not handle non-songs", ->
-            assert.is.false handler.midcast({Type: "White Magic", Name: ""}, sets)
+		context 'when a dummy song is cast', ->
+			local DummyAction
+			setup ->
+				DummyAction = {Type: 'Bard Song', Name: 'Fowl Aubade'}
+			it 'should not return false', ->
+				assert.is_not.false Handler.midcast(DummyAction, Sets)
+			it 'should return the Dummy Songs set', ->
+				assert.is.same Sets.midcast.dummySongs, Handler.midcast(DummyAction, Sets)
+		
+		context 'when a non-dummy song is cast', ->
+			local SongAction
+			setup ->
+				SongAction = {Type: 'Bard Song', Name: 'Valor Minuet V'}
+			it 'should return false', ->
+				assert.is.false Handler.midcast(SongAction, Sets)
+				
+		context 'when any other spell is cast', ->
+			local Action
+			setup ->
+				Action = {Type: 'White Magic', Name: 'Cure IV'}
+			it 'should return false', ->
+				assert.is.false Handler.midcast(Action, Sets)
