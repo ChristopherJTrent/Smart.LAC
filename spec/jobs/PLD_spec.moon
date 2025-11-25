@@ -4,11 +4,11 @@ describe 'PLD job handler', ->
 		Handler = require('handlers.JOB.PLD')
 
 	it 'should exist', ->
-		assert.not.equals nil, Handler
+		assert.is_not.nil Handler
 	it 'should define a midcast handler', ->
-		assert.not.equals nil, Handler.midcast
+		assert.is_not.nil Handler.midcast
 	it 'should define an ability handler', ->
-		assert.not.equals nil, Handler.ability
+		assert.is_not.nil Handler.ability
 
 	context 'when in midcast', ->
 		local EnmitySpellAction, BLUHateTools

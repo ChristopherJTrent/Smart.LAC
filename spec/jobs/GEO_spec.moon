@@ -4,11 +4,11 @@ describe 'GEO job handler', ->
 		Handler = require('handlers.JOB.GEO')
 	
 	it 'should exist', ->
-		assert.not.equals nil, Handler
+		assert.is_not.nil Handler
 	context 'during midcast', ->
 		local Sets
 		it 'should have a handler', ->
-			assert.is_not.equals nil, Handler.midcast
+			assert.is_not.nil Handler.midcast
 
 		context 'when no midcast set is defined', ->
 			setup ->
