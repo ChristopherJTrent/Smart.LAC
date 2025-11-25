@@ -3,7 +3,7 @@ describe 'NIN job handler', ->
 	setup ->
 		Handler = require('handlers.JOB.NIN')
 	it 'should exist', ->
-		assert.not.equals nil, Handler
+		assert.is_not.nil Handler
 	
 	context 'when in precast', ->
 		context 'when no precast set is defined', ->

@@ -3,7 +3,9 @@ describe "COR Job Handler", ->
 	setup ->
 		Handler = require 'handlers.JOB.COR'
 		Sets = {}
-		
+
+	it 'should exist', ->
+		assert.is_not.nil Handler
 	context 'when Phantom Roll is used', ->
 		local PRAction
 		setup ->

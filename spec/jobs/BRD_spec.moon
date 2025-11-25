@@ -4,10 +4,10 @@ describe "BRD job handler", ->
         Handler = require('handlers.JOB.BRD')
 
     it "should exist", ->
-        assert.are_not.equals Handler, nil
+        assert.is_not.nil Handler
 
 	it 'should have a midcast handler', ->
-		assert.are_not.equals Handler.midcast, nil
+		assert.is_not.nil Handler.midcast
     
     describe 'midcast', ->
         local Sets
