@@ -32,11 +32,14 @@ function AshitaCore:GetChatManager()
 				return
 			end
 		end
-		--lu.assertFalse(true)
 	end
 	return ChatManager
 end
 
 function AshitaCore:GetInstallPath()
-	return string.gsub(arg[0], string.format("%stests.lua", package.config:sub(1, 1)), "")
+	local p = os.getenv('PWD')
+	if p == nil then
+		error('These tests will not function on windows. please run the tests again using WSL2 or a linux computer.', 3)
+	end
+	return p
 end
