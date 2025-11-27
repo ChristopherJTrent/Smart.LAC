@@ -1,7 +1,7 @@
 describe 'the BLU job handler', ->
 	local Sets, Handler
 	setup ->
-		Handler = require('handlers.JOB.BLU.lua')
+		Handler = require('handlers.JOB.BLU') 
 	
 	it 'should exist', ->
 		assert.is_not.nil Handler
