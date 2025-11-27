@@ -39,7 +39,10 @@ gFunc.LoadFile = function(path)
 		return LOADFILE_REPLACE_CONTENT[path]
 	end
 	local sep = package.config:sub(1, 1)
-	local frameworkRoot = string.gsub(arg[0], string.format("%stests.lua", sep), "")
+	local frameworkRoot = os.getenv('PWD')
+	if frameworkRoot == nil then
+		error('These tests will not function on windows. please run the tests again using WSL2 or a linux computer.', 3)
+	end
 	path = string.gsub(path, "smart.lac/", '')
 	local paths = T{
 		path,
