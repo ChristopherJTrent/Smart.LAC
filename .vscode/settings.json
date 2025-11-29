@@ -3,6 +3,7 @@
 	"explorer.fileNesting.expand": false,
 	"explorer.fileNesting.patterns": {
 		"*.lua": "${capture}.h.lua",
+		"*.moon": "${capture}.lua"
 	},
 	"Lua.completion.autoRequire": false
 }
