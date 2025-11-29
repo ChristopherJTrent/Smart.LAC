@@ -11,5 +11,4 @@ return T{
 		WHM = gFunc.LoadFile('smart.lac/handlers/JOB/WHM.lua'),
 		RUN = gFunc.LoadFile('smart.lac/handlers/JOB/RUN.lua'),
 		DNC = gFunc.LoadFile('smart.lac/handlers/JOB/DNC.lua')
-	}
-end)()
+}
