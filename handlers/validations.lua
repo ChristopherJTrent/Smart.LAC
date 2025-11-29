@@ -1,6 +1,7 @@
 local function CheckForDefaults(sets)
 	for k, v in pairs(sets) do
 		if v.default == nil and (k ~= 'general' and k ~= 'settings' and k ~= 'lockstyle') and not k:find("^_") then
+			success = false
 			if v.Default ~= nil then
 				print(chat.warning(Helpers.AddModHeader('Found key "Default" in table '..k..', did you mean "default"?')))
 			else
@@ -8,10 +9,11 @@ local function CheckForDefaults(sets)
 			end
 		end
 	end
+	return success
 end
 
 
-local function validateGeneral(sets)
+function validations.validateGeneral(sets)
 	if sets.general then
 		if sets.general.Idle == nil then
 			if sets.general.idle then
@@ -19,17 +21,19 @@ local function validateGeneral(sets)
 			else
 				print(Helpers.AddModHeader(chat.warning('Idle set not found')))
 			end
+		else
+			return true
 		end
 	elseif sets.General then
 		print(Helpers.AddModHeader(chat.warning('found set "General", did you mean "general"?')))
 	else
 		print(Helpers.AddModHeader(chat.warning('general table not found, please add one.')))
 	end
+	return false
 end
 
-local function root(sets)
-	validateGeneral(sets)
-	CheckForDefaults(sets)
+function validations.validate(sets)
+	return validations.checkForDefaults(sets) and validations.validateGeneral(sets)
 end
 
-return root
+return validations

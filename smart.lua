@@ -102,7 +102,7 @@ local load = function()
 
 	local validator = gFunc.LoadFile('smart.lac/handlers/validations.lua')
 	assert(validator ~= nil, "Validator unexpectedly nil.")
-	validator(sets)
+	validator.validate(sets)
 
 	if not Helpers.ValidateSets(sets) then
 		print(Helpers.AddModHeader(chat.warning('Failed to validate sets')))
@@ -246,9 +246,9 @@ local weaponskill = function()
 	end
 end
 
--- luacov: disable
+ 
 return (function()
-	-- luacov: enable
+	 
 	---@return smartProfile
 	local retFunc = function()
 
@@ -297,10 +297,10 @@ return (function()
 			end
 		end
 	end
-	-- luacov: disable
+	 
 	-- lines which return an anonymous function misbehave in luacov
 	return (function()
-		-- luacov: enable
+		 
 		---@param sets sets
 		return function(sets)
 			modes._setup()
