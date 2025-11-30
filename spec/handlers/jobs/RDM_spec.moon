@@ -2,7 +2,10 @@ describe 'RDM job handler', ->
 	local Sets, Handler, Spell
 	setup ->
 		Handler = require('handlers.JOB.RDM')
-	
+		Sets = {}
+	export gData = {}
+	gData.GetPlayer = spy.new(-> {Name:'testUser'})
+	gData.GetActionTarget = spy.new(-> {Name: 'testUser2'})
 	it 'should not be nil', ->
 		assert.is_not.nil Handler
 	it 'should define a midcast handler', ->
@@ -88,6 +91,10 @@ describe 'RDM job handler', ->
 				}
 
 			it 'should return false', ->
+				content = Handler.midcast(SpellAction, Sets)
+				print content
+				for k, v in pairs content
+					print("#{k}: #{v}")
 				assert.is.false Handler.midcast(SpellAction, Sets)
 	context 'when casting Enhancing Magic', ->
 		local Groups
@@ -164,6 +171,17 @@ describe 'RDM job handler', ->
 							Sets.midcast['Enhancing Magic'].skill = nil
 						it 'should return the gainspell set', ->
 							assert.is.same Sets.midcast['Enhancing Magic'].gainspell, Handler.midcast({Skill: 'Enhancing Magic', Name: 'Gain-MND'}, Sets)
+				context 'while casting on another player', ->
+					context 'with a targetOther set defined', ->
+						setup ->
+							Sets = 
+								midcast:
+									'Enhancing Magic':
+										targetOther: 
+											Head: 1
+						it 'should return the targetOther set', ->
+							assert.is.same Sets.midcast['Enhancing Magic'].targetOther, Handler.midcast({Skill: 'Enhancing Magic', Name: 'Haste II'}, Sets)
+
 					
 			context 'with a default set defined', ->
 				setup ->
