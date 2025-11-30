@@ -1,3 +1,4 @@
+require('common')
 return {
 	ability = function(action, sets)
 		if (action.Type == 'Corsair Roll' or action.Name == 'Double-Up') then

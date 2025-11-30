@@ -1,3 +1,4 @@
+require('common')
 return {
 	precast = function(action, sets)
 		local currentArts = (gData.GetBuffCount("Light Arts") == 1 or gData.GetBuffCount("Addendum: White") == 1) and "White Magic" or "Black Magic"
