@@ -13,6 +13,11 @@ gData.GetPlayer = function()
 	}
 end
 
+function gData.GetActionTarget()
+	return {
+		Name = 'testPlayer2'
+	}
+end
 
 function gData.GetAction()
 	---@type Action

@@ -1,0 +1,21 @@
+return {
+    setup = function()
+    	local say = require('say')
+		package.path = package.path..';.'
+		local function is_nil(state, arguments)
+			if #arguments ~= 2 then
+				return false
+			end
+			return arguments[1] == nil
+		end
+
+		say:set('assertion.nil.positive', 'Expected %s to be nil')
+		say:set('assertion.nil.negative', 'Expected %s to not be nil')
+		assert:register('assertion', 'nil', is_nil, 'assertion.nil.positive', 'assertion.nil.negative')
+		
+    end,
+    default = {
+        verbose = true,
+        output = "gtest",
+    }
+}
