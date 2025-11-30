@@ -422,7 +422,8 @@ return {
           ImGuiWindowFlags_AlwaysAutoResize,
           ImGuiWindowFlags_NoSavedSettings,
           ImGuiWindowFlags_NoFocusOnAppearing,
-          ImGuiWindowFlags_NoNav
+          ImGuiWindowFlags_NoNav,
+		  ImGuiWindowFlags_NoMouseInputs
         )
         imgui.SetNextWindowBgAlpha(0.8)
         imgui.SetNextWindowSize({-1, -1}, ImGuiCond_Always)
