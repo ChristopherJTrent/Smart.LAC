@@ -1,3 +1,4 @@
+require('common')
 return {
     precast = function(action, sets)
         if sets.precast == nil then return false end

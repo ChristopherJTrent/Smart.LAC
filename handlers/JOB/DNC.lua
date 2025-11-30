@@ -1,4 +1,5 @@
 ---@type jobHandler
+require('common')
 return {
     ability = function (action, sets)
         if sets.ability == nil then return false end

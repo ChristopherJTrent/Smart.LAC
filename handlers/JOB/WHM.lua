@@ -1,3 +1,4 @@
+require('common')
 return T{
 	midcast = function(action, sets)
 		-- Thanks to Arieh for these lists.

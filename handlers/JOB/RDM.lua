@@ -1,11 +1,10 @@
+require('common')
 return {
     midcast = function(action, sets)
         if sets.midcast == nil then return false end
         if action.Skill == "Enfeebling Magic" then
             if sets.midcast['Enfeebling Magic'] == nil then return false end
-            local finalSet = sets.midcast['Enfeebling Magic'].default ~= nil
-                         and sets.midcast['Enfeebling Magic'].default
-                         or  {}
+            local finalSet = sets.midcast['Enfeebling Magic'].default or {}
             local groups = T{
                 {Name = "skill", Spells = T{"Distract III", "Frazzle III", "Poison", "Poison II"}},
                 {Name = "highSkill", Spells = T{"Distract III", "Frazzle III"} },
@@ -34,19 +33,17 @@ return {
                     {Name = "duration", Spells = T{"Blink", "Haste", "Haste II", "Flurry", "Flurry II"}} -- check for barspells
                 }
                 
-                local finalSet = sets.midcast['Enhancing Magic'].default 
-                             and sets.midcast['Enhancing Magic'].default
-                             or {}
+                local finalSet = sets.midcast['Enhancing Magic'].default or {}
                 for _, group in ipairs(groups) do
                     if sets.midcast['Enhancing Magic'][group.Name] ~= nil and group.Spells:hasval(action.Name) then
                         finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'][group.Name])
                     end
                 end
                 if string.find(action.Name, "Bar") ~= nil then
-                    finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].duration)
+                    finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].duration or {})
                 end
                 if sets.midcast['Enhancing Magic'].skill ~= nil and string.find(action.Name, "En") ~= nil then
-                    finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].skill)
+                    finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].skill or {})
                 end
                 if string.find(action.Name, "Gain") ~= nil then
                     finalSet = gFunc.Combine(
@@ -56,10 +53,10 @@ return {
                 end
                 if gData.GetPlayer().Name ~= gData.GetActionTarget().Name then
                     if sets.midcast['Enhancing Magic'].targetOther ~= nil then
-                        finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].targetOther)
+                        finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].targetOther or {})
                     end
                 end
-                if finalSet ~= {} then
+                if next(finalSet) ~= nil then
                     return finalSet
                 else
                     return false
