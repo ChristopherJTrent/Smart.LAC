@@ -1,5 +1,5 @@
 --luacheck: globals gFunc gData gSettings gProfile chat T
-Smart_Version = "0.6.10"
+Smart_Version = "0.7.0"
 ---@type skills?
 local skills = gFunc.LoadFile('smart.lac/data/skills.lua')
 ---@type playerData?
