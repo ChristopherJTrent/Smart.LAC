@@ -7,7 +7,7 @@ return (function()
 	setmetatable(ret, {
 		__index = function (t, k)
 			if t.cache[k] ~= nil then return t.cache[k] end
-			if Helpers.SmartFileExists('handlers.job.'..k) then
+			if Helpers.SmartFileExists('handlers.JOB.'..k) then
 				t.cache[k] = gFunc.LoadFile('smart.lac/handlers/JOB/'..k..'.lua')
 				return t.cache[k]
 			end
