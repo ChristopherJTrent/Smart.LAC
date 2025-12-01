@@ -17,5 +17,8 @@ return {
     default = {
         verbose = true,
         output = "gtest",
-    }
+    },
+	exclude = {
+			'^.+%.h%.lua$'
+	}
 }
