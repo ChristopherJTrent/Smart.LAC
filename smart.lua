@@ -1,5 +1,5 @@
 --luacheck: globals gFunc gData gSettings gProfile chat T
-Smart_Version = "0.6.9"
+Smart_Version = "0.6.10"
 ---@type skills?
 local skills = gFunc.LoadFile('smart.lac/data/skills.lua')
 ---@type playerData?
@@ -176,7 +176,10 @@ local default = function()
 		if ModeTable.secondaryEnabled then
 			set = gFunc.Combine(set, modes.getSecondaryGroup())
 		end
-		
+		if(sets.general.moving ~= nil and player.IsMoving) then
+			set = gFunc.Combine(set, sets.general.moving)
+		end
+
 		set = modes.applyOverrides(set, "general", status)
 		
 		if jobHandlers[player.MainJob] ~= nil and jobHandlers[player.MainJob].default ~= nil then
