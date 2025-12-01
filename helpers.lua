@@ -198,6 +198,7 @@ local function profileFileExists(name, forceLua)
 end
 
 local function smartFileExists(name)
+	name = string.gsub(name, "%.", platformPathSeparator)
 	local path = BuildPlatformPath(
 		AshitaCore:GetInstallPath(),
 		"config",
@@ -206,7 +207,8 @@ local function smartFileExists(name)
 		"Smart.LAC",
 		name
 	)
-	path = string.gsub(path, "%.", platformPathSeparator)
+
+	path = string.gsub(path, "\\\\", "\\")
 	if not path:match("\\.lua$") then
 		path = path..".lua"
 	end
