@@ -275,8 +275,9 @@ local performUpdateCheck = function()
 	local http = require('socket\\ssl\\https')
 	http.TIMEOUT = 1
 	local body, statusCode, _, _= http.request('https://raw.githubusercontent.com/ChristopherJTrent/Smart.LAC/refs/heads/master/version')
-	if statusCode ~= 200 then
+	if statusCode ~= 200 or body == nil then
 		print('Failed to download version info. Please check the github for updates')
+		return
 	else
 		-- ---@diagnostic disable-next-line: undefined-field
 		-- local locVerPath = ("%sconfig\\addons\\luashitacast\\Smart.LAC\\version"):fmt(AshitaCore:GetInstallPath())
