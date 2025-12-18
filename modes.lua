@@ -145,7 +145,7 @@ end
 ---@field registerWeaponGroup fun(group: string, set: weaponGroup)
 ---@field registerSecondaryGroup fun(group: string, set: weaponGroup)
 ---@field registerOverride fun(layerName: string, sets: sets, stateName: string?, keybind: string?)
----@field applyOverrides fun(baseSet: sets, outerKey: string, innerKey: string, secondaryInnerKey: string): sets
+---@field applyOverrides fun(baseSet: sets, outerKey: string, innerKey: string, secondaryInnerKey: string?): sets
 ---@field getSets fun():sets
 ---@field getWeaponGroup fun():weaponGroup
 ---@field getSecondaryGroup fun():weaponGroup
@@ -155,14 +155,14 @@ end
 ---@field nextMode function
 ---@field nextWeaponGroup function
 ---@field nextoverrideState fun(layer: string)
----@field nextsecondaryGroup function
+---@field nextSecondaryGroup function
 ---@field setWindowPosX fun(x: integer)
 ---@field setWindowPosY fun(y: integer)
----@field TriggerPrimaryBumpChecker fun(force: boolean)
----@field TriggerSecondaryBumpChecker fun(force: boolean)
+---@field TriggerPrimaryBumpChecker fun(force: boolean?)
+---@field TriggerSecondaryBumpChecker fun(force: boolean?)
 ---@field setWindowVisibility fun(enable: boolean)
 ---@field toggleWindowVisibility function
----@field package initializeWindow function
+---@field initializeWindow function
 return {
   generatePackerConfig = function()
     local builder = gFunc.LoadFile('smart.lac/packerBuilder.lua')

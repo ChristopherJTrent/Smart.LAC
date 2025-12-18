@@ -84,8 +84,8 @@ local load = function()
 	gSettings.AllowAddSet = true
 
 
-	data.ownedBelts = Helpers.EnsureSugaredTable(data.ownedBelts)
-	data.ownedGorgets = Helpers.EnsureSugaredTable(data.ownedGorgets)
+	data.ownedBelts = T(data.ownedBelts)
+	data.ownedGorgets = T(data.ownedGorgets)
 
 	if globals and globals.debug  then
 		print(data.ownedBelts.contains ~= nil
@@ -112,8 +112,7 @@ local load = function()
 	if sets.general and sets.general.Idle  then
 		gFunc.EquipSet(sets.general.Idle)
 	else
-		print(Helpers.AddModHeader(Helpers.SucceedOrWarn(false, "",
-														"Failed to equip default idle set, please check your gear.")))
+		print(Helpers.AddModHeader(Helpers.SucceedOrWarn(false, "","Failed to equip default idle set, please check your gear.")))
 		success = false
 	end
 

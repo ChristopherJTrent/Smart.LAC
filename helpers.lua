@@ -316,7 +316,25 @@ local subJobHasChanged = function()
 	return player.SubJob and player.SubJob ~= "NON" and player.SubJob ~= Subjob
 end
 
----@type Helpers
+---@class Helpers
+---@field slotNames string[]
+---@field EnsureSugaredTable fun(table:table):table @deprecated
+---@field ContainsAllKeys fun(t: table, other: table): boolean
+---@field ValidatePlayerData fun(t: table): boolean
+---@field ValidateSets fun(t: table): boolean
+---@field AddModHeader fun(string: string): string
+---@field SucceedOrWarn fun(success: boolean, good: string, bad: string): string
+---@field SucceedOrError fun(success: boolean, good: string, bad: string): string
+---@field GetWeaponskillProperty fun(ability: {Id: integer})
+---@field GenericAbilityHandler fun(sets: sets, key: string): boolean
+---@field CleanupSets fun(sets: sets): sets
+---@field customFlattenTable fun(t: table): any[]
+---@field CreateRequiredFiles function
+---@field PerformUpdateCheck function
+---@field ProfileFileExists fun(path: string): boolean
+---@field SmartFileExists fun(path:string): boolean
+---@field SubJobHasChanged fun(): boolean
+---@field BuildPlatformPath fun(...:string): string
 return {
 	slotNames = T{
 		"Main",
