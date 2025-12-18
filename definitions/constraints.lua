@@ -1,10 +1,16 @@
 local DualWieldAbilityID = AshitaCore:GetResourceManager():GetAbilityByName("Dual Wield", 0).Id
+
+---@alias constraint fun():boolean
+---@alias constraintFactory<T> fun(T):constraint
+
 ---@class Constraints
+---@field HasDualWield constraint
+---@field Invert constraintFactory<constraint>
+---@field HasSubjob constraintFactory<string>
 Constraint = {
 }
 
 function Constraint.HasDualWield()
-    ---@type Player
     local player = gData.GetPlayer()
     return (
         ( player.MainJob == "NIN" and player.MainJobSync > 10 )
