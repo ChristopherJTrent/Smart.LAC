@@ -13,3 +13,4 @@ This repo uses a custom code style.
 * indent multiline boolean operations with tabs until they (mostly) match the line above
 * When creating a class, define the table and add methods using the : operator
 * Any new classes must include a <name>.h.lua file that defines the types created
+	* inline types may be used instead
