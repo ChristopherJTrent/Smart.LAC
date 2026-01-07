@@ -16,7 +16,8 @@ return {
     end,
     default = {
         verbose = true,
-        output = "gtest",
+        --output = "gtest",
+		helper="./spec/helper.lua"
     },
 	exclude = {
 			'^.+%.h%.lua$'
