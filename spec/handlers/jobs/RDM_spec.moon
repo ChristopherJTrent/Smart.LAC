@@ -92,9 +92,6 @@ describe 'RDM job handler', ->
 
 			it 'should return false', ->
 				content = Handler.midcast(SpellAction, Sets)
-				print content
-				for k, v in pairs content
-					print("#{k}: #{v}")
 				assert.is.false Handler.midcast(SpellAction, Sets)
 	context 'when casting Enhancing Magic', ->
 		local Groups
