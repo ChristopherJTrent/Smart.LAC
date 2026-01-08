@@ -1,3 +1,4 @@
+-- this file is not unit tested
 return function()
 	local mainhand = ModeTable.weaponGroups[ModeTable.weaponGroupList[ModeTable.currentWeaponGroup]].Main or ""
 	if mainhand ~= "" then
