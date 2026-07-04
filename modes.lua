@@ -464,9 +464,9 @@ return {
         imgui.SetNextWindowSize({-1, -1}, ImGuiCond_Always)
         imgui.SetNextWindowSizeConstraints({-1, -1}, {FLT_MAX, FLT_MAX})
         imgui.SetNextWindowPos({ModeTable.imgui.windowPosX, ModeTable.imgui.windowPosY}, ImGuiCond_Always, {0, 0})
-        if (imgui.Begin('smart.lac', true, flags)) then
+        if (imgui.Begin('smart.lac', {}, flags)) then
           local showSeparator = false
-          imgui.SetWindowFontScale(1)
+        --   imgui.SetWindowFontScale(1)
           imgui.Text("Smart.LAC")
           imgui.Separator()
           if ModeTable.secondaryEnabled then 
