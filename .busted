@@ -15,8 +15,8 @@ return {
 		
     end,
     default = {
-        verbose = true,
-        --output = "gtest",
+        verbose = false,
+        output = "plainTerminal",
 		helper="./spec/helper.lua"
     },
 	exclude = {
