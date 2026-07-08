@@ -76,6 +76,11 @@ local defaultSecondaryBindings = T{
 }
 
 ModeTable = {}
+ModeTable.builtin_keybinds = {
+	nextMode = "F12",
+	nextWeaponGroup = "F11",
+	nextSecondaryGroup = "F10"
+}
 ModeTable.enableWindow = true
 ModeTable.imgui = {}
 if index.imgui then
@@ -138,8 +143,9 @@ end
 ---@class modes
 ---@field generatePackerConfig fun():table?
 ---@field registerKeybinds function
----@field enableWeaponGroups function
----@field enableSecondaryGroups function
+---@field enableWeaponGroups fun(keybind: string): nil
+---@field enableSecondaryGroups fun(keybind: string): nil
+---@field setModeCycleKeybind fun(keybind: string): nil
 ---@field enableOverrideLayers function
 ---@field registerSets fun(mode: string, sets: sets):nil
 ---@field registerWeaponGroup fun(group: string, set: weaponGroup)
@@ -180,9 +186,9 @@ return {
     local chatManager = AshitaCore:GetChatManager()
     chatManager:QueueCommand(-1, "/unbind all");
     (function()
-      chatManager:QueueCommand(-1, "/bind F12 /lac fwd nextMode")
-      chatManager:QueueCommand(-1, "/bind F11 /lac fwd nextWeaponGroup")
-      chatManager:QueueCommand(-1, "/bind F10 /lac fwd nextSecondaryGroup")
+      chatManager:QueueCommand(-1, "/bind "..ModeTable.builtin_keybinds.nextMode.." /lac fwd nextMode")
+      chatManager:QueueCommand(-1, "/bind "..ModeTable.builtin_keybinds.nextWeaponGroup.." /lac fwd nextWeaponGroup")
+      chatManager:QueueCommand(-1, "/bind "..ModeTable.builtin_keybinds.nextSecondaryGroup.." /lac fwd nextSecondaryGroup")
       for i, v in ipairs(ModeTable.keybinds) do
         chatManager:QueueCommand(-1, "/bind "..v.." /lac fwd nextOverride "..i)
       end
@@ -196,17 +202,28 @@ return {
       ---@diagnostic disable-next-line: undefined-field
     end):once(0.25)
   end,
-  enableWeaponGroups = function()
+  enableWeaponGroups = function(keybind)
     if globals.debug then 
       print(Helpers.AddModHeader(chat.success('Enabled weapon groups')))
     end
+	if keybind and type(keybind) == "string" then
+		ModeTable.builtin_keybinds.nextWeaponGroup = keybind
+	end
     ModeTable.weaponsEnabled = true
   end,
-  enableSecondaryGroups = function()
+  enableSecondaryGroups = function(keybind)
     if globals.debug then 
       print(Helpers.AddModHeader(chat.success('Enabled secondary weapon groups')))
     end
+		if keybind and type(keybind) == "string" then
+		ModeTable.builtin_keybinds.nextSecondaryGroup = keybind
+	end
     ModeTable.secondaryEnabled = true
+  end,
+  setModeCycleKeybind = function(keybind)
+  	if keybind and type(keybind) == "string" then
+		ModeTable.builtin_keybinds.nextMode = keybind
+  	end
   end,
   enableOverrideLayers = function()
     if globals.debug then 
@@ -471,7 +488,7 @@ return {
           imgui.Separator()
           if ModeTable.secondaryEnabled then 
             showSeparator = true
-            imgui.TextColored(red, '(F10)')
+            imgui.TextColored(red, ModeTable.builtin_keybinds.nextSecondaryGroup)
             imgui.SameLine()
             imgui.Text('Secondary:')
             imgui.SameLine()
@@ -479,7 +496,7 @@ return {
           end
           if ModeTable.weaponsEnabled then
             showSeparator = true
-            imgui.TextColored(red, '(F11)')
+            imgui.TextColored(red, ModeTable.builtin_keybinds.nextWeaponGroup)
             imgui.SameLine()
             imgui.Text('Weapon:')
             imgui.SameLine()
@@ -487,7 +504,7 @@ return {
           end
           if #ModeTable.modeList > 1 then
             showSeparator = true
-            imgui.TextColored(red, '(F12)')
+            imgui.TextColored(red, ModeTable.builtin_keybinds.nextMode)
             imgui.SameLine()
             imgui.Text('Mode:')
             imgui.SameLine()
