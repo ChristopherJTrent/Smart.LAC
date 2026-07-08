@@ -9,7 +9,8 @@ return {
 		"/usr/*",
 		"luacov$",
 		"busted$",
-		"^.+%.h%.lua$"
+		"^.+%.h%.lua$",
+		"C:\\msys64\\*"
 	},
 	includeuntestedfiles = true
 }
