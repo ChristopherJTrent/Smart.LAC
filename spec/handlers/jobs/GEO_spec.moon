@@ -5,6 +5,26 @@ describe 'GEO job handler', ->
 	
 	it 'should exist', ->
 		assert.is_not.nil Handler
+	context 'during default', ->
+		local Sets
+		it 'should have a handler', ->
+			assert.is_not.nil Handler.default
+		context 'when the player has a geocolure', ->
+			setup ->
+				_G.gData.GetPet = ->
+					return {}
+			context 'when the player has a geocolure idle set', ->
+				setup ->
+					Sets = {
+						general: {
+							geocolure: {
+								Head: 'test'
+							}
+						}
+					}
+				it 'should return that set', ->
+					assert.is.same Sets.general.geocolure,
+						Handler.default(Sets)
 	context 'during midcast', ->
 		local Sets
 		it 'should have a handler', ->
