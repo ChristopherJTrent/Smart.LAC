@@ -21,7 +21,7 @@ return {
                     finalSet = gFunc.Combine(finalSet, sets.midcast['Enfeebling Magic'][group.Name])
                 end
             end
-            if finalSet == {} then
+            if T(finalSet):equals(T{}) then
                 return false
             else
                 return finalSet
@@ -56,14 +56,13 @@ return {
                         finalSet = gFunc.Combine(finalSet, sets.midcast['Enhancing Magic'].targetOther or {})
                     end
                 end
-                if next(finalSet) ~= nil then
+                if finalSet ~= nil and next(finalSet) ~= nil then
                     return finalSet
                 else
                     return false
                 end
             end
-
+			return false
         end
-
     end
 }
