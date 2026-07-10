@@ -19,5 +19,6 @@ return {
 		elseif action.Name:contains('storm') then
 			if sets.midcast.storm then return sets.midcast.storm end
 		end
+		return false
 	end
 }
