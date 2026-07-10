@@ -6,13 +6,13 @@ return {
         if sets.midcast.enmity ~= nil then
             local enmitySpells = T{
                 "Flash",
-                "Blank Gaze",
-                "Jettatura",
-                "Sheep Song",
-                "Stinking Gas",
-                "Geist Wall",
-                "Soporific",
-                "Cold Wave"
+                -- "Blank Gaze",
+                -- "Jettatura",
+                -- "Sheep Song",
+                -- "Stinking Gas",
+                -- "Geist Wall",
+                -- "Soporific",
+                -- "Cold Wave"
             }
             if enmitySpells:contains(action.Name) then
                 return sets.midcast.enmity
