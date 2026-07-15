@@ -47,7 +47,7 @@ if Helpers.ProfileFileExists('common') then
 	gFunc.LoadFile('common')
 end
 
-local SkillNames = {
+SkillNames = {
 	"H2H",
 	"Dagger",
 	"Sword",
@@ -302,7 +302,7 @@ return (function()
 		---@param sets sets
 		return function(sets)
 			if sets ~= nil then
-				modes.registerSets('default', (shared ~= nil and shared.defaults ~= nil) and sets:merge(shared.defaults) or sets)
+				modes.registerSets('default', (shared ~= nil and shared.defaults ~= nil) and shared.defaults:merge(sets) or sets)
 				modes.setActiveMode('default')
 			end
 			return retFunc()
