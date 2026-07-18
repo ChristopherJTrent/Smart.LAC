@@ -26,6 +26,18 @@ describe 'PLD job handler', ->
 		
 		it 'should handle Flash', ->
 			assert.same Sets.midcast.enmity, Handler.midcast(EnmitySpellAction, Sets)
+		context 'casting phalanx', ->
+			context 'without a phalanx set', ->
+				it 'should return false', ->
+					assert.is.false Handler.midcast({Name: 'Phalanx'}, Sets)
+			context 'with a phalanx set', ->
+				setup ->
+					Sets.midcast.phalanx = {
+						Head: 'test'
+					}
+				it 'should return that set', ->
+					assert.is.same Sets.midcast.phalanx,
+						Handler.midcast({Name: "Phalanx"}, Sets)
 		it 'should not handle BLU spells', ->
 			for spell in *BLUHateTools
 				assert.is.false Handler.midcast({Name: spell}, Sets)
