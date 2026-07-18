@@ -274,7 +274,7 @@ local performUpdateCheck = function()
 	local beta = false
 	local http = require('socket\\ssl\\https')
 	http.TIMEOUT = 1
-	local body, statusCode, _, _= http.request('https://raw.githubusercontent.com/ChristopherJTrent/Smart.LAC/refs/heads/master/version')
+	local body, statusCode, _, _= http.request('https://forge.arkevorkhat.net/Smart.LAC/Smart.LAC/raw/branch/master/version')
 	if statusCode ~= 200 then
 		print('Failed to download version info. Please check the github for updates')
 	else
