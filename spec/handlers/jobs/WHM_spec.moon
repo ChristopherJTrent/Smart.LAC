@@ -93,10 +93,78 @@ describe 'WHM job handler', ->
 							default: {
 								Head: 'bar'
 								Body: 'bar'
+								Hands: 'bar'
 							}
 						}
 					it 'should return that default set', ->
 						for name in *barElement
 							assert.is.same Sets.midcast.default,
 								Handler.midcast({Name: name}, Sets)
-					context ''
+					context 'and a barSpell set', ->
+						setup ->
+							Sets.midcast.barSpell = {
+								Head: 'foo'
+								Feet: 'foo'
+							}
+						it 'should return the union of those sets', ->
+							for name in *barElement
+								assert.is.same gFunc.Combine(Sets.midcast.default, Sets.midcast.barSpell),
+									Handler.midcast({Name: name}, Sets)
+						context 'and a barElement set', ->
+							setup ->
+								Sets.midcast.barElement = {
+									Hands: 'baz'
+									Legs: 'baz'
+								}
+							it 'should return the union of all of those sets', ->
+								for name in *barElement
+									assert.is.same gFunc.Combine(gFunc.Combine(Sets.midcast.default, Sets.midcast.barSpell), Sets.midcast.barElement),
+										Handler.midcast({Name: name}, Sets)
+			context 'of the status variety', ->
+				local barStatus
+				setup ->
+					barStatus = {
+						'Baramnesra'
+						'Barvira'
+						'Barparalyzra'
+						'Barsilencera'
+						'Barpetra'
+						'Barpoisonra'
+						'Barblindra'
+						'Barsleepra'
+					}
+				context 'with a default midcast set', ->
+					setup ->
+						Sets = {
+							midcast: {
+								default: {
+									Head: 'foo'
+									Body: 'foo'
+									Hands: 'foo'
+								}
+							}
+						}
+					it 'should return that midcast default set', ->
+						for name in *barStatus
+							assert.is.same Sets.midcast.default,
+								Handler.midcast({Name: name}, Sets)
+					context 'and a barSpell midcast set', ->
+						setup ->
+							Sets.midcast.barSpell = {
+								Head: 'bar'
+								Legs: 'bar'
+							}
+						it 'should return the union of those sets', ->
+							for name in *barStatus
+								assert.is.same gFunc.Combine(Sets.midcast.default, Sets.midcast.barSpell),
+									Handler.midcast({Name: name}, Sets)
+						context 'and a barStatus midcast set', ->
+							setup ->
+								Sets.midcast.barStatus = {
+									Body: 'baz',
+									Feet: 'baz'
+								}
+							it 'should return the union of all three sets', ->
+								for name in *barStatus
+									assert.is.same gFunc.Combine(gFunc.Combine(Sets.midcast.default, Sets.midcast.barSpell), Sets.midcast.barStatus),
+										Handler.midcast({Name: name}, Sets)
