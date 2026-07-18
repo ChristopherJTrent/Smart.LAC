@@ -1,5 +1,5 @@
 # Forgejo Notice #
-This repository will be retired with the upcoming 1.0 release of Smart.LAC.
+The Github version of this repository will be retired with the upcoming 1.0 release of Smart.LAC.
 All further updates will be posted to https://forge.arkevorkhat.net/Smart.LAC/Smart.LAC
 Additionally, the update checker will be updated to check forge.arkevorkhat.net.
 Please check [the migration guide on the wiki](https://github.com/ChristopherJTrent/Smart.LAC/wiki/Migration-Guide) for more details.
