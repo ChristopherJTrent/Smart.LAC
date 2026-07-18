@@ -1,2 +1,0 @@
----@class setConditionHandler: handler
----@field handle fun(t:conditions):boolean

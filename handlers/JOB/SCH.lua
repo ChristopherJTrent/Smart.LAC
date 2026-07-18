@@ -1,3 +1,4 @@
+require('common')
 return {
 	precast = function(action, sets)
 		local currentArts = (gData.GetBuffCount("Light Arts") == 1 or gData.GetBuffCount("Addendum: White") == 1) and "White Magic" or "Black Magic"
@@ -18,5 +19,6 @@ return {
 		elseif action.Name:contains('storm') then
 			if sets.midcast.storm then return sets.midcast.storm end
 		end
+		return false
 	end
 }

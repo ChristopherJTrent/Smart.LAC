@@ -1,0 +1,17 @@
+return {
+	reporter = "html",
+	reportfile = "luacov.report.html",
+	exclude = {
+		"handlers/.+%.h",
+		"handlers/command/subjobPalette",
+		"handlers/command/weaponskillPalette",
+		"spec",
+		"handlers/JOB/index",
+		"handlers/command$",
+		"handlers/validations"
+	},
+	include = {
+		"handlers%/.+$"
+	},
+	includeuntestedfiles = true
+}

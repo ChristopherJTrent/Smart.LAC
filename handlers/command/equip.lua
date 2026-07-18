@@ -9,10 +9,10 @@ return function(args)
 			gFunc.LockSet(sets[a[1]][a[2]][a[3]], 15)
 		end,
 		function(a)
-			gFunc.LockSet(sets[a[1]][a[2]][a[3]][a[4]])
+			gFunc.LockSet(sets[a[1]][a[2]][a[3]][a[4]], 15)
 		end,
 		function(a)
-			gFunc.LockSet(sets[a[1]][a[2]][a[3]][a[4]][a[5]])
+			gFunc.LockSet(sets[a[1]][a[2]][a[3]][a[4]][a[5]], 15)
 		end,
 	}
 	switch[#args](args)

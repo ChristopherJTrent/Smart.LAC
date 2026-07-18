@@ -1,3 +1,4 @@
+require('common')
 return {
     precast = function(action, sets)
         if sets.precast == nil then return false end
@@ -5,6 +6,7 @@ return {
             if sets.precast.utsusemi ~= nil then
                 return sets.precast.utsusemi
             end
+			return false
         end
     end
 }

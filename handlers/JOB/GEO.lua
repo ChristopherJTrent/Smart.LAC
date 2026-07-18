@@ -1,3 +1,4 @@
+require('common')
 return {
 	default = function(sets, status) 
 		local pet = gData.GetPet()
@@ -9,11 +10,6 @@ return {
 		if not sets.midcast then return false end
 		---@type Action
 		local ability = action
-		if ability.Type == 'Geomancy' then
-			if sets.midcast.Geomancy then
-				return sets.midcast.Geomancy
-			end
-		end
 		if string.match(ability.Name, 'Geo-') then
 			if sets.midcast.geocolure then
 				return sets.midcast.geocolure

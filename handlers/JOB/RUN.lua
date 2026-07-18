@@ -1,4 +1,5 @@
 ---@type jobHandler
+require('common')
 return {
     midcast = function (action, sets)
         if sets.midcast == nil then return false end
@@ -6,13 +7,6 @@ return {
             local enmitySpells = T{
                 "Flash",
                 "Foil",
-                "Blank Gaze",
-                "Jettatura",
-                "Sheep Song",
-                "Stinking Gas",
-                "Geist Wall",
-                "Soporific",
-                "Cold Wave",
             }
             if enmitySpells:contains(action.Name) then
                 return sets.midcast.enmity
