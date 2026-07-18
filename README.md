@@ -1,3 +1,9 @@
+# Forgejo Notice #
+This repository will be retired with the upcoming 1.0 release of Smart.LAC.
+All further updates will be posted to https://forge.arkevorkhat.net/Smart.LAC/Smart.LAC
+Additionally, the update checker will be updated to check forge.arkevorkhat.net.
+Please check [the migration guide on the wiki](https://github.com/ChristopherJTrent/Smart.LAC/wiki/Migration-Guide) for more details.
+
 ## Support
 Do not contact the Ashita developers, especially not Thorny, for support with this framework. I may not like the guy much, but it is the bare minimum courtesy to not send support requests to him for code he did not write. 
 Please just post an issue or start a discussion if you have a question.
