@@ -4,7 +4,7 @@ return T{
 		-- Thanks to Arieh for these lists.
 		local barSpells = T{
 			'Barfira', -- this looks weird, but this data change makes the code much easier to write.
-			'Barblizzara',
+			'Barblizzara', --this table is effectively an array with two extra tables stapled onto the end.
 			'Baraera',
 			'Barstonra',
 			'Barthundra',
