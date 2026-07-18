@@ -1,0 +1,6 @@
+require('spec.mocks.table')
+require('spec.mocks.gFunc')
+require('spec.mocks.ashita')
+require('spec.mocks.gData')
+require('spec.mocks.function')
+require('spec.mocks.string')
